@@ -22,16 +22,31 @@ async register(@Body() body:RegisterDto):Promise<AuthResponseDto>{
 return this.authService.register(body);
   };
   @Post('login')
-  @ApiOperation({ summary: 'Login user' })
+  @ApiOperation({ summary: 'Login user' , description: 'Authenticate user with email and password' 
+})
   @ApiResponse({ 
     status: 200, 
     description: 'User successfully logged in',
-    type: AuthResponseDto 
+    type: AuthResponseDto, 
+    example:{
+      access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+      user: {
+        id: 'clx1234567890',
+        email: 'john@example.com',
+        name: 'John Doe',
+        role: 'USER'
+      }
+    }
   })
   @ApiResponse({ 
     status: 401, 
     description: 'Invalid credentials' 
   })
+  @ApiResponse({
+    status:400,
+    description:'Invalid input data'
+  })
+  
   async Login(@Body() body:LoginDto):Promise<AuthResponseDto>{
 return this.authService.login(body);
   };

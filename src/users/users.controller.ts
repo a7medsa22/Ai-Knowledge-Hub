@@ -11,12 +11,17 @@ export class UsersController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth("JWT-auth")
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@GetUser() user: any) {
-    return this.usersService.findOne(user.id);
+    const userData = await this.usersService.findOne(user.id);
+
+    const {password, ...userWithoutPassword} = userData!;
+    return userWithoutPassword;    
   }
+  
 
   @Put('profile')
   @UseGuards(JwtAuthGuard)

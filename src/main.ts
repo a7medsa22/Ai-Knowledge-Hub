@@ -7,10 +7,19 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
     .setTitle('AI Research')
-    .setDescription('The AI Research API')
+    .setDescription('API for AI-powered research and knowledge management platform')
     .setVersion('1.0')
     .addTag('AI Research')
-    .addBearerAuth()
+    .addBearerAuth({
+      type:"http",
+      scheme:"bearer",
+      bearerFormat:"JWT",
+      name:"JWT",
+      description:"JWT Authorization header using the bearer scheme. \n\nEnter JWT token as Bearer + {token}",
+      in:"header"
+    },
+    'JWT-auth'
+  )
     .build()
    const document = () => SwaggerModule.createDocument(app,config)
    SwaggerModule.setup('swagger',app,document)
