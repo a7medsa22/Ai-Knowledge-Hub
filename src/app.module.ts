@@ -14,6 +14,10 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
       ConfigModule.forRoot({
         isGlobal:true
       }),
+      ThrottlerModule.forRoot([{
+        ttl:600000,  // 10 minutes
+        limit:10,    // 10 requests
+      }]),
      AuthModule,
      PrismaModule,
      UsersModule,
@@ -25,6 +29,10 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
      {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide:APP_GUARD,
+      useClass:ThrottlerGuard,
     },
     
   ],
