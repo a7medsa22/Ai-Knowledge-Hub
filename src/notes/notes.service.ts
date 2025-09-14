@@ -3,6 +3,7 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { Note, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SearchNoteDto } from './dto/search-note.dto';
+import { UpdateNoteDto } from './dto/update-note.dto';
 
 @Injectable()
 export class NotesService {
@@ -41,6 +42,25 @@ export class NotesService {
     return note;
   }; 
 
+   async findByDocument(userId: string, docId: string, search?: SearchNoteDto) {
+    await this.validateDocumentAccess(docId, userId);
+
+    const where = this.buildWhereClause(userId, { ...search, docId });
+    return this.executeSearchQuery(where, search);
+  }
+public async update(id: number, updateNoteDto: UpdateNoteDto) {
+    return `This action updates a #${id} note`;
+  }
+
+   async remove(id: string, userId: string): Promise<Note> {
+    // Check ownership
+    await this.checkNoteOwnership(id, userId);
+
+    return this.prisma.note.delete({
+      where: { id },
+      include: this.gerNoteInclude(),
+    });
+  }
   
    //Standard include for note queries
   private gerNoteInclude(){
