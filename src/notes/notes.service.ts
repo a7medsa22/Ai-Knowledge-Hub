@@ -159,5 +159,41 @@ public async update(id: number, updateNoteDto: UpdateNoteDto) {
 
     return note;
   }
+  // Utility methods
+  async getNotesStats(userId: string) {
+    const [totalNotes, notesWithDocs, standaloneNotes] = await Promise.all([
+      this.prisma.note.count({
+        where: { authorId: userId },
+      }),
+      this.prisma.note.count({
+        where: { 
+          authorId: userId,
+          docId: { not: null },
+        },
+      }),
+      this.prisma.note.count({
+        where: { 
+          authorId: userId,
+          docId: null,
+        },
+      }),
+    ]);
+
+    return {
+      totalNotes,
+      notesWithDocs,
+      standaloneNotes,
+    };
+  }
+
+  // Get recent notes for dashboard
+  async getRecentNotes(userId: string, limit: number = 5) {
+    return this.prisma.note.findMany({
+      where: { authorId: userId },
+      include: this.gerNoteInclude(),
+      orderBy: { updatedAt: 'desc' },
+      take: limit,
+    });
+  }
  
 }
