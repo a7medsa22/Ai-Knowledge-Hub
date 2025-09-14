@@ -49,7 +49,7 @@ model Note {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   doc       Doc?     @relation(fields: [docId], references: [id], onDelete: Cascade)
 
-  @@map("notes")
+  @@map("notes") 
 }
 
 model File {
