@@ -1,3 +1,6 @@
+# 📘 Knowledge Platform – Docs, Notes & AI
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -22,78 +25,132 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🚀 Overview
 
-## Project setup
+A lightweight platform to manage **Documents, Notes, and Files** with integrated **AI features**:
 
-```bash
-$ npm install
+* Summarize documents and notes.
+* Generate Q\&A from text.
+* Perform semantic search across stored data.
+
+It is built with:
+
+* **NestJS + Prisma + PostgreSQL**
+* **AI Integration** (local Ollama or external providers)
+* **MCP Tool Server** to allow AI to execute system actions (e.g., searchDocs, addNote).
+
+---
+
+## 🛠️ Tech Stack
+
+* **Backend:** NestJS (REST APIs)
+* **Database:** PostgreSQL + Prisma ORM
+* **AI:** Ollama (local, free) or external providers (OpenAI, Anthropic, OpenRouter)
+* **MCP:** Node Tool Server (interacts with the API)
+* **Docs:** Swagger + Postman Collection
+
+---
+
+## 📂 Project Structure
+
+```
+apps/api (NestJS backend)
+  src/
+    auth/        → Authentication (JWT)
+    users/       → User management
+    knowledge/   → Docs, Notes, Tags
+    files/       → File uploads
+    ai/          → Summarization / QA / Semantic Search
+    mcp/         → Tool definitions
+    common/      → Shared utils
+    prisma/      → PrismaService + schema
+
+prisma/schema.prisma → Database schema
+
+tools/mcp-server (Node Tool Server)
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## 🔌 API Endpoints (Samples)
 
-# watch mode
-$ npm run start:dev
+### Auth
 
-# production mode
-$ npm run start:prod
-```
+* `POST /auth/signup` – Create a new user
+* `POST /auth/login` – Login with JWT
 
-## Run tests
+### Knowledge
 
-```bash
-# unit tests
-$ npm run test
+* `POST /docs` – Create document
+* `GET /docs/:id` – Fetch document
+* `POST /docs/:id/notes` – Add note to document
+* `GET /notes` – List/search notes
 
-# e2e tests
-$ npm run test:e2e
+### AI
 
-# test coverage
-$ npm run test:cov
-```
+* `POST /ai/summarize` → Get summary for text/doc
+* `POST /ai/qa` → Ask question and get answer from doc
+* `POST /ai/search` → Semantic search over docs/notes
 
-## Deployment
+### MCP Tools
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+* `POST /mcp/tools/searchDocs` → Search documents
+* `POST /mcp/tools/addNote` → Add note to doc
+* `POST /mcp/tools/listTasks` → List user tasks
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+## ⚙️ Setup
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+1. **Install dependencies**
 
-## Resources
+   ```bash
+   npm install
+   ```
 
-Check out a few resources that may come in handy when working with NestJS:
+2. **Run PostgreSQL (via Docker)**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+   ```bash
+   docker-compose up -d
+   ```
 
-## Support
+3. **Apply database migrations**
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+   ```bash
+   npx prisma migrate dev
+   ```
 
-## Stay in touch
+4. **Start API server**
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+   ```bash
+   npm run start:dev
+   ```
 
-## License
+5. **Run MCP Tool Server**
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+   ```bash
+   cd tools/mcp-server
+   npm run start
+   ```
+
+---
+
+## 🪜 Contribution Guide
+
+* Each issue will specify a feature or bugfix (e.g., `Add GET /files endpoint`).
+* Create a **new branch** with the issue ID.
+* Submit a **Pull Request** with a short description of changes.
+* Ensure before merging:
+
+  * ✅ Tests pass
+  * ✅ Swagger docs updated
+  * ✅ ESLint/Prettier clean
+
+---
+
+## 💡 Why this project?
+
+* Combines **Backend + AI + MCP** in a single project.
+* Showcases experience in **modern AI integration (LLMs + Tool Use)**.
+* Easy to demo with **Swagger, README, and seed data**.
