@@ -5,8 +5,13 @@ import { UpdateNoteDto } from './dto/update-note.dto';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { NoteResponseDto } from './dto/response-note.dto';
-import { SearchDocDto } from 'src/docs/dto/search-doc.dto';
 import { SearchNoteDto } from './dto/search-note.dto';
+
+export interface JwtUser {
+  id: string;
+  email: string;
+  role: string;
+}
 
 @Controller('notes')
 @UseGuards(JwtAuthGuard)
@@ -32,7 +37,7 @@ export class NotesController {
     status: 403, 
     description: 'Cannot add notes to private documents you do not own' 
   })
-  create(@Body() body: CreateNoteDto,@GetUser()user:any) {
+  create(@Body() body: CreateNoteDto,@GetUser()user:JwtUser) {
     return this.notesService.create(user.id,body);
   }
 
@@ -51,13 +56,26 @@ export class NotesController {
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
   @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt'] })
   @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
-  findAll(@GetUser() user: any,@Query()serach:SearchNoteDto) {
+  findAll(@GetUser() user: JwtUser,@Query()serach:SearchNoteDto) {
     return this.notesService.findAll(user.id,serach);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.notesService.findOne(+id);
+  @ApiOperation({ 
+    summary: 'Get note by ID',
+    description: 'Get a specific note by its ID' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Note retrieved successfully',
+    type: NoteResponseDto 
+  })
+  @ApiResponse({ 
+    status: 404, 
+    description: 'Note not found or access denied' 
+  })
+  findOne(@Param('id') id: string,@GetUser() user:JwtUser) {
+    return this.notesService.findOne(id,user.id);
   }
 
   @Patch(':id')
