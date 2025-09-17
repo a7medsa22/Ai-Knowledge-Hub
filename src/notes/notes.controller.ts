@@ -100,7 +100,7 @@ export class NotesController {
       @ApiQuery({ name: 'limit', required: false, description: 'Number of recent notes to retrieve, default is 5' })
   getRecent(@GetUser() user:JwtUser,@Query('limit') limit?:string){
     const parsedLimit = limit ? parseInt(limit, 10) : 5;
-    return this.notesService.getRecentNotes(user.id);
+    return this.notesService.getRecentNotes(user.id,parsedLimit);
   }
   @Get('document/:docId')
   @ApiOperation({ 
@@ -148,4 +148,24 @@ export class NotesController {
     return this.notesService.update(id,user.id, body);
   }
 
+  @Delete(':id')
+  @ApiOperation({ 
+    summary: 'Delete note',
+    description: 'Delete a note (only by owner)' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Note deleted successfully' 
+  })
+  @ApiResponse({ 
+    status: 404, 
+    description: 'Note not found' 
+  })
+  @ApiResponse({ 
+    status: 403, 
+    description: 'You can only delete your own notes' 
+  })
+  remove(@Param('id') id: string, @GetUser() user: JwtUser) {
+    return this.notesService.remove(id, user.id);
+  }
 }
