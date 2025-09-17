@@ -48,9 +48,18 @@ export class NotesService {
     const where = this.buildWhereClause(userId, { ...search, docId });
     return this.executeSearchQuery(where, search);
   }
-public async update(id: number, updateNoteDto: UpdateNoteDto) {
-    return `This action updates a #${id} note`;
+
+async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
+    // Check ownership
+    await this.checkNoteOwnership(id, userId);
+
+    return this.prisma.note.update({
+      where: { id },
+      data: dto,
+      include: this.gerNoteInclude(),
+    });
   }
+
 
    async remove(id: string, userId: string): Promise<Note> {
     // Check ownership
@@ -59,6 +68,43 @@ public async update(id: number, updateNoteDto: UpdateNoteDto) {
     return this.prisma.note.delete({
       where: { id },
       include: this.gerNoteInclude(),
+    });
+  }
+
+   // Utility methods
+  async getNotesStats(userId: string) {
+    const [totalNotes, notesWithDocs, standaloneNotes] = await Promise.all([
+      this.prisma.note.count({
+        where: { authorId: userId },
+      }),
+      this.prisma.note.count({
+        where: { 
+          authorId: userId,
+          docId: { not: null },
+        },
+      }),
+      this.prisma.note.count({
+        where: { 
+          authorId: userId,
+          docId: null,
+        },
+      }),
+    ]);
+
+    return {
+      totalNotes,
+      notesWithDocs,
+      standaloneNotes,
+    };
+  }
+
+  // Get recent notes for dashboard
+  async getRecentNotes(userId: string, limit: number = 5) {
+    return this.prisma.note.findMany({
+      where: { authorId: userId },
+      include: this.gerNoteInclude(),
+      orderBy: { updatedAt: 'desc' },
+      take: limit,
     });
   }
   
@@ -159,41 +205,6 @@ public async update(id: number, updateNoteDto: UpdateNoteDto) {
 
     return note;
   }
-  // Utility methods
-  async getNotesStats(userId: string) {
-    const [totalNotes, notesWithDocs, standaloneNotes] = await Promise.all([
-      this.prisma.note.count({
-        where: { authorId: userId },
-      }),
-      this.prisma.note.count({
-        where: { 
-          authorId: userId,
-          docId: { not: null },
-        },
-      }),
-      this.prisma.note.count({
-        where: { 
-          authorId: userId,
-          docId: null,
-        },
-      }),
-    ]);
-
-    return {
-      totalNotes,
-      notesWithDocs,
-      standaloneNotes,
-    };
-  }
-
-  // Get recent notes for dashboard
-  async getRecentNotes(userId: string, limit: number = 5) {
-    return this.prisma.note.findMany({
-      where: { authorId: userId },
-      include: this.gerNoteInclude(),
-      orderBy: { updatedAt: 'desc' },
-      take: limit,
-    });
-  }
+ 
  
 }

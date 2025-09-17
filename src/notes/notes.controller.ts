@@ -78,13 +78,52 @@ export class NotesController {
     return this.notesService.findOne(id,user.id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.notesService.update(+id, updateNoteDto);
+  @Get('status')
+  @ApiOperation({ 
+    summary: 'Get note status',
+    description: 'Get the status of notes for the current user'})
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Status retrieved successfully'})
+  getStatus(@GetUser() user:JwtUser){
+    return this.notesService.getNotesStats(user.id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.notesService.remove(+id);
+  @Get('recent')
+  @ApiOperation({ 
+    summary: 'Get recent notes',
+    description: 'Get the most recently updated notes for the current user'})
+    @ApiResponse({ 
+      status: 200, 
+      description: 'Recent notes retrieved successfully',
+      type: [NoteResponseDto]})
+      @ApiQuery({ name: 'limit', required: false, description: 'Number of recent notes to retrieve, default is 5' })
+  getRecent(@GetUser() user:JwtUser,@Query('limit') limit?:string){
+    const parsedLimit = limit ? parseInt(limit, 10) : 5;
+    return this.notesService.getRecentNotes(user.id, parsedLimit);
   }
+  @Get('document/:docId')
+  @ApiOperation({ 
+    summary: 'Get notes for a document',
+    description: 'Get all notes associated with a specific document'
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Notes retrieved successfully'
+  })
+  @ApiResponse({ 
+    status: 404,
+    description: 'Document not found or access denied'
+  })
+   @ApiResponse({ 
+    status: 403, 
+    description: 'Access denied to private document' 
+  })
+  @ApiQuery({ name: 'query', required: false, description: 'Search in note content' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Number of results' })
+  @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
+   findByDocument(@Param('docId') docId: string,@GetUser() user:JwtUser,@Query() search:SearchNoteDto) {
+    return this.notesService.findByDocument(user.id,docId,search);
+  }
+
 }
