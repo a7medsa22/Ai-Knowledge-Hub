@@ -100,7 +100,7 @@ export class NotesController {
       @ApiQuery({ name: 'limit', required: false, description: 'Number of recent notes to retrieve, default is 5' })
   getRecent(@GetUser() user:JwtUser,@Query('limit') limit?:string){
     const parsedLimit = limit ? parseInt(limit, 10) : 5;
-    return this.notesService.getRecentNotes(user.id, parsedLimit);
+    return this.notesService.getRecentNotes(user.id);
   }
   @Get('document/:docId')
   @ApiOperation({ 
@@ -124,6 +124,28 @@ export class NotesController {
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
    findByDocument(@Param('docId') docId: string,@GetUser() user:JwtUser,@Query() search:SearchNoteDto) {
     return this.notesService.findByDocument(user.id,docId,search);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ 
+    summary: 'Update a note',
+    description: 'Update the content of an existing note'
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Note updated successfully',
+    type: NoteResponseDto 
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Note not found or access denied'
+  })
+  @ApiResponse({ 
+    status: 403, 
+    description: 'You can only update your own notes' 
+  })
+  update(@Param('id') id: string,@GetUser() user:JwtUser ,@Body() body: UpdateNoteDto) {
+    return this.notesService.update(id,user.id, body);
   }
 
 }
