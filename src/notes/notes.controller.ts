@@ -88,7 +88,8 @@ export class NotesController {
   getStatus(@GetUser() user:JwtUser){
     return this.notesService.getNotesStats(user.id);
   }
-
+ 
+  // get recent notes dashboard snippet service method
   @Get('recent')
   @ApiOperation({ 
     summary: 'Get recent notes',

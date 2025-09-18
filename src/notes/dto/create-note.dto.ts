@@ -12,7 +12,7 @@ export class CreateNoteDto {
 
 
    @ApiProperty({ 
-    example: 'clx1234567890',
+    example: 'clx1234567890 (optional)',
     description: 'ID of the document this note belongs to (optional)',
     required: false 
    })
