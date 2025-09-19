@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsEnum, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 enum SummaryLength {
     SHORT = "short",
@@ -68,5 +68,55 @@ export class QuestionAnswerDto {
      @MaxLength(15000, { message: 'Context text is too long (max 15,000 characters)' })
        context?: string;
 }   
+
+export class SemanticSearchDto {
+    @ApiProperty({ 
+    example: 'neural networks and deep learning',
+    description: 'Search query for semantic similarity' 
+    })
+    @IsString()
+    @MinLength(3, { message: 'Search query must be at least 3 characters long' })
+    @MaxLength(200, { message: 'Search query is too long (max 200 characters)' })
+    query: string;
+  
+    @ApiProperty({ 
+      example: 5,
+      description: 'Number of similar documents to return',
+      required: false 
+    })
+    @IsOptional()
+    limit?: number = 5;
+}
+
+export class AiResponseDto {
+    @ApiProperty({ example: 'This is a summarized text...', description: 'Response from AI operation' })
+    result: string;
+
+    @ApiProperty({ example: 'openai', description: 'AI provider used for the operation', required: false })
+    @IsOptional()
+    @IsString()
+    provider?: string;
+ 
+    @ApiProperty({ example: 'gpt-4', description: 'Model used for the operation', required: false })
+    @IsOptional()
+    @IsString()
+    model?: string;
+    
+    @ApiProperty({description: 'Processing time in milliseconds' })
+    @IsNumber()
+    processingTime: number;
+
+    @ApiProperty({ example: 150, description: 'Number of input tokens used', required: false })
+    @IsOptional()
+    @IsString()
+    inputTokens?: number;
+
+    @ApiProperty({ example: 300, description: 'Number of output tokens generated', required: false })
+    @IsOptional()
+    @IsString()
+    outputTokens?: number;
+}
+
+
    
    
