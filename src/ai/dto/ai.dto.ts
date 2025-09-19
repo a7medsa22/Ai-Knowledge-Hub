@@ -117,6 +117,31 @@ export class AiResponseDto {
     outputTokens?: number;
 }
 
+export class SummarizeResponseDto extends AiResponseDto {
+    @ApiProperty({ example: 'This is a summarized text...', description: 'Generated summary' })
+    summary: string;
+    
+    @ApiProperty({ example: 'medium', description: 'Length of the summary' })
+    @IsEnum(SummaryLength)
+    length: SummaryLength;
+    
+    @ApiProperty({ example: 1200, description: 'Length of the original text in characters'})
+    @IsOptional()
+    @IsNumber()
+    originalTextLength?: number;
+}
+
+export class QuestionAnswerResponseDto extends AiResponseDto {
+    @ApiProperty({ example: 'The main types of machine learning algorithms are supervised, unsupervised, and reinforcement learning.', description: 'Answer to the question' })
+    answer: string;
+
+    @ApiProperty({ example: 'What are the main types of machine learning algorithms?', description: 'The question that was asked' })
+    question: string;
+
+    @ApiProperty({ example: 0.95, description: 'Confidence score of the answer (if provided by the AI model)', required: false })
+    confidence?: number;
+}
+
 
    
    
