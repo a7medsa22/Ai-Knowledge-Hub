@@ -8,6 +8,7 @@ import { NotesModule } from './notes/notes.module';
 import { TasksModule } from './tasks/tasks.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
      UsersModule,
      DocsModule,
      NotesModule,
-     TasksModule
+     TasksModule,
+     AiModule
         ],
   providers: [
      {
