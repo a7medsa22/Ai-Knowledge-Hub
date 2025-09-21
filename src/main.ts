@@ -1,23 +1,54 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { ConfigService } from '@nestjs/config';
+import compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+    const config = app.get(ConfigService)
   
-  app.useGlobalPipes(new ValidationPipe({whitelist:true,transform:true,}))
-   
+// Global Validation Pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: false,
+      skipNullProperties: false,
+      skipUndefinedProperties: false,
+    })
+  )   
+
   // Secure the app by setting various HTTP headers
   app.use(helmet());
+  app.use(compression())
+
    
   // Enable CORS for all origins (you can customize this as needed)
   app.enableCors({
-    origin:"http://localhost:3000"
+    origin:"http://localhost:3000",
+     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
 
-  }) 
+  })
 
+   // API versioning
+   app.enableVersioning({
+    type:VersioningType.URI,
+    defaultVersion:'1',
+   })
+  
+  // global versioning
+  const apiPrefix = config.get('API_PREFIX');
+  app.setGlobalPrefix(apiPrefix);
+
+  // Swagger setup
+   if (config.get('NODE_ENV') === 'development') {
   const config = new DocumentBuilder()
     .setTitle('AI Research')
     .setDescription('API for AI-powered research and knowledge management platform')
@@ -35,10 +66,22 @@ async function bootstrap() {
   )
     .build()
    const document = () => SwaggerModule.createDocument(app,config)
-   SwaggerModule.setup('swagger',app,document)
+   SwaggerModule.setup('swagger',app,document,{
+    swaggerOptions:{
+      persistAuthorization:true
+    }
+   })
+}
 
-  await app.listen(process.env.PORT ?? 3000);
-
-  console.log(`Server is running on port ${process.env.PORT ?? 3000}`);
+  // Start Server
+  const port = config.get('PORT', 3000);
+  await app.listen(port);
+  
+  console.log(`
+    Ai knowledge Hub Backend server is running...
+🚀 Server running on: http://localhost:${port}
+📚 API Documentation: http://localhost:${port}/${apiPrefix}/docs
+🔧 Environment: ${config.get('NODE_ENV', 'development')}
+  `);
 }
 bootstrap();
