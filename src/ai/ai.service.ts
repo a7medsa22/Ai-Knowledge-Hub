@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAiDto } from './dto/ai.dto';
-import { UpdateAiDto } from './dto/update-ai.dto';
 
 @Injectable()
 export class AiService {

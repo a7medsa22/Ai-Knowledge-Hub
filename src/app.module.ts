@@ -1,7 +1,7 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { DocsModule } from './docs/docs.module';
 import { NotesModule } from './notes/notes.module';
@@ -13,12 +13,34 @@ import { AiModule } from './ai/ai.module';
 @Module({
   imports: [
       ConfigModule.forRoot({
-        isGlobal:true
+        isGlobal:true,
+        envFilePath: '.env',
+      expandVariables: true,
       }),
-      ThrottlerModule.forRoot([{
-        ttl:600000,  // 10 minutes
-        limit:10,    // 10 requests
-      }]),
+   
+         // Rate Limiting
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => [
+        {
+          name: 'short',
+          ttl: config.get('THROTTLE_TTL', 60) * 1000, // Convert to milliseconds
+          limit: config.get('THROTTLE_LIMIT', 100),
+        },
+        {
+          name: 'auth',
+          ttl: 60 * 1000, // 1 minute
+          limit: 5, // 5 requests per minute for auth endpoints
+        },
+        {
+          name: 'upload',
+          ttl: 60 * 60 * 1000, // 1 hour  
+          limit: 10, // 10 file uploads per hour
+        },
+      ],
+    }),
+    
      AuthModule,
      PrismaModule,
      UsersModule,
