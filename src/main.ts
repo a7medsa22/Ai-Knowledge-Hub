@@ -5,6 +5,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { ConfigService } from '@nestjs/config';
 import compression from 'compression';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -46,6 +49,10 @@ async function bootstrap() {
   // global versioning
   const apiPrefix = config.get('API_PREFIX');
   app.setGlobalPrefix(apiPrefix);
+
+  // Global Filters & Interceptors
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor() , new TransformInterceptor());
 
   // Swagger setup
    if (config.get('NODE_ENV') === 'development') {
