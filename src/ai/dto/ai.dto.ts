@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-enum SummaryLength {
+export enum SummaryLength {
     SHORT = "short",
     MEDIUM = "medium",
     Detailed = "detailed"
