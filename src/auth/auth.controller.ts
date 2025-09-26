@@ -48,32 +48,45 @@ export class AuthController {
    return this.authService.register(body);
 
   };
+
+      // ===============================================
+
   @Post('login')
-  @ApiOperation({ summary: 'Login user' , description: 'Authenticate user with email and password' 
-})
+  @Throttle({ auth: { limit: 5, ttl: 60000 } }) 
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ 
+    summary: 'User login (Step 1)',
+    description: "Authenticate user credentials and create a session" 
+  })
   @ApiResponse({ 
     status: 200, 
-    description: 'User successfully logged in',
-    type: AuthResponseDto, 
-    example:{
-      access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-      user: {
-        id: 'clx1234567890',
-        email: 'john@example.com',
-        name: 'John Doe',
-        role: 'USER'
+    description: 'Credentials verified, session created',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Login successful' },
+        data: {
+          type: 'object',
+          properties: {
+            userId: { type: 'string', example: 'uuid-string' },
+            accessToken: { type: 'string', example: 'jwt-string' }, 
+          }
+        }
       }
     }
   })
   @ApiResponse({ 
     status: 401, 
-    description: 'Invalid credentials' 
+    description: 'Invalid credentials or account not approved',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'array', items: { type: 'string' }, example: ['Invalid credentials'] }
+      }
+    }
   })
-  @ApiResponse({
-    status:400,
-    description:'Invalid input data'
-  })
-  
   async Login(@Body() body:LoginDto):Promise<AuthResponseDto>{
 return this.authService.login(body);
   };
