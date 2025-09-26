@@ -36,5 +36,5 @@ export abstract class AiProvider {
     
     abstract generateEmbedding(text: string): Promise<number[]>;
     
-    abstract isAvailable(): Promise<boolean>;
+    abstract isAvailable():  Promise<boolean>;
   }
