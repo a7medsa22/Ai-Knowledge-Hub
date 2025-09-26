@@ -109,7 +109,7 @@ async getAllTags(): Promise<string[]> {
         }
       },
       notes:{
-       incloud:{
+       include:{
        author:{
        select:{
            id: true,
