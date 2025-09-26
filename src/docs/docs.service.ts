@@ -66,14 +66,10 @@ async update(id: string,userId:string ,dto: UpdateDocDto) {
     });
   }
 
-async getAllTags(): Promise<string[]> {
+async getAllTags(where: any = {}): Promise<string[]> {
     const docs = await this.prisma.doc.findMany({
-      select: {
-        tags: true,
-      },
-      where: {
-        isPublic: true, // Only tags from public docs
-      },
+      select: {tags: true},
+      where,
     });
 
     // Extract unique tags
@@ -87,7 +83,7 @@ async getAllTags(): Promise<string[]> {
     
     const [totalDocs, totalTags] = await Promise.all([
       this.prisma.doc.count({ where }),
-      this.getAllTags(),
+      this.getAllTags(where),
     ]);
 
     return {

@@ -117,7 +117,7 @@ export class DocsController {
     return this.docsService.findOne(id, user?.id);
   }
 
-  @Patch(':id')
+  @Patch(':id') 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ 
@@ -165,5 +165,28 @@ export class DocsController {
   })
   remove(@Param('id') id: string, @GetUser() user: any) {
     return this.docsService.remove(id, user.id);
+  }
+
+  @Get('stats')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ 
+    summary: 'Get document statistics',
+    description: 'Get statistics about documents (only by owner)' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Document statistics retrieved successfully' 
+  })
+  @ApiResponse({ 
+    status: 404, 
+    description: 'Document not found' 
+  })
+  @ApiResponse({ 
+    status: 403, 
+    description: 'You can only update your own documents' 
+  })
+  async getDocStats(@GetUser() user: any) {
+    return this.docsService.getDocStats(user.id);
   }
 }
