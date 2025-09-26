@@ -73,7 +73,7 @@ async function bootstrap() {
   )
     .build()
    const document = () => SwaggerModule.createDocument(app,config)
-   SwaggerModule.setup('swagger',app,document,{
+   SwaggerModule.setup( `${apiPrefix}/docs`,app,document,{
     swaggerOptions:{
       persistAuthorization:true
     }
