@@ -4,7 +4,7 @@ import { IsEnum, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "cl
 export enum SummaryLength {
     SHORT = "short",
     MEDIUM = "medium",
-    Detailed = "detailed"
+    DETAILED = "detailed"
 }
 export class SummarizeDto {
     @ApiProperty({ 
