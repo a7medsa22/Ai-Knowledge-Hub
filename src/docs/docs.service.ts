@@ -29,7 +29,7 @@ export class DocsService {
     return this.executeQuery(where,search);
   };
 
- async findOne(id: string,userId:string) {  
+ async findOne(id: string,userId?:string) {  
     if(userId)
       await this.checkDocumentAccess(id,userId,'read');
 
