@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 import { AiProviderFactory } from './providers/ai-provider.factory';
 import { DocsService } from 'src/docs/docs.service';
 import { QuestionAnswerDto, QuestionAnswerResponseDto, SemanticSearchDto, SummarizeDto, SummarizeResponseDto, SummaryLength } from './dto/ai.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AiService {
@@ -10,6 +11,7 @@ export class AiService {
     constructor(
         private readonly aiProviderFactory:AiProviderFactory,
         private readonly docsService:DocsService,
+        private readonly config:ConfigService,
     ){}
     private async getTextContent(
         text?: string,
@@ -62,8 +64,8 @@ export class AiService {
     try{
         const response  =  await provider.summarize(content,length);
         const result: SummarizeResponseDto = {
+          result: "success",
             summary: response.result,
-            result: response.result,
             provider: provider.getName(),
             model: response.model,
             processingTime: Date.now() - startTime,
@@ -130,8 +132,8 @@ export class AiService {
       const response = await provider.answerQuestion(question, content);
 
       const result: QuestionAnswerResponseDto = {
+        result: 'success',
         answer: response.result,
-        result: response.result,
         question,
         provider: provider.getName(),
         model: response.model,
@@ -202,7 +204,7 @@ export class AiService {
         available: availableProviders.length > 0,
         providers: availableProviders,
         currentProvider: currentProvider.getName(),
-        model: process.env.AI_MODEL || 'unknown',
+        model: this.config.get('AI_MODEL') || 'unknown',
       };
     } catch (error) {
       this.logger.error(`AI status check failed: ${error.message}`);

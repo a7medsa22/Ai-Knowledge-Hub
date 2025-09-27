@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AiService } from './ai.service';
-import { QuestionAnswerDto, QuestionAnswerResponseDto, SemanticSearchDto, SummarizeDto, SummarizeResponseDto } from './dto/ai.dto';
+import { BulkSummarizeDto, ExtractKeyPointsDto, QuestionAnswerDto, QuestionAnswerResponseDto, SemanticSearchDto, SummarizeDto, SummarizeResponseDto, SummaryLength } from './dto/ai.dto';
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import * as client from '@prisma/client';
 
@@ -45,8 +45,8 @@ export class AiController {
     description: 'Summary generated successfully',
     type: SummarizeResponseDto,
     example: {
+      result: 'success',
       summary: 'This article discusses the fundamentals of machine learning...',
-      result: 'This article discusses the fundamentals of machine learning...',
       provider: 'ollama',
       model: 'phi3:3.8b',
       processingTime: 2500,
@@ -87,8 +87,8 @@ export class AiController {
     description: 'Answer generated successfully',
     type: QuestionAnswerResponseDto,
     example: {
+      result: 'success',
       answer: 'Machine learning algorithms can be categorized into three main types...',
-      result: 'Machine learning algorithms can be categorized into three main types...',
       question: 'What are the main types of machine learning algorithms?',
       provider: 'ollama',
       model: 'phi3:3.8b',
@@ -127,6 +127,7 @@ export class AiController {
     status: 200,
     description: 'Search results retrieved successfully',
     example: {
+      result: 'success',
       data: [
         {
           id: 'doc123',
@@ -190,8 +191,8 @@ export class AiController {
     description: 'Unauthorized',
   })
   async extractKeyPoints(
-    @Body() body: { text: string; count?: number },
-    @GetUser() user?:client.User,
+    @Body() body: ExtractKeyPointsDto,
+    @GetUser() user?: client.User,
   ) {
     const { text, count = 5 } = body;
     const keyPoints = await this.aiService.extractKeyPoints(text, count);
@@ -235,14 +236,14 @@ export class AiController {
     description: 'Unauthorized',
   })
   async bulkSummarize(
-    @Body() body: { docIds: string[]; length?: 'short' | 'medium' | 'detailed' },
+    @Body() body: BulkSummarizeDto,
     @GetUser() user: any,
   ) {
-    const { docIds, length = 'medium' } = body;
+    const { docIds, length = SummaryLength.MEDIUM } = body;
     const results = await this.aiService.generateBulkSummaries(
       docIds,
       user.id,
-      length as any,
+      length,
     );
 
     return {

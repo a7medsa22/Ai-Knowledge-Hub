@@ -19,9 +19,10 @@ export class AiProviderFactory {
       ) {}
       async getProvider(providerType?:AiProviderType):Promise<AiProvider>{
     const selectedProvider = providerType || (this.config.get('AI_PROVIDER') as AiProviderType) || 'ollama';
-        
-    if(!this.providerCache.has(selectedProvider)){
-        return this.providerCache.get(selectedProvider)!;
+    this.logger.log('Selected provider:', selectedProvider);
+
+    if (this.providerCache.has(selectedProvider)) {
+      return this.providerCache.get(selectedProvider)!;
     }
     
     let provider: AiProvider;

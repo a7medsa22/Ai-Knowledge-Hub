@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { ArrayMinSize, IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min, MinLength } from "class-validator";
 
 export enum SummaryLength {
     SHORT = "short",
@@ -141,6 +141,40 @@ export class QuestionAnswerResponseDto extends AiResponseDto {
     @ApiProperty({ example: 0.95, description: 'Confidence score of the answer (if provided by the AI model)', required: false })
     confidence?: number;
 }
+
+export class ExtractKeyPointsDto {
+  @ApiProperty({ example: 'This is a text to extract key points from', description: 'Text to extract key points from' })
+  @IsString()
+  @IsNotEmpty()
+  text: string;
+
+  @ApiProperty({ example: 5, description: 'Number of key points to extract', required: false })
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  count?: number = 5;
+}
+export class BulkSummarizeDto {
+  @ApiProperty({ 
+    example: ['doc123', 'doc456'],
+    description: 'Array of document IDs to summarize',
+    type: [String]
+  })
+  @IsArray()
+  @IsString({ each: true })
+  docIds: string[];
+
+  @ApiProperty({ 
+    example: SummaryLength.MEDIUM,
+    description: 'Length of summaries',
+    enum: SummaryLength,
+    required: false 
+  })
+  @IsEnum(SummaryLength)
+  @IsOptional()
+  length?: SummaryLength = SummaryLength.MEDIUM;
+}
+
 
 
    

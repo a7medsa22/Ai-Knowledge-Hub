@@ -11,7 +11,7 @@ export class OllamaProvider  extends AiProvider {
 
     constructor(private readonly httpService:HttpService , private configServise:ConfigService) {
         super({
-            baseUrl:configServise.get('AI_BASE_URL')|| 'http://localhost:11434',
+            baseUrl:configServise.get('AI_BASE_URL')|| 'http://127.0.0.1:11434',
             model:configServise.get('AI_MODEL') || 'phi3:3.8b',
             temperature: 0.7,
         })

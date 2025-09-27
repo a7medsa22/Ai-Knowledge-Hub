@@ -83,18 +83,6 @@ export class DocsController {
     return this.docsService.findUserDocs(search, user.id);
   }
 
-  @Get('tags')
-  @ApiOperation({ 
-    summary: 'Get all available tags',
-    description: 'Get a list of all unique tags used in documents' 
-  })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Tags retrieved successfully' 
-  })
-  getAllTags() {
-    return this.docsService.getAllTags();
-  }
 
   @Get(':id')
   @ApiOperation({ 
@@ -115,6 +103,33 @@ export class DocsController {
   })
   findOne(@Param('id') id: string, @GetUser() user?: any) {
     return this.docsService.findOne(id, user?.id);
+  }
+
+  
+  @Get('tags')
+  @ApiOperation({ 
+    summary: 'Get all available tags',
+    description: 'Get a list of all unique tags used in documents' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Tags retrieved successfully' 
+  })
+  getAllTags() {
+    return this.docsService.getAllTags();
+  }
+
+  @Get('stats')
+  @ApiOperation({ 
+    summary: 'Get documents statistics',
+    description: 'Get statistics about documents and tags' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Statistics retrieved successfully' 
+  })
+  getStats(@GetUser() user?: any) {
+    return this.docsService.getDocStats(user?.id);
   }
 
   @Patch(':id') 
@@ -167,26 +182,5 @@ export class DocsController {
     return this.docsService.remove(id, user.id);
   }
 
-  @Get('stats')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ 
-    summary: 'Get document statistics',
-    description: 'Get statistics about documents (only by owner)' 
-  })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Document statistics retrieved successfully' 
-  })
-  @ApiResponse({ 
-    status: 404, 
-    description: 'Document not found' 
-  })
-  @ApiResponse({ 
-    status: 403, 
-    description: 'You can only update your own documents' 
-  })
-  async getDocStats(@GetUser() user: any) {
-    return this.docsService.getDocStats(user.id);
-  }
+  
 }
