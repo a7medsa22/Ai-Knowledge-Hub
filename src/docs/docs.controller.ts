@@ -47,22 +47,6 @@ export class DocsController {
     return this.docsService.create(user.id, body);
   }
 
-  @Get()
-  @ApiOperation({ 
-    summary: 'Get all public documents',
-    description: 'Search and filter public documents' 
-  })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Documents retrieved successfully' 
-  })
-  @ApiQuery({ name: 'query', required: false, description: 'Search query' })
-  @ApiQuery({ name: 'tags', required: false, description: 'Filter by tags (comma-separated)' })
-  @ApiQuery({ name: 'limit', required: false, description: 'Number of results' })
-  @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
-  findAll(@Query() search: SearchDocDto) {
-    return this.docsService.findAll(search);
-  }
 
   @Get('my-docs')
   @UseGuards(JwtAuthGuard)
@@ -79,10 +63,57 @@ export class DocsController {
   @ApiQuery({ name: 'tags', required: false, description: 'Filter by tags (comma-separated)' })
   @ApiQuery({ name: 'limit', required: false, description: 'Number of results' })
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
+  @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt', 'title'] })
+  @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
   findUserDocs(@GetUser() user: any, @Query() search: SearchDocDto) {
     return this.docsService.findUserDocs(search, user.id);
   }
 
+
+  @Get('tags')
+  @ApiOperation({ 
+    summary: 'Get all available tags',
+    description: 'Get a list of all unique tags used in documents' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Tags retrieved successfully' 
+  })
+  getAllTags() {
+    return this.docsService.getAllTags();
+  }
+
+  @Get('status')
+  @ApiOperation({ 
+    summary: 'Get documents statistics',
+    description: 'Get statistics about documents and tags' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Statistics retrieved successfully' 
+  })
+  getStats(@GetUser() user?: any) {
+    return this.docsService.getDocStats(user?.id);
+  }
+
+  @Get()
+  @ApiOperation({ 
+    summary: 'Get all public documents',
+    description: 'Search and filter public documents' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Documents retrieved successfully' 
+  })
+  @ApiQuery({ name: 'query', required: false, description: 'Search query' })
+  @ApiQuery({ name: 'tags', required: false, description: 'Filter by tags (comma-separated)' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Number of results' })
+  @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
+  @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt', 'title'] })
+  @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
+  findAll(@Query() search: SearchDocDto) {
+    return this.docsService.findAll(search);
+  }
 
   @Get(':id')
   @ApiOperation({ 
@@ -105,32 +136,6 @@ export class DocsController {
     return this.docsService.findOne(id, user?.id);
   }
 
-  
-  @Get('tags')
-  @ApiOperation({ 
-    summary: 'Get all available tags',
-    description: 'Get a list of all unique tags used in documents' 
-  })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Tags retrieved successfully' 
-  })
-  getAllTags() {
-    return this.docsService.getAllTags();
-  }
-
-  @Get('stats')
-  @ApiOperation({ 
-    summary: 'Get documents statistics',
-    description: 'Get statistics about documents and tags' 
-  })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Statistics retrieved successfully' 
-  })
-  getStats(@GetUser() user?: any) {
-    return this.docsService.getDocStats(user?.id);
-  }
 
   @Patch(':id') 
   @UseGuards(JwtAuthGuard)

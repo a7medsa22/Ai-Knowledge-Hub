@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } f
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { NoteResponseDto } from './dto/response-note.dto';
 import { SearchNoteDto } from './dto/search-note.dto';
@@ -12,7 +12,7 @@ export interface JwtUser {
   email: string;
   role: string;
 }
-
+@ApiTags('Notes')
 @Controller('notes')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
@@ -37,7 +37,7 @@ export class NotesController {
     status: 403, 
     description: 'Cannot add notes to private documents you do not own' 
   })
-  create(@Body() body: CreateNoteDto,@GetUser()user:JwtUser) {
+  create(@GetUser()user:JwtUser,@Body() body: CreateNoteDto) {
     return this.notesService.create(user.id,body);
   }
 
@@ -60,23 +60,6 @@ export class NotesController {
     return this.notesService.findAll(user.id,serach);
   }
 
-  @Get(':id')
-  @ApiOperation({ 
-    summary: 'Get note by ID',
-    description: 'Get a specific note by its ID' 
-  })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Note retrieved successfully',
-    type: NoteResponseDto 
-  })
-  @ApiResponse({ 
-    status: 404, 
-    description: 'Note not found or access denied' 
-  })
-  findOne(@Param('id') id: string,@GetUser() user:JwtUser) {
-    return this.notesService.findOne(id,user.id);
-  }
 
   @Get('status')
   @ApiOperation({ 
@@ -94,15 +77,16 @@ export class NotesController {
   @ApiOperation({ 
     summary: 'Get recent notes',
     description: 'Get the most recently updated notes for the current user'})
-    @ApiResponse({ 
+  @ApiResponse({ 
       status: 200, 
       description: 'Recent notes retrieved successfully',
       type: [NoteResponseDto]})
-      @ApiQuery({ name: 'limit', required: false, description: 'Number of recent notes to retrieve, default is 5' })
+   @ApiQuery({ name: 'limit', required: false, description: 'Number of recent notes to retrieve, default is 5' })
   getRecent(@GetUser() user:JwtUser,@Query('limit') limit?:string){
     const parsedLimit = limit ? parseInt(limit, 10) : 5;
     return this.notesService.getRecentNotes(user.id,parsedLimit);
   }
+
   @Get('document/:docId')
   @ApiOperation({ 
     summary: 'Get notes for a document',
@@ -123,9 +107,31 @@ export class NotesController {
   @ApiQuery({ name: 'query', required: false, description: 'Search in note content' })
   @ApiQuery({ name: 'limit', required: false, description: 'Number of results' })
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
+  @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt'] })
+  @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
    findByDocument(@Param('docId') docId: string,@GetUser() user:JwtUser,@Query() search:SearchNoteDto) {
     return this.notesService.findByDocument(user.id,docId,search);
   }
+
+  @Get(':id')
+  @ApiOperation({ 
+    summary: 'Get note by ID',
+    description: 'Get a specific note by its ID' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Note retrieved successfully',
+    type: NoteResponseDto 
+  })
+  @ApiResponse({ 
+    status: 404, 
+    description: 'Note not found or access denied' 
+  })
+  findOne(@Param('id') id: string,@GetUser() user:JwtUser) {
+    return this.notesService.findOne(id,user.id);
+  }
+
+  
 
   @Patch(':id')
   @ApiOperation({ 
