@@ -6,8 +6,7 @@ import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@ne
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { NoteResponseDto } from './dto/response-note.dto';
 import { SearchNoteDto } from './dto/search-note.dto';
-import * as jwtUser from 'src/common/interfaces/jwtUser';
-import { JwtPayload } from 'src/auth/strategies/jwt.strategy';
+import type {JwtUser} from 'src/common/interfaces/jwt-user.interface';
 
 
 @ApiTags('Notes')
@@ -35,8 +34,8 @@ export class NotesController {
     status: 403, 
     description: 'Cannot add notes to private documents you do not own' 
   })
-  create(@GetUser()user:jwtUser.JwtUser,@Body() body: CreateNoteDto) {
-    return this.notesService.create(user.id,body);
+  create(@GetUser()user:JwtUser,@Body() body: CreateNoteDto) {
+    return this.notesService.create(user.sub,body);
   }
 
   @Get()
@@ -54,8 +53,8 @@ export class NotesController {
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
   @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt'] })
   @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
-  findAll(@GetUser() user: jwtUser.JwtUser,@Query()serach:SearchNoteDto) {
-    return this.notesService.findAll(user.id,serach);
+  findAll(@GetUser() user: JwtUser,@Query()serach:SearchNoteDto) {
+    return this.notesService.findAll(user.sub,serach);
   }
 
 
@@ -66,8 +65,8 @@ export class NotesController {
   @ApiResponse({ 
     status: 200, 
     description: 'Status retrieved successfully'})
-  getStatus(@GetUser() user:jwtUser.JwtUser){
-    return this.notesService.getNotesStats(user.id);
+  getStatus(@GetUser() user:JwtUser){
+    return this.notesService.getNotesStats(user.sub);
   }
  
   // get recent notes dashboard snippet service method
@@ -80,9 +79,9 @@ export class NotesController {
       description: 'Recent notes retrieved successfully',
       type: [NoteResponseDto]})
    @ApiQuery({ name: 'limit', required: false, description: 'Number of recent notes to retrieve, default is 5' })
-  getRecent(@GetUser() user:jwtUser.JwtUser,@Query('limit') limit?:string){
+  getRecent(@GetUser() user:JwtUser,@Query('limit') limit?:string){
     const parsedLimit = limit ? parseInt(limit, 10) : 5;
-    return this.notesService.getRecentNotes(user.id,parsedLimit);
+    return this.notesService.getRecentNotes(user.sub,parsedLimit);
   }
 
   @Get('document/:docId')
@@ -107,7 +106,7 @@ export class NotesController {
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
   @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt'] })
   @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
-   findByDocument(@Param('docId') docId: string,@GetUser() user: JwtStrategy.JwtPayload,@Query() search:SearchNoteDto) {
+   findByDocument(@Param('docId') docId: string,@GetUser() user: JwtUser,@Query() search:SearchNoteDto) {
     return this.notesService.findByDocument(user.sub,docId,search);
   }
 
@@ -125,8 +124,8 @@ export class NotesController {
     status: 404, 
     description: 'Note not found or access denied' 
   })
-  findOne(@Param('id') id: string,@GetUser() user:jwtUser.JwtUser) {
-    return this.notesService.findOne(id,user.id);
+  findOne(@Param('id') id: string,@GetUser() user:JwtUser) {
+    return this.notesService.findOne(id,user.sub);
   }
 
   
@@ -149,8 +148,8 @@ export class NotesController {
     status: 403, 
     description: 'You can only update your own notes' 
   })
-  update(@Param('id') id: string,@GetUser() user:jwtUser.JwtUser ,@Body() body: UpdateNoteDto) {
-    return this.notesService.update(id,user.id, body);
+  update(@Param('id') id: string,@GetUser() user:JwtUser ,@Body() body: UpdateNoteDto) {
+    return this.notesService.update(id,user.sub, body);
   }
 
   @Delete(':id')
@@ -170,7 +169,7 @@ export class NotesController {
     status: 403, 
     description: 'You can only delete your own notes' 
   })
-  remove(@Param('id') id: string, @GetUser() user: jwtUser.JwtUser) {
-    return this.notesService.remove(id, user.id);
+  remove(@Param('id') id: string, @GetUser() user: JwtUser) {
+    return this.notesService.remove(id, user.sub);
   }
 }

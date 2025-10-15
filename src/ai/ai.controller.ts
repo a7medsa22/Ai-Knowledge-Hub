@@ -4,6 +4,7 @@ import { AiService } from './ai.service';
 import { BulkSummarizeDto, ExtractKeyPointsDto, QuestionAnswerDto, QuestionAnswerResponseDto, SemanticSearchDto, SummarizeDto, SummarizeResponseDto, SummaryLength } from './dto/ai.dto';
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import * as client from '@prisma/client';
+import type { JwtUser } from 'src/common/interfaces/jwt-user.interface';
 
 
 @ApiTags('AI Services')
@@ -68,9 +69,9 @@ export class AiController {
   })
   async summarize(
     @Body() summarizeDto: SummarizeDto,
-    @GetUser() user?:client.User,
+    @GetUser() user?: JwtUser,
   ): Promise<SummarizeResponseDto> {
-    return this.aiService.summarize(summarizeDto, user?.id);
+    return this.aiService.summarize(summarizeDto, user?.sub);
   }
 
   @Post('qa')
@@ -109,9 +110,9 @@ export class AiController {
   })
   async answerQuestion(
     @Body() questionAnswerDto: QuestionAnswerDto,
-    @GetUser() user?:client.User,
+    @GetUser() user?: JwtUser,
   ): Promise<QuestionAnswerResponseDto> {
-    return this.aiService.answerQuestion(questionAnswerDto, user?.id);
+    return this.aiService.answerQuestion(questionAnswerDto, user?.sub);
   }
 
   @Post('search')
@@ -155,9 +156,9 @@ export class AiController {
   })
   async semanticSearch(
     @Body() searchDto: SemanticSearchDto,
-    @GetUser() user?:client.User,
+    @GetUser() user?: JwtUser,
   ) {
-    return this.aiService.semanticSearch(searchDto, user?.id);
+    return this.aiService.semanticSearch(searchDto, user?.sub);
   }
 
 
@@ -192,7 +193,6 @@ export class AiController {
   })
   async extractKeyPoints(
     @Body() body: ExtractKeyPointsDto,
-    @GetUser() user?: client.User,
   ) {
     const { text, count = 5 } = body;
     const keyPoints = await this.aiService.extractKeyPoints(text, count);
@@ -237,12 +237,12 @@ export class AiController {
   })
   async bulkSummarize(
     @Body() body: BulkSummarizeDto,
-    @GetUser() user: any,
+    @GetUser() user: JwtUser,
   ) {
     const { docIds, length = SummaryLength.MEDIUM } = body;
     const results = await this.aiService.generateBulkSummaries(
       docIds,
-      user.id,
+      user.sub,
       length,
     );
 

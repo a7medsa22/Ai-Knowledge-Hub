@@ -22,9 +22,7 @@ import { JwtAuthGuard, GetUser } from '../auth/guards/jwt-auth.guard';
 import { CreateDocDto } from './dto/create-doc.dto';
 import { SearchDocDto } from './dto/search-doc.dto';
 import { UpdateDocDto } from './dto/update-doc.dto';
-import * as jwtUser from 'src/common/interfaces/jwtUser';
-import { JwtUser } from 'src/common/interfaces/jwtUser';
-import * as jwtStrategy from 'src/auth/strategies/jwt.strategy';
+import type { JwtUser } from '../common/interfaces/jwt-user.interface';
 
 @ApiTags('Documents')
 @Controller('docs')
@@ -46,7 +44,7 @@ export class DocsController {
     status: 401, 
     description: 'Unauthorized' 
   })
-  create(@GetUser() user: jwtStrategy.JwtPayload, @Body() body: CreateDocDto) {
+  create(@GetUser() user: JwtUser, @Body() body: CreateDocDto) {
     return this.docsService.create(user.sub, body);
   }
 
@@ -68,7 +66,7 @@ export class DocsController {
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
   @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt', 'title'] })
   @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
-  findUserDocs(@GetUser() user: jwtStrategy.JwtPayload, @Query() search: SearchDocDto) {
+  findUserDocs(@GetUser() user: JwtUser, @Query() search: SearchDocDto) {
     return this.docsService.findUserDocs(search, user.sub);
   }
 
@@ -95,7 +93,7 @@ export class DocsController {
     status: 200, 
     description: 'Statistics retrieved successfully' 
   })
-  getStats(@GetUser() user?: jwtStrategy.JwtPayload) {
+  getStats(@GetUser() user?: JwtUser) {
     return this.docsService.getDocStats(user?.sub);
   }
 
@@ -135,7 +133,7 @@ export class DocsController {
     status: 403, 
     description: 'Access denied to private document' 
   })
-  findOne(@Param('id') id: string, @GetUser() user?: jwtStrategy.JwtPayload) {
+  findOne(@Param('id') id: string, @GetUser() user?: JwtUser) {
     return this.docsService.findOne(id, user?.sub);
   }
 
@@ -161,7 +159,7 @@ export class DocsController {
   })
   update(
     @Param('id') id: string,
-    @GetUser() user: jwtStrategy.JwtPayload,
+    @GetUser() user: JwtUser,
     @Body() body: UpdateDocDto,
   ) {
     return this.docsService.update(id, user.sub, body);
@@ -186,7 +184,7 @@ export class DocsController {
     status: 403, 
     description: 'You can only delete your own documents' 
   })
-  remove(@Param('id') id: string, @GetUser() user: jwtStrategy.JwtPayload) {
+  remove(@Param('id') id: string, @GetUser() user: JwtUser) {
     return this.docsService.remove(id, user.sub);
   }
 
