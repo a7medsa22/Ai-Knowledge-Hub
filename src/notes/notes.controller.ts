@@ -6,12 +6,10 @@ import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@ne
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { NoteResponseDto } from './dto/response-note.dto';
 import { SearchNoteDto } from './dto/search-note.dto';
+import * as jwtUser from 'src/common/interfaces/jwtUser';
+import { JwtPayload } from 'src/auth/strategies/jwt.strategy';
 
-export interface JwtUser {
-  id: string;
-  email: string;
-  role: string;
-}
+
 @ApiTags('Notes')
 @Controller('notes')
 @UseGuards(JwtAuthGuard)
@@ -37,7 +35,7 @@ export class NotesController {
     status: 403, 
     description: 'Cannot add notes to private documents you do not own' 
   })
-  create(@GetUser()user:JwtUser,@Body() body: CreateNoteDto) {
+  create(@GetUser()user:jwtUser.JwtUser,@Body() body: CreateNoteDto) {
     return this.notesService.create(user.id,body);
   }
 
@@ -56,7 +54,7 @@ export class NotesController {
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
   @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt'] })
   @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
-  findAll(@GetUser() user: JwtUser,@Query()serach:SearchNoteDto) {
+  findAll(@GetUser() user: jwtUser.JwtUser,@Query()serach:SearchNoteDto) {
     return this.notesService.findAll(user.id,serach);
   }
 
@@ -68,7 +66,7 @@ export class NotesController {
   @ApiResponse({ 
     status: 200, 
     description: 'Status retrieved successfully'})
-  getStatus(@GetUser() user:JwtUser){
+  getStatus(@GetUser() user:jwtUser.JwtUser){
     return this.notesService.getNotesStats(user.id);
   }
  
@@ -82,7 +80,7 @@ export class NotesController {
       description: 'Recent notes retrieved successfully',
       type: [NoteResponseDto]})
    @ApiQuery({ name: 'limit', required: false, description: 'Number of recent notes to retrieve, default is 5' })
-  getRecent(@GetUser() user:JwtUser,@Query('limit') limit?:string){
+  getRecent(@GetUser() user:jwtUser.JwtUser,@Query('limit') limit?:string){
     const parsedLimit = limit ? parseInt(limit, 10) : 5;
     return this.notesService.getRecentNotes(user.id,parsedLimit);
   }
@@ -109,8 +107,8 @@ export class NotesController {
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
   @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field', enum: ['createdAt', 'updatedAt'] })
   @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
-   findByDocument(@Param('docId') docId: string,@GetUser() user:JwtUser,@Query() search:SearchNoteDto) {
-    return this.notesService.findByDocument(user.id,docId,search);
+   findByDocument(@Param('docId') docId: string,@GetUser() user: JwtStrategy.JwtPayload,@Query() search:SearchNoteDto) {
+    return this.notesService.findByDocument(user.sub,docId,search);
   }
 
   @Get(':id')
@@ -127,7 +125,7 @@ export class NotesController {
     status: 404, 
     description: 'Note not found or access denied' 
   })
-  findOne(@Param('id') id: string,@GetUser() user:JwtUser) {
+  findOne(@Param('id') id: string,@GetUser() user:jwtUser.JwtUser) {
     return this.notesService.findOne(id,user.id);
   }
 
@@ -151,7 +149,7 @@ export class NotesController {
     status: 403, 
     description: 'You can only update your own notes' 
   })
-  update(@Param('id') id: string,@GetUser() user:JwtUser ,@Body() body: UpdateNoteDto) {
+  update(@Param('id') id: string,@GetUser() user:jwtUser.JwtUser ,@Body() body: UpdateNoteDto) {
     return this.notesService.update(id,user.id, body);
   }
 
@@ -172,7 +170,7 @@ export class NotesController {
     status: 403, 
     description: 'You can only delete your own notes' 
   })
-  remove(@Param('id') id: string, @GetUser() user: JwtUser) {
+  remove(@Param('id') id: string, @GetUser() user: jwtUser.JwtUser) {
     return this.notesService.remove(id, user.id);
   }
 }
