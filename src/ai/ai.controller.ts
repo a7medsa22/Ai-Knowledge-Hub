@@ -7,7 +7,7 @@ import * as client from '@prisma/client';
 import type { JwtUser } from 'src/common/interfaces/jwt-user.interface';
 
 
-@ApiTags('AI Services')
+@ApiTags('AI Research')
 @Controller('ai')
 export class AiController {
   constructor(private readonly aiService:AiService){}
