@@ -26,7 +26,44 @@ export class TasksService extends BaseSearchService {
       include: this.getTaskInclude(),
     });
   }
+  async findAll(userId:string,searchDto?:SearchTasksDto){
+    const where = this.buildWhereClause(userId, searchDto);
+    const orderBy = this.buildOrderBy(searchDto, 'createdAt');
+    return this.executePaginatedQuery('task', where, searchDto, this.getTaskInclude(), orderBy);
+  }
 
+  async findOne(userId:string,taskId:string){
+    const task = await this.prisma.task.findFirst({
+      where:{
+        id:taskId,
+        ownerId:userId,
+      },
+      include:this.getTaskInclude(),
+    })
+    if(!task){
+      throw new Error('Task not found')
+    }
+    return task
+  }
+  
+  async update(userId:string,taskId:string,dto:UpdateTaskDto):Promise<Task>{
+    await this.checkTaskOwnership(taskId, userId);
+    const { title, description, priority = Priority.MEDIUM, dueDate } = dto;
+    return this.prisma.task.update({
+      where:{
+        id:taskId,
+        ownerId:userId,
+      },
+      data:{
+        title,
+        description,
+        priority,
+        dueDate: dueDate ? new Date(dueDate) : null,
+      },
+      include:this.getTaskInclude(),
+    })
+  }
+  
   
   // Private Helper Method
   private getTaskInclude() {
