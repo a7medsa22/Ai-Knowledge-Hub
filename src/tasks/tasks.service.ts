@@ -118,6 +118,26 @@ export class TasksService extends BaseSearchService {
     };
   }
 
+  async getUpcomingTasks(userId: string, days: number = 7) {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + days);
+
+    return this.prisma.task.findMany({
+      where: {
+        ownerId: userId,
+        status: { not: TaskStatus.DONE },
+        dueDate: {
+          gte: new Date(),
+          lte: futureDate,
+        },
+      },
+      include: this.getTaskInclude(),
+      orderBy: {
+        dueDate: 'asc',
+      },
+    });
+  }
+
   
   // Private Helper Method
   private getTaskInclude() {
