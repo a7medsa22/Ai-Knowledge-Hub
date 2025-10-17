@@ -72,6 +72,51 @@ export class TasksService extends BaseSearchService {
       },
     })
   }
+   // Utils Method
+ async getTasksStats(userId: string) {
+    const [
+      totalTasks,
+      todoTasks,
+      inProgressTasks,
+      doneTasks,
+      cancelledTasks,
+      overdueTasks,
+      highPriorityTasks,
+    ] = await Promise.all([
+      this.prisma.task.count({ where: { ownerId: userId } }),
+      this.prisma.task.count({ where: { ownerId: userId, status: TaskStatus.TODO } }),
+      this.prisma.task.count({ where: { ownerId: userId, status: TaskStatus.IN_PROGRESS } }),
+      this.prisma.task.count({ where: { ownerId: userId, status: TaskStatus.DONE } }),
+      this.prisma.task.count({ where: { ownerId: userId, status: TaskStatus.CANCELLED } }),
+      this.prisma.task.count({
+        where: {
+          ownerId: userId,
+          dueDate: { lt: new Date() },
+          status: { not: TaskStatus.DONE },
+        },
+      }),
+      this.prisma.task.count({
+        where: {
+          ownerId: userId,
+          priority: { in: [Priority.HIGH, Priority.URGENT] },
+          status: { not: TaskStatus.DONE },
+        },
+      }),
+    ]);
+
+    return {
+      totalTasks,
+      byStatus: {
+        todo: todoTasks,
+        inProgress: inProgressTasks,
+        done: doneTasks,
+        cancelled: cancelledTasks,
+      },
+      overdueTasks,
+      highPriorityTasks,
+      completionRate: totalTasks > 0 ? ((doneTasks / totalTasks) * 100).toFixed(1) : '0',
+    };
+  }
 
   
   // Private Helper Method
