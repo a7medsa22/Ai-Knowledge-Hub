@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { Prisma, PrismaClient, TaskStatus } from '@prisma/client';
+import { Priority, Prisma, PrismaClient, Task, TaskStatus } from '@prisma/client';
 import { SearchTasksDto } from './dto/search-task.dto';
 import { BaseSearchService } from 'src/common/utils/base-search.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -12,8 +12,34 @@ export class TasksService extends BaseSearchService {
     super(prisma)
   }
 
+   async create(userId: string, createTaskDto: CreateTaskDto): Promise<Task> {
+    const { title, description, priority = Priority.MEDIUM, dueDate } = createTaskDto;
 
+    return this.prisma.task.create({
+      data: {
+        title,
+        description,
+        priority,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        ownerId: userId,
+      },
+      include: this.getTaskInclude(),
+    });
+  }
+
+  
   // Private Helper Method
+  private getTaskInclude() {
+    return {
+      owner: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
+      },
+    };
+  }
     private buildWhereClause(userId: string, searchDto?: SearchTasksDto): Prisma.TaskWhereInput {
     const { query, status, priority, overdue } = searchDto || {};
     const where: Prisma.TaskWhereInput = { ownerId: userId, AND: [] };
@@ -47,10 +73,5 @@ export class TasksService extends BaseSearchService {
     return this.checkOwnership('task', taskId, userId, 'ownerId');
   }
 
-  private getTaskInclude() {
-    return {
-      owner: true,
-      comments: true,
-    };
-  }
+  
 }
