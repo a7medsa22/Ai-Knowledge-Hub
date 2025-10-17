@@ -149,9 +149,20 @@ export class TasksService extends BaseSearchService {
             },
             include:this.getTaskInclude(),
         })
-
-      
     }
+     async getOverdueTasks(userId: string) {
+    return this.prisma.task.findMany({
+      where: {
+        ownerId: userId,
+        dueDate: { lt: new Date() },
+        status: { not: TaskStatus.DONE },
+      },
+      include: this.getTaskInclude(),
+      orderBy: {
+        dueDate: 'asc',
+      },
+    });
+  }
 
   
   // Private Helper Method
