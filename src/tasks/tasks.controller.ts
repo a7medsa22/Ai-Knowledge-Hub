@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -31,6 +31,33 @@ export class TasksController {
   create(@GetUser() user: JwtUser, @Body() body: CreateTaskDto) {
     return this.tasksService.create(user.sub, body);
   }
+
+   @Get('stats')
+  @ApiOperation({ 
+    summary: 'Get tasks statistics',
+    description: 'Get statistics about current user tasks' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Tasks statistics retrieved successfully' 
+  })
+  getStats(@GetUser() user: JwtUser) {
+    return this.tasksService.getTasksStats(user.sub);
+  }
+
+  @Get('upcoming')
+  @ApiOperation({ 
+    summary: 'Get upcoming tasks',
+    description: 'Get upcoming tasks for the current user' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Upcoming tasks retrieved successfully' 
+  })
+  getUpcomingTasks(@GetUser() user: JwtUser, @Query('days') days: number = 7) {
+    return this.tasksService.getUpcomingTasks(user.sub, days);
+  }
+
 
 
 
