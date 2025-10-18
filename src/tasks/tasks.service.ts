@@ -137,7 +137,7 @@ export class TasksService extends BaseSearchService {
       },
     });
   }
-    async updateStatus(taskId: string, userId: string, status: TaskStatus) { 
+    async updateStatus( userId: string,taskId: string, status: TaskStatus) { 
         await this.checkTaskOwnership(taskId, userId);
         return this.prisma.task.update({
             where:{

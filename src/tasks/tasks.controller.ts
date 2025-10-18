@@ -135,6 +135,23 @@ export class TasksController {
     return this.tasksService.update(user.sub,id,body);
   }
 
+  @Patch(':id/status')
+  @ApiOperation({ 
+    summary: 'Update task status',
+    description: 'Quick update for task status only' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Task status updated successfully' 
+  })
+  updateStatus(
+    @Param('id') id: string,
+    @GetUser() user: JwtUser,
+    @Body() body: { status: TaskStatus },
+  ) {
+    return this.tasksService.updateStatus(user.sub,id,body.status);
+  }
+
   @Delete(':id')
   @ApiOperation({ 
     summary: 'Delete task',
