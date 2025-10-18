@@ -57,6 +57,21 @@ export class TasksController {
   getUpcomingTasks(@GetUser() user: JwtUser, @Query('days') days: number = 7) {
     return this.tasksService.getUpcomingTasks(user.sub, days);
   }
+  
+  @Get('overdue')
+  @ApiOperation({ 
+    summary: 'Get overdue tasks',
+    description: 'Get all overdue tasks that are not completed' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Overdue tasks retrieved successfully' 
+  })
+  getOverdueTasks(@GetUser() user: JwtUser) {
+    return this.tasksService.getOverdueTasks(user.sub);
+  }
+
+
 
 
 
