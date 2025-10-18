@@ -48,4 +48,14 @@ export class UpdateTaskDto {
   
 }
 
+export class UpdateStatusDto{
+  @ApiProperty({ 
+    example: TaskStatus.IN_PROGRESS,
+    enum: TaskStatus,
+    required: true 
+  })
+  @IsEnum(TaskStatus)
+  @IsOptional()
+  status?: TaskStatus;
+}
 

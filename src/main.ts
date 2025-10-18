@@ -60,12 +60,12 @@ async function bootstrap() {
     .setTitle('AI Research')
     .setDescription('API for AI-powered research and knowledge management platform')
     .setVersion('1.0')
-    .addTag('AI Research')
     .addTag('Authentication')
     .addTag('Users')
+    .addTag('AI Research')
     .addTag('Documents')
-    .addTag('Notes')
     .addTag('Tasks')
+    .addTag('Notes')
     .addBearerAuth({
       type:"http",
       scheme:"bearer",

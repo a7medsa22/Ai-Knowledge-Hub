@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { UpdateStatusDto, UpdateTaskDto } from './dto/update-task.dto';
 import { Priority, Prisma, PrismaClient, Task, TaskStatus } from '@prisma/client';
 import { SearchTasksDto } from './dto/search-task.dto';
 import { BaseSearchService } from 'src/common/utils/base-search.service';
@@ -118,7 +118,8 @@ export class TasksService extends BaseSearchService {
     };
   }
 
-  async getUpcomingTasks(userId: string, days: number = 7) {
+  async getUpcomingTasks(userId: string, day?: number ) {
+    let days = day || 7;
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + days);
 
@@ -137,7 +138,7 @@ export class TasksService extends BaseSearchService {
       },
     });
   }
-    async updateStatus( userId: string,taskId: string, status: TaskStatus) { 
+    async updateStatus( userId: string,taskId: string, dto: UpdateStatusDto) { 
         await this.checkTaskOwnership(taskId, userId);
         return this.prisma.task.update({
             where:{
@@ -145,7 +146,7 @@ export class TasksService extends BaseSearchService {
                 ownerId:userId,
             },
             data:{
-                status,
+                status:dto.status,
             },
             include:this.getTaskInclude(),
         })

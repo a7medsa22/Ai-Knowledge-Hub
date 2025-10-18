@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags,ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { UpdateStatusDto, UpdateTaskDto } from './dto/update-task.dto';
+import { ApiBearerAuth, ApiResponse, ApiTags,ApiOperation, ApiQuery, ApiParam, ApiBody } from '@nestjs/swagger';
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TaskResponseDto } from './dto/response-task.dto';
 import type {JwtUser} from 'src/common/interfaces/jwt-user.interface';
@@ -56,7 +56,7 @@ export class TasksController {
     status: 200, 
     description: 'Upcoming tasks retrieved successfully' 
   })
-  getUpcomingTasks(@GetUser() user: JwtUser, @Query('days') days: number = 7) {
+  getUpcomingTasks(@GetUser() user: JwtUser, @Query('days') days?: number) {
     return this.tasksService.getUpcomingTasks(user.sub, days);
   }
   
@@ -95,11 +95,32 @@ export class TasksController {
     return this.tasksService.findAll(user.sub, searchDto);
   }
 
+   @Patch(':id/status')
+  @ApiOperation({ 
+    summary: 'Update task status',
+    description: 'Quick update for task status only' 
+  })
+  @ApiParam({ name: 'id', required: true, description: 'Task ID' })
+  @ApiBody({ type: UpdateStatusDto })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Task status updated successfully' 
+  })
+  updateStatus(
+    @Param('id') id: string,
+    @GetUser() user: JwtUser,
+    @Body() body: UpdateStatusDto,
+  ) {
+    return this.tasksService.updateStatus(user.sub,id,body);
+  }
+
+
   @Get(':id')
   @ApiOperation({ 
     summary: 'Get task by ID',
     description: 'Get a specific task by its ID' 
   })
+  @ApiParam({ name: 'id', required: true, description: 'Task ID' })
   @ApiResponse({ 
     status: 200, 
     description: 'Task retrieved successfully',
@@ -118,10 +139,12 @@ export class TasksController {
     summary: 'Update task',
     description: 'Update a task (only by owner)' 
   })
+  @ApiParam({ name: 'id', required: true, description: 'Task ID' })
+  @ApiBody({ type: UpdateTaskDto })
   @ApiResponse({ 
     status: 200, 
     description: 'Task updated successfully',
-    type: TaskResponseDto 
+    type: TaskResponseDto   
   })
   @ApiResponse({ 
     status: 404, 
@@ -135,28 +158,13 @@ export class TasksController {
     return this.tasksService.update(user.sub,id,body);
   }
 
-  @Patch(':id/status')
-  @ApiOperation({ 
-    summary: 'Update task status',
-    description: 'Quick update for task status only' 
-  })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Task status updated successfully' 
-  })
-  updateStatus(
-    @Param('id') id: string,
-    @GetUser() user: JwtUser,
-    @Body() body: { status: TaskStatus },
-  ) {
-    return this.tasksService.updateStatus(user.sub,id,body.status);
-  }
-
+ 
   @Delete(':id')
   @ApiOperation({ 
     summary: 'Delete task',
     description: 'Delete a task (only by owner)' 
   })
+  @ApiParam({ name: 'id', required: true, description: 'Task ID' })
   @ApiResponse({ 
     status: 200, 
     description: 'Task deleted successfully' 

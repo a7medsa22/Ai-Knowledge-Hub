@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { UsersService } from './users.service';
 import { JwtAuthGuard, GetUser } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/user.dto';
+import type { JwtUser } from 'src/common/interfaces/jwt-user.interface';
 
 @ApiTags('Users')
 @Controller('users')
@@ -15,8 +16,8 @@ export class UsersController {
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProfile(@GetUser() user: any) {
-    const userData = await this.usersService.findOne(user.id);
+  async getProfile(@GetUser() user: JwtUser) {
+    const userData = await this.usersService.findOne(user.sub);
 
     const {password, ...userWithoutPassword} = userData!;
     return userWithoutPassword;    
@@ -29,10 +30,10 @@ export class UsersController {
   @ApiOperation({ summary: 'Update current user profile' })
   @ApiResponse({ status: 200, description: 'User profile updated successfully' })
   async updateProfile(
-    @GetUser() user: any,
+    @GetUser() user: JwtUser,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.update(user.id, updateUserDto);
+    return this.usersService.update(user.sub, updateUserDto);
   }
 
   @Delete('profile')
@@ -40,8 +41,8 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete current user account' })
   @ApiResponse({ status: 200, description: 'User account deleted successfully' })
-  async deleteProfile(@GetUser() user: any) {
-    return this.usersService.delete(user.id);
+  async deleteProfile(@GetUser() user: JwtUser) {
+    return this.usersService.delete(user.sub);
   }
 
   @Get()
