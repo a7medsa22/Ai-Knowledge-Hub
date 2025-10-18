@@ -95,6 +95,67 @@ export class TasksController {
     return this.tasksService.findAll(user.sub, searchDto);
   }
 
+  @Get(':id')
+  @ApiOperation({ 
+    summary: 'Get task by ID',
+    description: 'Get a specific task by its ID' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Task retrieved successfully',
+    type: TaskResponseDto 
+  })
+  @ApiResponse({ 
+    status: 404, 
+    description: 'Task not found or access denied' 
+  })
+  findOne(@Param('id') id: string, @GetUser() user: JwtUser) {
+    return this.tasksService.findOne(user.sub,id);
+  }
+
+   @Patch(':id')
+  @ApiOperation({ 
+    summary: 'Update task',
+    description: 'Update a task (only by owner)' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Task updated successfully',
+    type: TaskResponseDto 
+  })
+  @ApiResponse({ 
+    status: 404, 
+    description: 'Task not found' 
+  })
+  @ApiResponse({ 
+    status: 403, 
+    description: 'You can only update your own tasks' 
+  })
+  update(@Param('id') id: string, @GetUser() user: JwtUser, @Body() body: UpdateTaskDto) {
+    return this.tasksService.update(user.sub,id,body);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ 
+    summary: 'Delete task',
+    description: 'Delete a task (only by owner)' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Task deleted successfully' 
+  })
+  @ApiResponse({ 
+    status: 404, 
+    description: 'Task not found' 
+  })
+  @ApiResponse({ 
+    status: 403, 
+    description: 'You can only delete your own tasks' 
+  })
+  remove(@Param('id') id: string, @GetUser() user: JwtUser) {
+    return this.tasksService.deleteTask(user.sub,id);
+  }
+
 
 
 

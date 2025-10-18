@@ -63,7 +63,7 @@ export class TasksService extends BaseSearchService {
       include:this.getTaskInclude(),
     })
   }
-  async delete(userId:string,taskId:string){
+  async deleteTask(userId:string,taskId:string){
     await this.checkTaskOwnership(taskId, userId);
     return this.prisma.task.delete({
       where:{
