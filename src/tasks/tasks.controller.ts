@@ -2,10 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } f
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags,ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags,ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TaskResponseDto } from './dto/response-task.dto';
 import type {JwtUser} from 'src/common/interfaces/jwt-user.interface';
+import { SearchTasksDto } from './dto/search-task.dto';
+import { TaskStatus } from '@prisma/client';
 
 @ApiTags('Tasks')
 @Controller('tasks')
@@ -69,6 +71,28 @@ export class TasksController {
   })
   getOverdueTasks(@GetUser() user: JwtUser) {
     return this.tasksService.getOverdueTasks(user.sub);
+  }
+
+
+    @Get()
+  @ApiOperation({ 
+    summary: 'Get user tasks',
+    description: 'Get all tasks created by the current user with search and filter options' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Tasks retrieved successfully' 
+  })
+  @ApiQuery({ name: 'query', required: false, description: 'Search in task title and description' })
+  @ApiQuery({ name: 'status', required: false, description: 'Filter by status', enum: TaskStatus })
+  @ApiQuery({ name: 'priority', required: false, description: 'Filter by priority' })
+  @ApiQuery({ name: 'overdue', required: false, description: 'Filter overdue tasks' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Number of results' })
+  @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
+  @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field' })
+  @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
+  findAll(@GetUser() user: JwtUser, @Query() searchDto: SearchTasksDto) {
+    return this.tasksService.findAll(user.sub, searchDto);
   }
 
 
