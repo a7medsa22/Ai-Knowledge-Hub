@@ -9,6 +9,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AiModule } from './ai/ai.module';
+import { McpModule } from './mcp/mcp.module';
 
 @Module({
   imports: [
@@ -47,7 +48,8 @@ import { AiModule } from './ai/ai.module';
      DocsModule,
      NotesModule,
      TasksModule,
-     AiModule
+     AiModule,
+     McpModule
         ],
   providers: [
      {
