@@ -150,3 +150,19 @@ export class McpToolResponse {
   @ApiProperty({ example: 100 })
   executionTime: number;
 }
+
+// MCP Tool Execution Response
+export class McpToolExecutionResponse {
+  @ApiProperty({ example: 'toolName' })
+  toolName: string;
+
+  @ApiProperty({ example: 'result' })
+  result: any;
+
+  @ApiProperty({ example: 'error', required: false })
+  error?: string;
+
+  @ApiProperty({ example: 100 })
+  executionTime: number;
+}
+
