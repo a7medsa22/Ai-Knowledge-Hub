@@ -166,3 +166,13 @@ export class McpToolExecutionResponse {
   executionTime: number;
 }
 
+// MCP Tool Execution Request
+export class McpToolExecutionRequest {
+  @ApiProperty({ example: 'toolName' })
+  toolName: string;
+
+  @ApiProperty({ example: 'parameters' })
+  parameters: any;
+}
+
+
