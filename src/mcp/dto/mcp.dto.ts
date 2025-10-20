@@ -110,3 +110,20 @@ export class CreateTaskToolDto {
   dueDate?: string;
 }
 
+// List Tasks Tool
+export class ListTasksToolDto {
+  @ApiProperty({ example: 'TODO', required: false })
+  @IsString()
+  @IsOptional()
+  status?: string;
+
+  @ApiProperty({ example: 'HIGH', required: false })
+  @IsString()
+  @IsOptional()
+  priority?: string;
+
+  @ApiProperty({ example: 10, required: false })
+  @IsOptional()
+  limit?: number; 
+}
+
