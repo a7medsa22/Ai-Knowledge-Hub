@@ -1,14 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMcpDto } from './dto/mcp.dto';
-import { UpdateMcpDto } from './dto/update-mcp.dto';
 
 @Injectable()
 export class McpService {
-  create(createMcpDto: CreateMcpDto) {
-    return 'This action adds a new mcp';
-  }
-
-  findAll() {
+  
+  async executeTool(toolName: string, parameters: any) {
     return `This action returns all mcp`;
   }
 
@@ -16,7 +11,7 @@ export class McpService {
     return `This action returns a #${id} mcp`;
   }
 
-  update(id: number, updateMcpDto: UpdateMcpDto) {
+  update(id: number) {
     return `This action updates a #${id} mcp`;
   }
 
