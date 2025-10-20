@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { McpService } from './mcp.service';
-import { CreateMcpDto } from './dto/create-mcp.dto';
+import { CreateMcpDto } from './dto/mcp.dto';
 import { UpdateMcpDto } from './dto/update-mcp.dto';
 
 @Controller('mcp')

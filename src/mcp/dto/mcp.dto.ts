@@ -1,0 +1,89 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { IsArray, IsOptional, IsString } from "class-validator";
+
+export class McpToolParameter {
+    @ApiProperty({
+        example: 'name',
+        description: 'Parameter name',
+    })
+    name: string;
+    @ApiProperty({
+        example: 'type',
+        description: 'Parameter type',
+    })
+    type: string;
+    @ApiProperty({
+        example: 'description',
+        description: 'Parameter description',
+    })
+    description: string;
+}
+export class McpToolDefinition {
+    @ApiProperty({
+        example: 'name',
+        description: 'Tool name',
+    })
+    name: string;
+    @ApiProperty({
+        example: 'type',
+        description: 'Tool type',
+    })
+    type: string;
+    @ApiProperty({
+        example: 'description',
+        description: 'Tool description',
+    })
+    description: string;
+    @ApiProperty({
+        example: 'parameters',
+        description: 'Tool parameters',
+        type: [McpToolParameter],
+    })
+    parameters: McpToolParameter[];
+}
+
+// MCP Tool Execution Request
+export class ExecuteToolDto {
+  @ApiProperty({ 
+    example: 'searchDocs',
+    description: 'Name of the tool to execute'
+  })
+  @IsString()
+  toolName: string;
+
+  @ApiProperty({ 
+    example: { query: 'machine learning', limit: 5 },
+    description: 'Parameters for the tool'
+  })
+  @IsOptional()
+  parameters?: Record<string, any>;
+}
+
+// Search Documents Tool
+export class SearchDocsToolDto {
+  @ApiProperty({ example: 'machine learning' })
+  @IsString()
+  query: string;
+
+  @ApiProperty({ example: 5, required: false })
+  @IsOptional()
+  limit?: number;
+
+  @ApiProperty({ example: ['ai', 'tutorial'], required: false, type: [String] })
+  @IsArray()
+  @IsOptional()
+  tags?: string[];
+}
+
+// Add Note Tool
+export class AddNoteToolDto {
+  @ApiProperty({ example: 'This is an important observation...' })
+  @IsString()
+  content: string;
+
+  @ApiProperty({ example: 'doc123', required: false })
+  @IsString()
+  @IsOptional()
+  docId?: string;
+}
+
