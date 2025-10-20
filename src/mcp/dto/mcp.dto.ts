@@ -126,4 +126,27 @@ export class ListTasksToolDto {
   @IsOptional()
   limit?: number; 
 }
+// Get Document Tool
+export class GetDocumentToolDto {
+  @ApiProperty({ example: 'doc123'  })
+  @IsString()
+  docId: string;
+}
 
+// MCP Response
+export class McpToolResponse {
+  @ApiProperty({ example: true })
+  success: boolean;
+
+  @ApiProperty({ example: 'toolName' })
+  toolName: string;
+
+  @ApiProperty({ example: 'result' })
+  result: any;
+
+  @ApiProperty({ example: 'error', required: false })
+  error?: string;
+
+  @ApiProperty({ example: 100 })
+  executionTime: number;
+}
