@@ -87,3 +87,26 @@ export class AddNoteToolDto {
   docId?: string;
 }
 
+
+// Create Task Tool
+export class CreateTaskToolDto {
+  @ApiProperty({ example: 'Review AI implementation' })
+  @IsString()
+  title: string;
+
+  @ApiProperty({ example: 'Check all AI endpoints', required: false })
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @ApiProperty({ example: 'HIGH', required: false })
+  @IsString()
+  @IsOptional()
+  priority?: string;
+
+  @ApiProperty({ example: '2025-11-01T23:59:59Z', required: false })
+  @IsString()
+  @IsOptional()
+  dueDate?: string;
+}
+
