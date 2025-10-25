@@ -81,7 +81,77 @@ export class McpController {
     return this.mcpService.executeTool(body.toolName, body.parameters , user.sub);
   }
 
+
+  @Post('execute-batch')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Execute multiple MCP tools',
+    description: 'Execute multiple tools in a single request',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Batch execution completed',
+    example: {
+      results: [
+        {
+          success: true,
+          toolName: 'searchDocs',
+          result: { documents: [], total: 0 },
+          executionTime: 100,
+        },
+        {
+          success: true,
+          toolName: 'listTasks',
+          result: { tasks: [], total: 0 },
+          executionTime: 80,
+        },
+      ],
+      totalExecutionTime: 180,
+      successCount: 2,
+      failureCount: 0,
+    },
+  })
+  async executeBatchTools(@Body() body: ExecuteToolDto[] , @GetUser() user: JwtUser) {
+    const startTime = Date.now();
+    const results = await this.mcpService.executeBatchTools(body , user.sub);
+    const executionTime = Date.now() - startTime;
+    const successCount = results.filter((result) => result.success).length;
+    const failureCount = results.filter((result) => !result.success).length;
+    return {
+      results,
+      totalExecutionTime: executionTime,
+      successCount,
+      failureCount,
+    };
+  }
+
   
+  @Get('health')
+  @ApiOperation({
+    summary: 'Check MCP service health',
+    description: 'Verify that MCP service is operational',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'MCP service is healthy',
+    example: {
+      status: 'healthy',
+      availableTools: 6,
+      timestamp: '2025-10-17T12:00:00Z',
+    },
+  })
+  healthCheck() {
+    const tools = this.mcpService.getAvailableTools();
+    return {
+      status: 'healthy',
+      availableTools: tools.count,
+      timestamp: new Date().toISOString(),
+    };
+  }
+  
+  
+
+
 
 
 }
