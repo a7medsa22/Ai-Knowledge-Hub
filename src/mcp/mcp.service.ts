@@ -16,7 +16,8 @@ export class McpService {
 
       // Get all available MCP tools
   getAvailableTools(){
-      return MCP_Tools;
+      const tools = MCP_Tools
+      return {tools , count:tools.length}
   }
 
   async executeTool(toolName:string,parameters:any,userId:string):Promise<McpToolResponse>{
@@ -88,7 +89,7 @@ export class McpService {
     );
     return results;
   }
-  
+
 
 
   
