@@ -12,11 +12,19 @@ export class McpToolParameter {
         description: 'Parameter type',
     })
     type: string;
+
     @ApiProperty({
         example: 'description',
         description: 'Parameter description',
     })
     description: string;
+    
+    @ApiProperty({
+        example: 'required',
+        description: 'Parameter required',
+        required:false
+    })
+    required?: boolean;
 }
 export class McpToolDefinition {
     @ApiProperty({
@@ -24,6 +32,7 @@ export class McpToolDefinition {
         description: 'Tool name',
     })
     name: string;
+
     @ApiProperty({
         example: 'type',
         description: 'Tool type',
@@ -34,6 +43,7 @@ export class McpToolDefinition {
         description: 'Tool description',
     })
     description: string;
+
     @ApiProperty({
         example: 'parameters',
         description: 'Tool parameters',

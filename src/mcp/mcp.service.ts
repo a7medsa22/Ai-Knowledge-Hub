@@ -1,22 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { ExecuteToolDto } from './dto/mcp.dto';
+import { ExecuteToolDto, McpToolDefinition } from './dto/mcp.dto';
+import { DocsService } from 'src/docs/docs.service';
+import { NotesService } from 'src/notes/notes.service';
+import { TasksService } from 'src/tasks/tasks.service';
+import { MCP_Tools } from './mcp-tools.registry';
 
 @Injectable()
 export class McpService {
-  tools: any[] = [];
-  
-  async executeTool(dto: ExecuteToolDto) {
-    const toolName = dto.toolName;
-    const parameters = dto.parameters;
-    
-    const tool = this.tools.find((tool) => tool.name === toolName);
-    if (!tool) {
-      throw new Error(`Tool ${toolName} not found`);
-    }
-    
-    const result = await tool.execute(parameters);
-    return result;    
+  constructor(
+      private readonly docsService:DocsService
+     ,private readonly notesService:NotesService
+     ,private readonly tasksService:TasksService){}
+
+      // Get all available MCP tools
+  getAvailableTools(){
+      return MCP_Tools;
   }
+  
+
+  
+    
 
   findOne(id: number) {
     return `This action returns a #${id} mcp`;
