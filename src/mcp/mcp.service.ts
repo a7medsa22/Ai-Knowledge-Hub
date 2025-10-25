@@ -81,7 +81,15 @@ export class McpService {
       };
     }
   }
+
+  async executeBatchTools(tools: ExecuteToolDto[], userId: string): Promise<McpToolResponse[]> {
+    const results = await Promise.all(
+      tools.map(async (tool) => this.executeTool(tool.toolName, tool.parameters, userId))
+    );
+    return results;
+  }
   
+
 
   
     
