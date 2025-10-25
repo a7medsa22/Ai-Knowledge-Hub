@@ -6,6 +6,7 @@ import { ExecuteToolDto, McpToolResponse } from './dto/mcp.dto';
 import { GetUser } from 'src/auth/guards/jwt-auth.guard';
 import type {JwtUser} from 'src/common/interfaces/jwt-user.interface';
 import { SearchDocDto } from 'src/docs/dto/search-doc.dto';
+import { NoteResponseDto } from 'src/notes/dto/response-note.dto';
 
 @ApiTags('MCP (Model Context Protocol)')
 @ApiAuth()
@@ -184,7 +185,62 @@ export class McpController {
     return this.mcpService.executeTool('searchDocs', body , user.sub);
   }
 
+  @Get('quick/get-doc')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Quick get document',
+    description: 'Get document by id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Document retrieved successfully',
+    type: Document,
+    example: {
+      id: 'doc123',
+      title: 'Machine Learning Basics',
+      content: 'Introduction to ML...',
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid document id',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  quickGetDoc(@Body() body: { docId: string } , @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('getDocument', body , user.sub);
+  }
+
+  @Post('quick/add-note')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Quick add note',
+    description: 'Add note to document',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Note added successfully',
+    example: {
+      id: 'note123',
+      content: 'This is a note',
+      docId: 'doc123',
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid document id',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  quickAddNote(@Body() body: { docId: string , content: string } , @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('addNote', body , user.sub);
+  }
   
+
 
 
   
