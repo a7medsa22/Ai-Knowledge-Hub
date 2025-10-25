@@ -7,6 +7,8 @@ import { GetUser } from 'src/auth/guards/jwt-auth.guard';
 import type {JwtUser} from 'src/common/interfaces/jwt-user.interface';
 import { SearchDocDto } from 'src/docs/dto/search-doc.dto';
 import { NoteResponseDto } from 'src/notes/dto/response-note.dto';
+import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
+import { CreateNoteDto } from 'src/notes/dto/create-note.dto';
 
 @ApiTags('MCP (Model Context Protocol)')
 @ApiAuth()
@@ -236,10 +238,38 @@ export class McpController {
     status: 401,
     description: 'Unauthorized',
   })
-  quickAddNote(@Body() body: { docId: string , content: string } , @GetUser() user: JwtUser) {
+  quickAddNote(@Body() body: CreateNoteDto , @GetUser() user: JwtUser) {
     return this.mcpService.executeTool('addNote', body , user.sub);
   }
-  
+
+  @Post('quick/create-task')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Quick create task',
+    description: 'Create a new task',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Task created successfully',
+    example: {
+      id: 'task123',
+      title: 'Task title',
+      description: 'Task description',
+      priority: 'LOW',
+      dueDate: '2025-10-17T12:00:00Z',
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid task data',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  quickCreateTask(@Body() body: CreateTaskDto , @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('createTask', body , user.sub);
+  }
 
 
 
