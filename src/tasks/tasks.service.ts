@@ -12,8 +12,8 @@ export class TasksService extends BaseSearchService {
     super(prisma)
   }
 
-   async create(userId: string, createTaskDto: CreateTaskDto): Promise<Task> {
-    const { title, description, priority = Priority.MEDIUM, dueDate } = createTaskDto;
+   async create(userId: string, dto: CreateTaskDto): Promise<Task> {
+    const { title, description, priority = Priority.MEDIUM, dueDate } = dto;
 
     return this.prisma.task.create({
       data: {
@@ -174,8 +174,17 @@ export class TasksService extends BaseSearchService {
           id: true,
           email: true,
           name: true,
-        },
+        }, 
       },
+      select:{
+        id:true,
+        title:true,
+        description:true,
+        priority:true,
+        dueDate:true,
+        status:true,
+        ownerId:true,
+      }
     };
   }
     private buildWhereClause(userId: string, searchDto?: SearchTasksDto): Prisma.TaskWhereInput {

@@ -18,7 +18,7 @@ export class McpToolParameter {
         description: 'Parameter description',
     })
     description: string;
-    
+
     @ApiProperty({
         example: 'required',
         description: 'Parameter required',
@@ -69,79 +69,6 @@ export class ExecuteToolDto {
   parameters?: Record<string, any>;
 }
 
-// Search Documents Tool
-export class SearchDocsToolDto {
-  @ApiProperty({ example: 'machine learning' })
-  @IsString()
-  query: string;
-
-  @ApiProperty({ example: 5, required: false })
-  @IsOptional()
-  limit?: number;
-
-  @ApiProperty({ example: ['ai', 'tutorial'], required: false, type: [String] })
-  @IsArray()
-  @IsOptional()
-  tags?: string[];
-}
-
-// Add Note Tool
-export class AddNoteToolDto {
-  @ApiProperty({ example: 'This is an important observation...' })
-  @IsString()
-  content: string;
-
-  @ApiProperty({ example: 'doc123', required: false })
-  @IsString()
-  @IsOptional()
-  docId?: string;
-}
-
-
-// Create Task Tool
-export class CreateTaskToolDto {
-  @ApiProperty({ example: 'Review AI implementation' })
-  @IsString()
-  title: string;
-
-  @ApiProperty({ example: 'Check all AI endpoints', required: false })
-  @IsString()
-  @IsOptional()
-  description?: string;
-
-  @ApiProperty({ example: 'HIGH', required: false })
-  @IsString()
-  @IsOptional()
-  priority?: string;
-
-  @ApiProperty({ example: '2025-11-01T23:59:59Z', required: false })
-  @IsString()
-  @IsOptional()
-  dueDate?: string;
-}
-
-// List Tasks Tool
-export class ListTasksToolDto {
-  @ApiProperty({ example: 'TODO', required: false })
-  @IsString()
-  @IsOptional()
-  status?: string;
-
-  @ApiProperty({ example: 'HIGH', required: false })
-  @IsString()
-  @IsOptional()
-  priority?: string;
-
-  @ApiProperty({ example: 10, required: false })
-  @IsOptional()
-  limit?: number; 
-}
-// Get Document Tool
-export class GetDocumentToolDto {
-  @ApiProperty({ example: 'doc123'  })
-  @IsString()
-  docId: string;
-}
 
 // MCP Response
 export class McpToolResponse {
