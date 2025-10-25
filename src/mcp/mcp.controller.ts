@@ -5,6 +5,7 @@ import { ApiAuth } from 'src/common/decorators/api-auth.decorator';
 import { ExecuteToolDto, McpToolResponse } from './dto/mcp.dto';
 import { GetUser } from 'src/auth/guards/jwt-auth.guard';
 import type {JwtUser} from 'src/common/interfaces/jwt-user.interface';
+import { SearchDocDto } from 'src/docs/dto/search-doc.dto';
 
 @ApiTags('MCP (Model Context Protocol)')
 @ApiAuth()
@@ -148,6 +149,44 @@ export class McpController {
       timestamp: new Date().toISOString(),
     };
   }
+
+  // Quick search docs
+  @Post('quick/search-docs')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Quick search for documents',
+    description: 'Search for documents by query',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Documents retrieved successfully',
+    type: [Document],
+    example: {
+      documents: [
+        {
+          id: 'doc123',
+          title: 'Machine Learning Basics',
+          excerpt: 'Introduction to ML...',
+        },
+      ],
+      total: 1,
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid query',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  quickSearchDocs(@Body() body: SearchDocDto , @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('searchDocs', body , user.sub);
+  }
+
+  
+
+
   
   
 
