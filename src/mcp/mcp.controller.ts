@@ -271,6 +271,28 @@ export class McpController {
     return this.mcpService.executeTool('createTask', body , user.sub);
   }
 
+@Get('quick/user-stats')
+@HttpCode(HttpStatus.OK)
+@ApiOperation({
+  summary: 'Quick get user stats',
+  description: 'Get user stats',
+})
+@ApiResponse({
+  status: 200,
+  description: 'User stats retrieved successfully',
+  example: {
+    documents: 10,
+    notes: 5,
+    tasks: 3,
+  },
+})
+@ApiResponse({
+  status: 401,
+  description: 'Unauthorized',
+})
+quickUserStats(@GetUser() user: JwtUser) {
+  return this.mcpService.executeTool('getUserStats', {} , user.sub);
+}
 
 
   
