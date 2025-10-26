@@ -10,10 +10,16 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AiModule } from './ai/ai.module';
 import { McpModule } from './mcp/mcp.module';
-
+import { GraphQLModule } from '@nestjs/graphql';
+import{ ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 @Module({
   imports: [
-      ConfigModule.forRoot({
+       GraphQLModule.forRoot<ApolloDriverConfig>({
+        driver:ApolloDriver,
+        autoSchemaFile:true,
+        playground:true,
+       })
+      ,ConfigModule.forRoot({
         isGlobal:true,
         envFilePath: '.env',
       expandVariables: true,
