@@ -66,6 +66,7 @@ async function bootstrap() {
     .addTag('Documents')
     .addTag('Tasks')
     .addTag('Notes')
+    .addTag('MCP (Model Context Protocol)')
     .addBearerAuth({
       type:"http",
       scheme:"bearer",
