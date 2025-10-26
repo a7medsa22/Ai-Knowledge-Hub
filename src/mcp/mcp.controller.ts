@@ -163,7 +163,7 @@ export class McpController {
   @ApiResponse({
     status: 200,
     description: 'Documents retrieved successfully',
-    type: [Document],
+    
     example: {
       documents: [
         {

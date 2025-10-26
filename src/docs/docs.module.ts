@@ -4,8 +4,11 @@ import { DocsController } from './docs.controller';
 import { DocsResolver } from './docs.resolver';
 
 @Module({
+
    controllers: [DocsController],
   providers: [DocsService, DocsResolver],
   exports:[DocsService],
+
+
 })
 export class DocsModule {}
