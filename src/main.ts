@@ -92,8 +92,9 @@ async function bootstrap() {
   
   console.log(`
     Ai knowledge Hub Backend server is running...
-🚀 Server running on: http://localhost:${port}
+🚀 Server running on: http://localhost:${port}/${apiPrefix}/v1
 📚 API Documentation: http://localhost:${port}/${apiPrefix}/docs
+🌌 GraphQL Playground: http://localhost:${port}/graphql
 🔧 Environment: ${config.get('NODE_ENV', 'development')}
   `);
 }

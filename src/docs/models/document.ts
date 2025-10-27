@@ -18,11 +18,11 @@ export class Document {
        @Field(()=>Boolean,{nullable:true})
       isPublic?:boolean;
     
-           
-      @Field(()=>[String],{nullable:'items'})
+          
+      @Field(()=>[String],{nullable:true}) 
       tags?:string[];
     
     
     
     
-}
+} 

@@ -12,12 +12,14 @@ import { AiModule } from './ai/ai.module';
 import { McpModule } from './mcp/mcp.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import{ ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { AppController } from './app..controller';
 @Module({
   imports: [
        GraphQLModule.forRoot<ApolloDriverConfig>({
         driver:ApolloDriver,
         autoSchemaFile:true,
         playground:true,
+        introspection:true
        })
       ,ConfigModule.forRoot({
         isGlobal:true,
@@ -68,5 +70,6 @@ import{ ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
     },
     
   ],
+  controllers:[AppController]
 })
 export class AppModule {}
