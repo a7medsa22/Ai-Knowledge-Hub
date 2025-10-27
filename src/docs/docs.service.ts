@@ -4,7 +4,6 @@ import { UpdateDocDto } from './dto/update-doc.dto';
 import { Doc, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SearchDocDto } from './dto/search-doc.dto';
-import { constants } from 'buffer';
 
 @Injectable()
 export class DocsService {

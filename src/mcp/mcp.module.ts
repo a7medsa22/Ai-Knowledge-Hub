@@ -7,7 +7,8 @@ import { TasksModule } from 'src/tasks/tasks.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports:[DocsModule, NotesModule, TasksModule,PrismaModule],
+  imports:[DocsModule
+    , NotesModule, TasksModule,PrismaModule],
   controllers: [McpController],
   providers: [McpService],
 })

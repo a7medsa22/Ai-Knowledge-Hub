@@ -6,7 +6,7 @@ import { DocsResolver } from './docs.resolver';
 @Module({
 
    controllers: [DocsController],
-  providers: [DocsService, DocsResolver],
+  providers: [DocsService],
   exports:[DocsService],
 
 
