@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { McpController } from './mcp.controller';
 import { McpService } from './mcp.service';
+import { McpToolDefinition } from './dto/mcp.dto';
+import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
 
 describe('McpController', () => {
   let controller: McpController;
@@ -8,14 +10,16 @@ describe('McpController', () => {
 
   const mockUser = {
     sub: 'user123',
-    role: 'USER',
-  } as any;
+    email: 'test@example.com',
+    name: 'Test User',
+    role: 'user',
+  };
 
   beforeEach(async () => {
     const mockMcpService = {
       getAvailableTools: jest.fn(),
       executeTool: jest.fn(),
-      executeBatchTools: jest.fn(),
+      executeBatch: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -38,22 +42,22 @@ describe('McpController', () => {
 
   describe('getAvailableTools', () => {
     it('should return list of available tools', () => {
-      const mockTools = [
+      const mockTools:McpToolDefinition[] = [
         {
           name: 'searchDocs',
-          type: 'action',
+          type: 'function',
           description: 'Search documents',
           parameters: [],
         },
         {
           name: 'addNote',
-          type: 'action',
+          type: 'function',
           description: 'Add a note',
           parameters: [],
         },
       ];
 
-      service.getAvailableTools.mockReturnValue({ tools: mockTools, count: mockTools.length });
+      service.getAvailableTools.mockReturnValue({ tools: mockTools , count: mockTools.length });
 
       const result = controller.getAvailableTools();
 
@@ -232,11 +236,11 @@ describe('McpController', () => {
   describe('healthCheck', () => {
     it('should return health status', () => {
       const mockTools = [
-        { name: 'tool1', type: 'action', description: '', parameters: [] },
-        { name: 'tool2', type: 'action', description: '', parameters: [] },
+        { name: 'tool1', type: 'function',description: '', parameters: [] },
+        { name: 'tool2', type: 'function',description: '', parameters: [] },
       ];
 
-      service.getAvailableTools.mockReturnValue({ tools: mockTools, count: mockTools.length });
+      service.getAvailableTools.mockReturnValue({ tools: mockTools , count: mockTools.length });
 
       const result = controller.healthCheck();
 
@@ -261,98 +265,100 @@ describe('McpController', () => {
 
         service.executeTool.mockResolvedValue(mockResponse);
 
-const result = await controller.quickSearchDocs(body, mockUser);
+        const result = await controller.quickSearchDocs(body, mockUser);
 
-expect(result).toEqual(mockResponse);
-expect(service.executeTool).toHaveBeenCalledWith(
-'searchDocs',
-body,
-mockUser.sub,
-);
-});
-});
+        expect(result).toEqual(mockResponse);
+        expect(service.executeTool).toHaveBeenCalledWith(
+          'searchDocs',
+          body,
+          mockUser.sub,
+        );
+      });
+    });
 
-describe('quickAddNote', () => {
-it('should execute quick add note', async () => {
-const body = { content: 'Test note', docId: 'doc1' };
+    describe('quickAddNote', () => {
+      it('should execute quick add note', async () => {
+        const body = { content: 'Test note', docId: 'doc1' };
 
-const mockResponse = {
-success: true,
-toolName: 'addNote',
-result: { id: 'note1', content: 'Test note' },
-executionTime: 30,
-};
+        const mockResponse = {
+          success: true,
+          toolName: 'addNote',
+          result: { id: 'note1', content: 'Test note' },
+          executionTime: 30,
+        };
 
-service.executeTool.mockResolvedValue(mockResponse);
+        service.executeTool.mockResolvedValue(mockResponse);
 
-const result = await controller.quickAddNote(body, mockUser);
+        const result = await controller.quickAddNote(body, mockUser);
 
-expect(result).toEqual(mockResponse);
-expect(service.executeTool).toHaveBeenCalledWith(
-'addNote',
-body,
-mockUser.sub,
-);
-});
+        expect(result).toEqual(mockResponse);
+        expect(service.executeTool).toHaveBeenCalledWith(
+          'addNote',
+          body,
+          mockUser.sub,
+        );
+      });
 
-it('should add note without docId', async () => {
-const body = { content: 'Standalone note' };
+      it('should add note without docId', async () => {
+        const body = { content: 'Standalone note' };
 
-const mockResponse = {
-success: true,
-toolName: 'addNote',
-result: { id: 'note1', content: 'Standalone note', docId: null },
-executionTime: 30,
-};
+        const mockResponse = {
+          success: true,
+          toolName: 'addNote',
+          result: { id: 'note1', content: 'Standalone note', docId: null },
+          executionTime: 30,
+        };
 
-service.executeTool.mockResolvedValue(mockResponse);
+        service.executeTool.mockResolvedValue(mockResponse);
 
-const result = await controller.quickAddNote(body, mockUser);
+        const result = await controller.quickAddNote(body, mockUser);
 
-expect(result).toEqual(mockResponse);
-});
-});
+        expect(result).toEqual(mockResponse);
+      });
+    });
 
-describe('quickCreateTask', () => {
-it('should execute quick create task', async () => {
-const body = {
-title: 'Test Task',
-description: 'Description',
-priority: 'HIGH',
-};
+    describe('quickCreateTask', () => {
+      it('should execute quick create task', async () => {
+        const body:CreateTaskDto = {
+          title: 'Test Task',
+          description: 'Description',
+          priority: 'HIGH',
+          dueDate: '2025-11-01',
+          
+        };
 
-const mockResponse = {
-success: true,
-toolName: 'createTask',
-result: { id: 'task1', title: 'Test Task' },
-executionTime: 40,
-};
+        const mockResponse = {
+          success: true,
+          toolName: 'createTask',
+          result: { id: 'task1', title: 'Test Task' },
+          executionTime: 40,
+        };
 
-service.executeTool.mockResolvedValue(mockResponse);
+        service.executeTool.mockResolvedValue(mockResponse);
 
-const result = await controller.quickCreateTask(body, mockUser);
+        const result = await controller.quickCreateTask(body, mockUser);
 
-expect(result).toEqual(mockResponse);
-expect(service.executeTool).toHaveBeenCalledWith(
-'createTask',
-body,
-mockUser.sub,
-);
-});
-});
+        expect(result).toEqual(mockResponse);
+        expect(service.executeTool).toHaveBeenCalledWith(
+          'createTask',
+          body,
+          mockUser.sub,
+        );
+      });
+    });
 
-describe('quickUserStats', () => {
-it('should execute quick get user stats', async () => {
-const mockResponse = {
-success: true,
-toolName: 'getUserStats',
-result: {
-documents: { totalDocs: 10 },
-notes: { totalNotes: 20 },
-tasks: { totalTasks: 15 },
-},
-executionTime: 60,
-};
+    describe('quickUserStats', () => {
+      it('should execute quick get user stats', async () => {
+        const mockResponse = {
+          success: true,
+          toolName: 'getUserStats',
+          result: {
+            documents: { totalDocs: 10 },
+            notes: { totalNotes: 20 },
+            tasks: { totalTasks: 15 },
+          },
+          executionTime: 60,
+        };
 
         service.executeTool.mockResolvedValue(mockResponse);
 
