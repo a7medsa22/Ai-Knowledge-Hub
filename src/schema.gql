@@ -1,0 +1,27 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Document {
+  id: String!
+  title: String!
+  content: String!
+  isPublic: Boolean
+  tags: [String]!
+}
+
+type Query {
+  findAll: [Document!]!
+  findOne(id: String!, userId: String!): Document!
+}
+
+type Mutation {
+  createDoc(authorId: String!, dto: InputDocument!): Document!
+}
+
+input InputDocument {
+  title: String!
+  content: String!
+  isPublic: Boolean
+  tags: [String]!
+}

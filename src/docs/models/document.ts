@@ -15,11 +15,11 @@ export class Document {
       content: string;
        
     
-       @Field({nullable:true})
+       @Field(()=>Boolean,{nullable:true})
       isPublic?:boolean;
     
            
-      @Field({nullable:'items'})
+      @Field(()=>[String],{nullable:'items'})
       tags?:string[];
     
     

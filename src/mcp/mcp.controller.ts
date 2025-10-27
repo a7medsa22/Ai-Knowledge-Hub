@@ -196,7 +196,6 @@ export class McpController {
   @ApiResponse({
     status: 200,
     description: 'Document retrieved successfully',
-    type: Document,
     example: {
       id: 'doc123',
       title: 'Machine Learning Basics',
