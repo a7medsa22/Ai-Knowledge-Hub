@@ -7,16 +7,16 @@ import { InputDocument } from './models/input-doc';
 export class DocsResolver {
     constructor(private readonly docsService: DocsService){}
     
-     @Query(()=>[Document])
+     @Query(()=>[Document],{name:'docs'})
       findAll(){
         return this.docsService.findAll()
      }
-     @Query(()=>Document)
-      findOne(@Args('id') id:string,@Args('userId') userId?:string){
-        return this.docsService.findOne(id,userId)
-     }
-     @Mutation(()=>Document)
-     createDoc(@Args('authorId') authorId:string,@Args('dto') dto:InputDocument){
-        return this.docsService.create(authorId,dto)
-     }    
+   //   @Query(()=>Document)
+   //    findOne(@Args('id') id:string,@Args('userId') userId?:string){
+   //      return this.docsService.findOne(id,userId)
+   //   }
+   //   @Mutation(()=>Document)
+   //   createDoc(@Args('authorId') authorId:string,@Args('dto') dto:InputDocument){
+   //      return this.docsService.create(authorId,dto)
+   //   }    
 }

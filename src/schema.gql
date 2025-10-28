@@ -3,25 +3,13 @@
 # ------------------------------------------------------
 
 type Document {
-  id: String!
+  id: ID!
   title: String!
   content: String!
   isPublic: Boolean
-  tags: [String]!
+  tags: [String!]
 }
 
 type Query {
-  findAll: [Document!]!
-  findOne(id: String!, userId: String!): Document!
-}
-
-type Mutation {
-  createDoc(authorId: String!, dto: InputDocument!): Document!
-}
-
-input InputDocument {
-  title: String!
-  content: String!
-  isPublic: Boolean
-  tags: [String]!
+  docs: [Document!]!
 }

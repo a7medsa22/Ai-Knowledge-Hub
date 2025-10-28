@@ -11,15 +11,19 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AiModule } from './ai/ai.module';
 import { McpModule } from './mcp/mcp.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import{ ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { AppController } from './app..controller';
+import { join } from 'path';
+import { AppService } from './app.service';
 @Module({
   imports: [
        GraphQLModule.forRoot<ApolloDriverConfig>({
         driver:ApolloDriver,
-        autoSchemaFile:true,
+        autoSchemaFile:join(process.cwd(), 'src/schema.gql'),
         playground:true,
-        introspection:true
+        introspection:true,
+       
        })
       ,ConfigModule.forRoot({
         isGlobal:true,
@@ -68,7 +72,7 @@ import { AppController } from './app..controller';
       provide:APP_GUARD,
       useClass:ThrottlerGuard,
     },
-    
+    AppService,
   ],
   controllers:[AppController]
 })

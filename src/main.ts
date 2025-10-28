@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType, RequestMethod } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { ConfigService } from '@nestjs/config';
@@ -48,7 +48,9 @@ async function bootstrap() {
   
   // global versioning
   const apiPrefix = config.get('API_PREFIX');
-  app.setGlobalPrefix(apiPrefix);
+  app.setGlobalPrefix(apiPrefix, {
+    exclude: [{ path: 'graphql', method: RequestMethod.ALL }],
+  });
 
   // Global Filters & Interceptors
   app.useGlobalFilters(new HttpExceptionFilter());

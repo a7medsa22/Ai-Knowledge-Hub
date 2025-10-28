@@ -1,21 +1,21 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class Document {
 
-       @Field(()=>String)
+       @Field(()=> ID)
       id:string;
    
 
-      @Field(()=>String)
+      @Field()
       title: string;
     
      
-      @Field(()=>String)
+      @Field()
       content: string;
        
     
-       @Field(()=>Boolean,{nullable:true})
+       @Field({nullable:true})
       isPublic?:boolean;
     
           
