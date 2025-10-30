@@ -3,8 +3,8 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateStatusDto, UpdateTaskDto } from './dto/update-task.dto';
 import { Priority, Prisma, PrismaClient, Task, TaskStatus } from '@prisma/client';
 import { SearchTasksDto } from './dto/search-task.dto';
-import { BaseSearchService } from 'src/common/utils/base-search.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { BaseSearchService } from '../common/utils/base-search.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class TasksService extends BaseSearchService {
@@ -175,15 +175,6 @@ export class TasksService extends BaseSearchService {
           email: true,
           name: true,
         }, 
-      },
-      select:{
-        id:true,
-        title:true,
-        description:true,
-        priority:true,
-        dueDate:true,
-        status:true,
-        ownerId:true,
       }
     };
   }

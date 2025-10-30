@@ -1,14 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { McpService } from './mcp.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ApiAuth } from 'src/common/decorators/api-auth.decorator';
+import { ApiAuth } from '../common/decorators/api-auth.decorator';
 import { ExecuteToolDto, McpToolResponse } from './dto/mcp.dto';
-import { GetUser } from 'src/auth/guards/jwt-auth.guard';
-import type {JwtUser} from 'src/common/interfaces/jwt-user.interface';
-import { SearchDocDto } from 'src/docs/dto/search-doc.dto';
-import { NoteResponseDto } from 'src/notes/dto/response-note.dto';
-import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
-import { CreateNoteDto } from 'src/notes/dto/create-note.dto';
+import { GetUser } from '../auth/guards/jwt-auth.guard';
+import type {JwtUser} from '../common/interfaces/jwt-user.interface';
+import { SearchDocDto } from '../docs/dto/search-doc.dto';
+import { CreateTaskDto } from '../tasks/dto/create-task.dto';
+import { CreateNoteDto } from '../notes/dto/create-note.dto';
 
 @ApiTags('MCP (Model Context Protocol)')
 @ApiAuth()

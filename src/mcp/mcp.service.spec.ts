@@ -15,7 +15,7 @@ describe('McpService', () => {
   beforeEach(async () => {
     // Create mock services
     const mockDocsService = {
-      findUserDocs: jest.fn(),
+      findUserDocs: jest.fn().mockResolvedValue({ documents: [{ id: '1', title: 'Test Doc' }] }),
       findOne: jest.fn(),
       getDocStats: jest.fn(),
     };
@@ -84,13 +84,11 @@ describe('McpService', () => {
   describe('executeTool - searchDocs', () => {
     it('should execute searchDocs tool successfully', async () => {
       const mockDocs = {
-        data: [
+        documents: [
           {
-            id: 'doc1',
-            title: 'Test Doc',
-            content: 'This is a test document with some content...',
-            tags: ['test'],
-            createdAt: new Date(),
+            id: '1',
+            title: 'Test Document',
+            content: 'This is a test document',
           },
         ],
         meta: { total: 1, limit: 5, offset: 0 },
@@ -106,7 +104,7 @@ describe('McpService', () => {
 
       expect(result.success).toBe(true);
       expect(result.toolName).toBe('searchDocs');
-      expect(result.result.documents).toBeDefined();
+      expect(result.result).toEqual(mockDocs);
       expect(result.executionTime).toBeGreaterThan(0);
     });
   });

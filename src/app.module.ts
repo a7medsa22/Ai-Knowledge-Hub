@@ -23,7 +23,6 @@ import { AppService } from './app.service';
         autoSchemaFile:join(process.cwd(), 'src/schema.gql'),
         playground:true,
         introspection:true,
-       
        })
       ,ConfigModule.forRoot({
         isGlobal:true,

@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ExecuteToolDto, McpToolDefinition, McpToolResponse } from './dto/mcp.dto';
-import { DocsService } from 'src/docs/docs.service';
-import { NotesService } from 'src/notes/notes.service';
-import { TasksService } from 'src/tasks/tasks.service';
+import { DocsService } from '../docs/docs.service';
+import { NotesService } from '../notes/notes.service';
+import { TasksService } from '../tasks/tasks.service';
 import { MCP_Tools } from './mcp-tools.registry';
 import { Logger } from '@nestjs/common';
+import { throws } from 'assert';
 
 @Injectable()
 export class McpService {
@@ -31,25 +32,42 @@ export class McpService {
 
       switch (toolName) {
         case 'searchDocs':
-          result = this.docsService.findUserDocs(parameters, userId);
+          result = await this.docsService.findUserDocs(parameters, userId);
           break;
 
         case 'getDocument':
-          result = this.docsService.findOne(parameters, userId);
+          if(parameters.id == null){
+            result = await this.docsService.findAll(parameters);
+          }
+          else{
+            result = await this.docsService.findOne(parameters.id, userId);
+          }
           break;
 
         case 'addNote':
           result = await this.notesService.create(userId,parameters);
           break;
 
-        case 'createTask':
+        case 'searchNotes':
+          result = await this.notesService.findAll(userId,parameters);
+          break;
+
+        case 'addTask':
           result = await this.tasksService.create(userId,parameters);
           break;
 
+        case 'searchTasks':
+          result = await this.tasksService.findAll(userId,parameters);
+          break;
+          
+        case 'createTask':
+          result = await this.tasksService.create(userId,parameters);
+          break;
+          
         case 'listTasks':
           result = await this.tasksService.findAll(userId,parameters);
           break;
-
+          
         case 'getUserStats':
           result = await this.notesService.getNotesStats(userId);
           break;
