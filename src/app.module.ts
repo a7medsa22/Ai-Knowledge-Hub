@@ -19,10 +19,16 @@ import { AppService } from './app.service';
 @Module({
   imports: [
        GraphQLModule.forRoot<ApolloDriverConfig>({
-        driver:ApolloDriver,
-        autoSchemaFile:join(process.cwd(), 'src/schema.gql'),
-        playground:true,
-        introspection:true,
+        driver: ApolloDriver,
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        playground: {
+          settings: {
+            'editor.theme': 'dark',
+            'editor.reuseHeaders': true,
+            'tracing.hideTracingResponse': true,
+          },
+        }, 
+        introspection: true,
        })
       ,ConfigModule.forRoot({
         isGlobal:true,

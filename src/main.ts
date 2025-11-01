@@ -27,7 +27,24 @@ async function bootstrap() {
   )   
 
   // Secure the app by setting various HTTP headers
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
+          styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+          imgSrc: ["'self'", "data:", "https://cdn.jsdelivr.net"],
+          connectSrc: ["'self'"],
+          fontSrc: ["'self'", "https://cdn.jsdelivr.net"],
+          objectSrc: ["'none'"],
+          frameSrc: ["'self'"],
+          upgradeInsecureRequests: [],
+        },
+      },
+      crossOriginEmbedderPolicy: false
+    })
+  );
   app.use(compression())
 
    
