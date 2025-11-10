@@ -49,10 +49,13 @@
     "graphql": "^16.11.0",
     "graphql-tools": "^9.0.20",
     "helmet": "^8.1.0",
+    "mammoth": "^1.11.0",
     "passport-jwt": "^4.0.1",
+    "pdf-parse": "^2.4.5",
     "prisma": "^6.15.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "textract": "^2.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
