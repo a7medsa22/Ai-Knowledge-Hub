@@ -4,8 +4,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { LinkedToType, SearchFilesDto } from './dto/files.dto';
 import { join } from 'path';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
-import * as pdfParse from 'pdf-parse';
 import * as mammoth from 'mammoth';
+const pdfParse = require('pdf-parse');
 
 @Injectable()
 export class FilesService {
