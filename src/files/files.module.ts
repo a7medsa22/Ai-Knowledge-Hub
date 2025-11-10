@@ -1,11 +1,13 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FilesController } from './files.controller';
 import { MulterModule } from '@nestjs/platform-express/multer';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { DocsModule } from 'src/docs/docs.module';
 @Module({
   imports: [
+    forwardRef(() => DocsModule),
     MulterModule.register({
       storage:diskStorage({
         destination: './uploads',

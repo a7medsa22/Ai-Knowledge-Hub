@@ -132,6 +132,7 @@ export class FilesService {
     return file;
   }
 
+
   // Get file path for serving
   getFilePath(filename: string): string {
     const filePath = join(process.cwd(), this.uploadDir, filename);

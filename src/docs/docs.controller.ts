@@ -26,7 +26,7 @@ import type { JwtUser } from '../common/interfaces/jwt-user.interface';
 
 @ApiTags('Documents')
 @Controller('docs')
-export class DocsController {
+export class DocsController { 
   constructor(private readonly docsService: DocsService) {}
 
   @Post()
