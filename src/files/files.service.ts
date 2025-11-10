@@ -3,9 +3,9 @@ import { File, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LinkedToType, SearchFilesDto } from './dto/files.dto';
 import { join } from 'path';
+import { existsSync, readFileSync, unlinkSync } from 'fs';
 import * as pdfParse from 'pdf-parse';
 import * as mammoth from 'mammoth';
-import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class FilesService {
@@ -231,5 +231,37 @@ export class FilesService {
     // For now, allow deletion if no specific ownership check
     return true;
   }
+
+  // Extract text from file
+  async extractTextFromFile(filePath: string, mimeType: string): Promise<string> {
+    try {
+      switch (mimeType) {
+        case 'application/pdf':
+          return await this.extractTextFromPdf(filePath);
+        
+        case 'application/msword':
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+          return await this.extractTextFromWord(filePath);
+        
+        case 'text/plain':
+        case 'text/csv':
+          return this.extractTextFromTxt(filePath);
+        
+        default:
+          throw new BadRequestException('Cannot extract text from this file type');
+      }
+    } catch (error) {
+      this.logger.error(`Text extraction failed: ${error.message}`);
+      throw new BadRequestException(`Failed to extract text: ${error.message}`);
+    }
+  }
+
+  // Extract text from PDF
+  private async extractTextFromPdf(filePath: string): Promise<string> {
+    const dataBuffer = readFileSync(filePath);
+    const data = await pdfParse(dataBuffer) ;
+    return data.text;
+  }
+  
 
 }
