@@ -263,5 +263,27 @@ export class FilesService {
     return data.text;
   }
   
+  // Extract text from Word
+  private async extractTextFromWord(filePath: string): Promise<string> {
+    const result = await mammoth.extractRawText({ path: filePath });
+    return result.value;
+  }
+
+  // Extract text from plain text
+  private extractTextFromTxt(filePath: string): string {
+    return readFileSync(filePath, 'utf-8');
+  }
+
+  // Check if file type supports text extraction
+  canExtractText(mimeType: string): boolean {
+    const extractableTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+      'text/csv',
+    ];
+    return extractableTypes.includes(mimeType);
+  }
 
 }
