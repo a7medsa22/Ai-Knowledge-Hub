@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -15,6 +17,8 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiQuery,
+  ApiConsumes,
+  ApiBody
 } from '@nestjs/swagger';
 
 import { DocsService } from './docs.service';
@@ -23,29 +27,71 @@ import { CreateDocDto } from './dto/create-doc.dto';
 import { SearchDocDto } from './dto/search-doc.dto';
 import { UpdateDocDto } from './dto/update-doc.dto';
 import type { JwtUser } from '../common/interfaces/jwt-user.interface';
+import { ApiAuth } from 'src/common/decorators/api-auth.decorator';
+import { FileInterceptor } from '@nestjs/platform-express/multer';
 
 @ApiTags('Documents')
+@ApiAuth()
 @Controller('docs')
 export class DocsController { 
   constructor(private readonly docsService: DocsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data', 'application/json')
   @ApiOperation({ 
     summary: 'Create a new document',
     description: 'Create a new document/article' 
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          example: 'Introduction to Machine Learning',
+          description: 'Title of the document (required)',
+        },
+        content: {
+          type: 'string',
+          example: 'Machine learning is...',
+          description: 'Text content (optional if file is provided)',
+        },
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'File to extract content from (optional if content is provided)',
+        },
+        tags: {
+          type: 'array',
+          items: { type: 'string' },
+          example: ['machine-learning', 'ai'],
+          description: 'Tags for categorizing',
+        },
+        isPublic: {
+          type: 'boolean',
+          example: true,
+          description: 'Whether document is public',
+        },
+      },
+    },
   })
   @ApiResponse({ 
     status: 201, 
     description: 'Document created successfully' 
   })
+   @ApiResponse({ 
+    status: 400, 
+    description: 'Invalid input (must provide either content or file)' 
+  })
   @ApiResponse({ 
     status: 401, 
     description: 'Unauthorized' 
   })
-  create(@GetUser() user: JwtUser, @Body() body: CreateDocDto) {
-    return this.docsService.create(user.sub, body);
+  create(@GetUser() user: JwtUser, @Body() body: CreateDocDto,
+  @UploadedFile() file?: Express.Multer.File,
+) {
+    return this.docsService.create(user.sub, body,file);
   }
 
 

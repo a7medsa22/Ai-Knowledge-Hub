@@ -1,21 +1,69 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateDocDto } from './dto/create-doc.dto';
 import { UpdateDocDto } from './dto/update-doc.dto';
-import { Doc, Prisma } from '@prisma/client';
+import { Doc, File, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { SearchDocDto } from './dto/search-doc.dto';
+import { FilesService } from '../files/files.service';
+import { LinkedToType } from 'src/files/dto/files.dto';
 
 @Injectable()
 export class DocsService {
-  constructor(private readonly prisma:PrismaService){}
-  create(authorId:string, dto: CreateDocDto):Promise<Doc> {
-   return this.prisma.doc.create({
+  constructor(private readonly prisma:PrismaService,private readonly filesService:FilesService){}
+  async create(authorId:string, dto: CreateDocDto,file?: Express.Multer.File):Promise<{document:Doc,uploadedFile?:File}> {
+    let content = dto.content;
+    let uploaded;
+
+    // If file is provided, extract text from it
+    if (file) {
+      // Validate file type
+      if (!this.filesService.canExtractText(file.mimetype)) {
+        throw new Error(
+          `Cannot extract text from ${file.mimetype}. Supported: PDF, Word, Plain Text`,
+        );
+      }
+
+      // Upload file first
+      uploaded = await this.filesService.uploadFile(file, authorId);
+
+      // Extract text from file
+      const filePath = this.filesService.getFilePath(file.filename);
+      content = await this.filesService.extractTextFromFile(filePath, file.mimetype);
+    }
+
+    // Validate: must have either content or file
+    if (!content || content.trim().length === 0) {
+      throw new Error('Must provide either content text or a file to extract content from');
+    }
+   const document = await this.prisma.doc.create({
     data:{
-      ...dto,authorId
+      ...dto,authorId,
+      content,
     },
     include:this.getDocIncloude(),
    });
-  }
+
+    if (uploaded) {
+      await this.filesService.uploadFile(
+        file!,
+        authorId,
+        LinkedToType.DOC,
+        document.id,
+      );
+    }
+
+ return {
+      document,
+      ...(uploaded && {
+        uploadedFile: {
+          id: uploaded.id,
+          filename: uploaded.filename,
+          originalName: uploaded.originalName,
+          url: uploaded.url,
+        },
+      }),
+    }
+    }
 
 
  async findAll(search?:SearchDocDto) {
