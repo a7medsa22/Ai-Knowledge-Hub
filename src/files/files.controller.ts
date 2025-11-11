@@ -189,7 +189,7 @@ export class FilesController {
       file,
       user.id,
       LinkedToType.DOC,
-      document.id,
+      document.document.id,
     );
 
     return {
@@ -201,12 +201,12 @@ export class FilesController {
         size: uploadedFile.size,
       },
       document: {
-        id: document.id,
-        title: document.title,
+        id: document.document.id,
+        title: document.document.title,
         content: extractedText.substring(0, 500) + (extractedText.length > 500 ? '...' : ''),
         wordCount: extractedText.split(/\s+/).length,
-        tags: document.tags,
-        createdAt: document.createdAt,
+        tags: document.document.tags,
+        createdAt: document.document.createdAt,
       },
       extractedTextLength: extractedText.length,
     };
@@ -262,11 +262,11 @@ export class FilesController {
     description: 'Get file information and metadata',
   })
   @ApiResponse({
-    status: 200,
+    status: 200, 
     description: 'File metadata retrieved successfully',
-    type: FileResponseDto,
+    type: FileResponseDto, 
   })
-  @ApiResponse({
+  @ApiResponse({ 
     status: 404,
     description: 'File not found',
   })
