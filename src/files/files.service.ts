@@ -79,6 +79,7 @@ export class FilesService {
     return uploadedFile;
   }
 
+  // get all files 
   async findAll(searchDto: SearchFilesDto): Promise<File[]> {
     const { linkedToType, linkedToId, mimeType } = searchDto;
     const where: Prisma.FileWhereInput = {};
@@ -112,6 +113,7 @@ export class FilesService {
     return files;
   }
 
+    // get file by id
     async findOne(id: string): Promise<File> {
     const file = await this.prisma.file.findUnique({
       where: { id },
