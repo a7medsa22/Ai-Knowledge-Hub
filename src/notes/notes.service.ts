@@ -119,7 +119,7 @@ async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
   }
     };
   };
-
+  // Validate document access for note operations
   private async validateDocumentAccess(docId: string, userId: string) {
     const doc = await this.prisma.doc.findUniqueOrThrow({
       where: { id: docId },
