@@ -83,7 +83,7 @@ export class AiService {
             try {
               await this.docsService.update(docId, userId, { 
                 summary: response.result,
-                       });
+                  });
               this.logger.log(`Summary saved to document ${docId}`);
             } catch (error) {
               this.logger.warn(`Failed to save summary to document: ${error.message}`);

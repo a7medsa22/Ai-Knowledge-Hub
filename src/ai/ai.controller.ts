@@ -154,6 +154,10 @@ export class AiController {
     status: 401,
     description: 'Unauthorized',
   })
+  @ApiResponse({
+    status: 500,
+    description: 'Semantic search not implemented',
+  })
   async semanticSearch(
     @Body() searchDto: SemanticSearchDto,
     @GetUser() user?: JwtUser,
@@ -190,6 +194,10 @@ export class AiController {
   @ApiResponse({
     status: 401,
     description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Key point extraction failed',
   })
   async extractKeyPoints(
     @Body() body: ExtractKeyPointsDto,
