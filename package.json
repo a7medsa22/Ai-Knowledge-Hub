@@ -38,6 +38,7 @@
     "@nestjs/throttler": "^6.4.0",
     "@octokit/rest": "^22.0.0",
     "@prisma/client": "^6.15.0",
+    "@types/passport-local": "^1.0.38",
     "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",

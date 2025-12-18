@@ -1,8 +1,9 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthResponseDto, LoginDto, RegisterDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Authentication')
 @Controller('users/auth')
@@ -54,6 +55,7 @@ export class AuthController {
 
   @Post('login')
   @Throttle({ auth: { limit: 5, ttl: 60000 } }) 
+  @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ 
     summary: 'User login (Step 1)',

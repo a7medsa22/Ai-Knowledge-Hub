@@ -32,16 +32,4 @@ export class LoginDto {
   password: string;
 }
 
-// class AuthResponseDto
-export class AuthResponseDto {
-  @ApiProperty()
-  access_token: string;
 
-  @ApiProperty()
-  user: {
-    id: string;
-    email: string;
-    name?: string;
-    role: string;
-  };
-}

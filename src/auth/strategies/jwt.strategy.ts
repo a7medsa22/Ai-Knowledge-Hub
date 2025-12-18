@@ -3,14 +3,9 @@ import { ConfigService } from "@nestjs/config";
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from "@nestjs/passport";
 import { AuthService } from "../auth.service";
+import { JwtPayload } from "../interfaces/jwt-payload";
 
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  role: string;
-  iat?: number;
-  exp?: number;
-}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy){
     constructor(
@@ -20,24 +15,15 @@ export class JwtStrategy extends PassportStrategy(Strategy){
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      //* ! *  عشان تقول للـ TS إنها مش undefined
       secretOrKey: config.get<string>('JWT_SECRET')!,
     });
   }
     async validate(payload:JwtPayload) {
-        const user = await this.authService.validateUser(payload.sub);
+        const user = await this.authService.validateJwtPayload(payload.sub);
         if(!user){
             throw new UnauthorizedException('User not found');
         }
-        return {
-            sub:user.id,
-            email:user.email,
-            role:user.role,
-            name:user.name,
-        }
+        return payload
         
     }
-
-
-  
 }
