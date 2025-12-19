@@ -6,7 +6,7 @@ import * as bcrypt from 'node_modules/bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './interfaces/jwt-payload';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User } from '@prisma/client';
+import { User, UserStatus } from '@prisma/client';
 import { AuthResponse } from './interfaces/auth-response.interface';
 
 @Injectable()
@@ -28,9 +28,10 @@ export class AuthService {
         const haspassword = await bcrypt.hash(password,12);
 
         const newUser = await this.userService.create({
-            name,
+            name: name || 'User',
             email,
-            password:haspassword
+            password:haspassword,
+            status: 'PENDING_EMAIL_VERIFICATION'
 });
 
 
@@ -76,17 +77,14 @@ user:{
         email: user.email,
         name: user.name,
         role: user.role,
+        status: user.status,
       },
         accessToken,
         refreshToken:'face-refresh',
         expiresIn: Number(this.configService.get('JWT_EXPIRES_IN')),
-
-        
-
-
-
     };
-  }
+  ;}
+
    async validateJwtPayload(userId: string) {
  const user = await this.prisma.user.findUnique({
     where: { id: userId },
@@ -96,11 +94,11 @@ user:{
 
    return{
     id:user.id,
-    name:user.id,
+    name:user.name,
     email:user.email,
     role: user.role,
-  //  status: user.status,
-  
+    status: user.status,
+   
    }
  }
 
@@ -142,7 +140,7 @@ user:{
   default:
     throw new UnauthorizedException('Invalid account status. Please contact support.');
 }
-if (!user.isActive) {
+if (user.status !== 'ACTIVE' || !user.isActive) {
   throw new UnauthorizedException('Account is not active. Please contact support.');
 }
 

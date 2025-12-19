@@ -13,7 +13,7 @@ export class UsersService {
     return this.prisma.user.create({data});
   }
 
-      async findAll(): Promise<UserWithoutPassword[]> {
+      async findAll() {
      return this.prisma.user.findMany({
       select: {
         id: true,

@@ -1,9 +1,10 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthResponseDto, LoginDto, RegisterDto } from './dto/auth.dto';
+import { RegisterDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthResponse } from './interfaces/auth-response.interface';
 
 @ApiTags('Authentication')
 @Controller('users/auth')
@@ -46,7 +47,7 @@ export class AuthController {
     }
   })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async register(@Body() body:RegisterDto):Promise<AuthResponseDto>{
+  async register(@Body() body:RegisterDto){
    return this.authService.register(body);
 
   };
@@ -90,7 +91,7 @@ export class AuthController {
       }
     }
   })
-  async Login(@Body() body:LoginDto):Promise<AuthResponseDto>{
-return this.authService.login(body);
+  async Login(@Req() req):Promise<AuthResponse>{
+return this.authService.login(req.user);
   };
 }
