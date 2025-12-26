@@ -109,6 +109,12 @@ user:{
       expiresIn: this.configService.get('JWT_EXPIRES_IN', '15m'),
     });
   }
+  async generateRefreshToken(payload: JwtPayload): Promise<string> {
+    return this.jwtService.signAsync(payload, {
+      secret: this.configService.get('JWT_REFRESH_SECRET'),
+      expiresIn: this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d'),
+    });
+  }
 
    async validateUser(email: string, password: string): Promise<any> {
     const user = await this.prisma.user.findUnique({
@@ -145,6 +151,6 @@ if (user.status !== 'ACTIVE' || !user.isActive) {
 }
 
 
-  }
+}
   
 }
