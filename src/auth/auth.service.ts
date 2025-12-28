@@ -85,6 +85,22 @@ user:{
     };
   ;}
 
+    async validateRefreshToken(userId: string, tokenId: string) {
+    const token = await this.prisma.authToken.findUnique({
+      where: { id: tokenId },
+    });
+    if (!token || token.isRevoked  || token.expiresAt < new Date()) {
+      throw new UnauthorizedException('invalid refresh token')
+    }
+
+    return {
+      userId,
+      tokenId
+    };
+
+  };
+
+
    async validateJwtPayload(userId: string) {
  const user = await this.prisma.user.findUnique({
     where: { id: userId },

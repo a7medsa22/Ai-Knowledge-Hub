@@ -3,12 +3,13 @@ import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { AuthService } from "../auth.service";
+import { RefreshJwtPayload } from "../interfaces/jwt-payload";
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
     constructor(
-        private config: ConfigService,
-        private authService: AuthService,
+        private readonly config: ConfigService,
+        private readonly authService: AuthService,
     ) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -18,7 +19,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
     }
 
 
-     validate(payload: RefreshJwtPayload) {
+validate(payload: RefreshJwtPayload) {
         return this.authService.validateRefreshToken(
             payload.sub,
             payload.tokenId,

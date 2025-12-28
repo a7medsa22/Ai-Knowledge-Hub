@@ -71,7 +71,7 @@ model Doc {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   files     File[]
   notes     Note[]
-
+  @@index([authorId])
   @@map("docs")
 }
 
@@ -85,6 +85,7 @@ model Note {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   doc       Doc?     @relation(fields: [docId], references: [id], onDelete: Cascade)
 
+  @@index([authorId])
   @@map("notes") 
 }
 
@@ -100,7 +101,8 @@ model File {
   linkedToId   String?
   docId        String?
   doc          Doc?     @relation(fields: [docId], references: [id], onDelete: Cascade)
-
+  
+ 
   @@map("files")
 }
 
@@ -115,7 +117,8 @@ model Task {
   updatedAt   DateTime   @updatedAt
   ownerId     String
   owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-
+  
+  @@index([ownerId])
   @@map("tasks")
 }
 

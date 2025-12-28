@@ -8,3 +8,7 @@ export interface JwtPayload {
   iat?: number;
   exp?: number;
 }
+export interface RefreshJwtPayload {
+  sub: string;
+  tokenId: string;
+}
