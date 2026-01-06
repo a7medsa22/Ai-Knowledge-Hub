@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login Verification</title>
+      </head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #2c5aa0;"> Ai-Research</h1>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 30px; border-radius: 10px;">
+          <h2 style="color: #28a745; margin-bottom: 20px;">🔐 Login Verification</h2>
+          
+          <p style="font-size: 16px; margin-bottom: 20px;">
+            Hello {{firstName}}, someone is trying to sign in to your Ai-Research account.
+          </p>
+          
+          <div style="background: #d4edda; padding: 25px; text-align: center; border-radius: 8px; margin: 25px 0;">
+            <p style="margin: 0; font-size: 14px; color: #155724; margin-bottom: 10px;">Your login verification code is:</p>
+            <div style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #28a745; font-family: 'Courier New', monospace;">
+              {{otp}}
+            </div>
+          </div>
+          
+          <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+            ⏰ This code will expire in <strong>10 minutes</strong>
+          </p>
+          
+          <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;">
+            <p style="margin: 0; font-size: 14px; color: #856404;">
+              <strong>⚠️ Security Alert:</strong> If this wasn't you, please secure your account immediately by changing your password.
+            </p>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+          <p style="font-size: 12px; color: #999;">
+            © {{today}} Ai-Research. All rights reserved.
+          </p>
+        </div>
+      </body>
+      </html>

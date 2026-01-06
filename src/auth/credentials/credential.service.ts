@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { UserEntity } from "src/users/entities/user.entity";
 import { UsersService } from "src/users/users.service";
 import { RegisterDto } from "../dto/auth.dto";
@@ -13,9 +13,12 @@ export class CredentialService {
     async createUser(data: CreateUserDto) {
         const user = await this.userService.create(data)
 
-        if (!user) throw new Error('Error creating user');
-
+        if (!user)
+            throw new UnprocessableEntityException('Error creating user');
+        
         return user
     }
+    
+    
 
 }
