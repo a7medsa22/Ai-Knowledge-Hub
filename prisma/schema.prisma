@@ -21,7 +21,7 @@ enum TokenType {
 
 model AuthToken {
   id         String    @id @default(uuid())
-  userId     String
+  authorId   String
   token      String    @unique
   tokenHash  String?
   type       TokenType
@@ -30,7 +30,7 @@ model AuthToken {
   expiresAt  DateTime
 
   // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@map("auth_tokens")
 }
@@ -54,6 +54,7 @@ model User {
   docs      Doc[]
   notes     Note[]
   tasks     Task[]
+  authTokens AuthToken[]
 
   @@map("users")
 }

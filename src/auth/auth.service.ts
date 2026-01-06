@@ -6,8 +6,10 @@ import * as bcrypt from 'node_modules/bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './interfaces/jwt-payload';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User, UserStatus } from '@prisma/client';
 import { AuthResponse } from './interfaces/auth-response.interface';
+import { AccountStatusService } from './account-status/account-status.service';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { UserStatus } from 'src/common/enums/user-status.enum';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +17,8 @@ export class AuthService {
       private readonly jwtService:JwtService,
       private readonly prisma:PrismaService,
       private readonly userService:UsersService,
-      private readonly configService:ConfigService
+      private readonly configService:ConfigService,
+      private readonly accountStatusService:AccountStatusService,
 
     ){}
 
@@ -31,12 +34,12 @@ export class AuthService {
             name: name || 'User',
             email,
             password:haspassword,
-            status: 'PENDING_EMAIL_VERIFICATION'
+            status: UserStatus.PENDING_EMAIL_VERIFICATION
 });
 
 
 return{
-  status:"successfuly",
+  status:"successfuly, go to email to verify account",
 user:{
     sub:newUser.id,
     name:newUser.name ,
@@ -48,13 +51,13 @@ user:{
 };      
 
     }
-      async login(user:User): Promise<AuthResponse> {
+      async login(user:UserEntity): Promise<AuthResponse> {
       
           if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
    
-    await this.checkAccountStatus(user)
+     this.accountStatusService.ensureCanLogin(user);
 
     // Generate tokens
     const payload: JwtPayload = {
@@ -133,40 +136,12 @@ user:{
   }
 
    async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.prisma.user.findUnique({
-      where: { email }, 
-    });
+    const user = await this.userService.findByEmail(email);
      
     if (user && await bcrypt.compare(password, user.password)) {
       return user;
     }
     return null;
   }
-
-  private async checkAccountStatus(user:User): Promise<void> {
-  switch (user.status) {
-  case UserStatus.PENDING_EMAIL_VERIFICATION:
-    throw new UnauthorizedException('Please verify your email before logging in.');
-
-
-  case UserStatus.INACTIVE:
-    throw new UnauthorizedException('Your account is inactive. Please contact support.');
-
-  case UserStatus.SUSPENDED:
-    throw new UnauthorizedException('Your account is suspended. Please contact support.');
-
-  case UserStatus.ACTIVE:
-    // continue
-    break;
-
-  default:
-    throw new UnauthorizedException('Invalid account status. Please contact support.');
-}
-if (user.status !== 'ACTIVE' || !user.isActive) {
-  throw new UnauthorizedException('Account is not active. Please contact support.');
-}
-
-
-}
   
 }

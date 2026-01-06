@@ -1,16 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
-export type UserWithoutPassword = Omit<User, 'password'>;
+import { UserMapper } from 'src/common/infrastructure/mappers/user.mapper';
+import { UserEntity } from './entities/user.entity';
+import { CreateUserDto } from './dto/user.dto';
 
 
 @Injectable()
 export class UsersService {
   constructor(private prisma:PrismaService){}
 
-  
-   create(data:Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({data});
+
+   async create(data: CreateUserDto): Promise<UserEntity> {
+    const user = await this.prisma.user.create({ data: data as Prisma.UserCreateInput });
+    if(!user) throw new Error('Error creating user');
+    return UserMapper.toDomain(user);
   }
 
       async findAll() {
@@ -25,26 +29,31 @@ export class UsersService {
       },
     });
   }
- async findOne(id: string): Promise<User | null>{
+ async findOne(id: string): Promise<UserEntity | null>{
     const user = await this.prisma.user.findUnique({where:{id}});
     if(!user) throw new Error('User not found');
-    return user
-  }
-  async findByEmail(email:string): Promise<User | null>{
-    return this.prisma.user.findUnique({where:{email}});
+    return UserMapper.toDomain(user);
   }
 
-   async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
-    return this.prisma.user.update({
+  async findByEmail(email:string): Promise<UserEntity | null>{
+    const user = await this.prisma.user.findUniqueOrThrow({where:{email}});
+    return UserMapper.toDomain(user);
+  }
+
+   async update(id: string, data: Prisma.UserUpdateInput): Promise<UserEntity> {
+   const user = await this.prisma.user.update({
       where: { id },
       data,
     });
+      return UserMapper.toDomain(user);
   }
 
-  async delete(id: string): Promise<User> {
-    return this.prisma.user.delete({
+  async delete(id: string): Promise<UserEntity> {
+    const user = await this.prisma.user.delete({
       where: { id },
     });
+    return UserMapper.toDomain(user);
   }
 
 }
+
