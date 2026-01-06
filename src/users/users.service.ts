@@ -4,6 +4,7 @@ import { User, Prisma } from '@prisma/client';
 import { UserMapper } from 'src/common/infrastructure/mappers/user.mapper';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/user.dto';
+import { UserStatus } from 'src/common/enums/user-status.enum';
 
 
 @Injectable()
@@ -39,6 +40,10 @@ export class UsersService {
     const user = await this.prisma.user.findUniqueOrThrow({where:{email}});
     return UserMapper.toDomain(user);
   }
+  async findByEmailValidat(email:string){
+    const user = await this.prisma.user.findUniqueOrThrow({where:{email}});
+    return user;
+  }
 
    async update(id: string, data: Prisma.UserUpdateInput): Promise<UserEntity> {
    const user = await this.prisma.user.update({
@@ -46,6 +51,14 @@ export class UsersService {
       data,
     });
       return UserMapper.toDomain(user);
+  }
+
+  async updateStatus(id:string,status:UserStatus){
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { status },
+    });
+    return UserMapper.toDomain(user);
   }
 
   async delete(id: string): Promise<UserEntity> {

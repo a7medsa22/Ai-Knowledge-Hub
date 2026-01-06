@@ -4,9 +4,11 @@ import { UserRole } from 'src/common/enums/user-role.enum';
 import { UserStatus } from 'src/common/enums/user-status.enum';
 
 export class CreateUserDto {
+  
   @ApiProperty()
+  @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @ApiProperty()
   @IsEmail()
@@ -16,11 +18,6 @@ export class CreateUserDto {
   @IsString()
   @MinLength(6)
   password: string;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  @IsOptional()
-  phone?: string;
 
   @ApiProperty({ enum: UserRole, default: UserRole.USER })
   @IsOptional()
