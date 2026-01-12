@@ -97,7 +97,7 @@ export class McpService {
         result: null,
         error: error.message,
         executionTime,
-      };
+      }; 
     }
   }
 
