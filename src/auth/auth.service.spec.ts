@@ -54,13 +54,24 @@ describe('AuthService', () => {
         },
         {
           provide: ConfigService,
-          useValue: { get: jest.fn((key) => (key.includes('EXPIRES') ? '15m' : 'secret')) },
+          useValue: {
+            get: jest.fn((key) => (key.includes('EXPIRES') ? '15m' : 'secret')),
+          },
         },
         {
           provide: PrismaService,
           useValue: {
             user: { update: jest.fn(), findUnique: jest.fn(() => mockUser) },
-            authToken: { create: jest.fn(), findFirst: jest.fn(() => ({ id: 'token-1', token: 'hashed', expiresAt: new Date(Date.now() + 10000), isRevoked: false })), update: jest.fn() },
+            authToken: {
+              create: jest.fn(),
+              findFirst: jest.fn(() => ({
+                id: 'token-1',
+                token: 'hashed',
+                expiresAt: new Date(Date.now() + 10000),
+                isRevoked: false,
+              })),
+              update: jest.fn(),
+            },
           },
         },
         {
@@ -84,7 +95,9 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
     jwtService = module.get<JwtService>(JwtService);
     credentialService = module.get<CredentialService>(CredentialService);
-    emailVerification = module.get<EmailVerificationService>(EmailVerificationService);
+    emailVerification = module.get<EmailVerificationService>(
+      EmailVerificationService,
+    );
     prisma = module.get<PrismaService>(PrismaService);
   });
 
@@ -94,9 +107,15 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should create a user and send OTP', async () => {
-      const result = await service.register({ email: 'test@example.com', password: '123456', status: UserStatus.PENDING_EMAIL_VERIFICATION });
+      const result = await service.register({
+        email: 'test@example.com',
+        password: '123456',
+        status: UserStatus.PENDING_EMAIL_VERIFICATION,
+      });
       expect(credentialService.createUser).toHaveBeenCalled();
-      expect(emailVerification.sendOtp).toHaveBeenCalledWith('test@example.com');
+      expect(emailVerification.sendOtp).toHaveBeenCalledWith(
+        'test@example.com',
+      );
       expect(result).toHaveProperty('message');
       expect(result).toHaveProperty('userId');
     });
@@ -105,13 +124,18 @@ describe('AuthService', () => {
   describe('verifyEmail', () => {
     it('should verify OTP and update status', async () => {
       const result = await service.verifyEmail('test@example.com', '123456');
-      expect(emailVerification.verify).toHaveBeenCalledWith('test@example.com', '123456');
+      expect(emailVerification.verify).toHaveBeenCalledWith(
+        'test@example.com',
+        '123456',
+      );
       expect(result).toEqual({ message: 'Email verified successfully' });
     });
 
     it('should throw BadRequestException if OTP invalid', async () => {
       jest.spyOn(emailVerification, 'verify').mockResolvedValueOnce(false);
-      await expect(service.verifyEmail('test@example.com', '0000')).rejects.toThrow(BadRequestException);
+      await expect(
+        service.verifyEmail('test@example.com', '0000'),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -124,21 +148,31 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if user not active', async () => {
-      const inactiveUser = { ...mockUser, status: UserStatus.PENDING_EMAIL_VERIFICATION } as any;
-      await expect(service.login(inactiveUser)).rejects.toThrow(UnauthorizedException);
+      const inactiveUser = {
+        ...mockUser,
+        status: UserStatus.PENDING_EMAIL_VERIFICATION,
+      } as any;
+      await expect(service.login(inactiveUser)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 
   describe('validateRefreshToken', () => {
     it('should validate refresh token successfully', async () => {
       (jest.spyOn(bcrypt, 'compare') as jest.Mock).mockResolvedValueOnce(true);
-      const result = await service.validateRefreshToken('user-123', 'any-token');
+      const result = await service.validateRefreshToken(
+        'user-123',
+        'any-token',
+      );
       expect(result).toEqual({ userId: 'user-123' });
     });
 
     it('should throw UnauthorizedException for invalid token', async () => {
       (jest.spyOn(bcrypt, 'compare') as jest.Mock).mockResolvedValueOnce(false);
-      await expect(service.validateRefreshToken('user-123', 'wrong')).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.validateRefreshToken('user-123', 'wrong'),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 
@@ -149,8 +183,13 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException for inactive user', async () => {
-      jest.spyOn(prisma.user, 'findUnique').mockResolvedValueOnce({ ...mockUser, status: 'PENDING_EMAIL_VERIFICATION' });
-      await expect(service.validateJwtPayload('user-123')).rejects.toThrow(UnauthorizedException);
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValueOnce({
+        ...mockUser,
+        status: 'PENDING_EMAIL_VERIFICATION',
+      });
+      await expect(service.validateJwtPayload('user-123')).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

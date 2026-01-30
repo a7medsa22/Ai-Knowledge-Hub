@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmailService } from './email.service';
 import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
-import {HandlebarsAdapter} from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter"
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import {HandlebarsAdapter} from "@nestjs-modules/mailer/dist/adapters/handlebars
           from: `"Ai-Research" <${configService.get<string>('SMTP_FROM')}>`,
         },
         template: {
-          dir: join(process.cwd(), 'dist/email/templates'), 
+          dir: join(process.cwd(), 'dist/email/templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,

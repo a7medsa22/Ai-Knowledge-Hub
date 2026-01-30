@@ -9,10 +9,10 @@ import { DocsModule } from 'src/docs/docs.module';
   imports: [
     forwardRef(() => DocsModule),
     MulterModule.register({
-      storage:diskStorage({
+      storage: diskStorage({
         destination: './uploads',
         filename: (req, file, callback) => {
-          const uniqueSuffix  = `${Date.now()}- ${Math.round(Math.random() * 1E9)}`;
+          const uniqueSuffix = `${Date.now()}- ${Math.round(Math.random() * 1e9)}`;
           const ext = extname(file.originalname);
           const filename = `${file.fieldname}-${uniqueSuffix}${ext}`;
           callback(null, filename);
@@ -35,7 +35,7 @@ import { DocsModule } from 'src/docs/docs.module';
       },
       limits: {
         fileSize: 1024 * 1024 * 10, // 10MB limit
-      },      
+      },
     }),
   ],
   controllers: [FilesController],

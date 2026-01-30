@@ -1,9 +1,28 @@
-import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, Param, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Param,
+  Post,
+  Query,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FilesService } from './files.service';
 import { DocsService } from 'src/docs/docs.service';
 import { GetUser } from 'src/auth/guards/jwt-auth.guard';
 import { FileResponseDto, LinkedToType, SearchFilesDto } from './dto/files.dto';
-import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ApiAuth } from 'src/common/decorators/api-auth.decorator';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import express from 'express';
@@ -11,15 +30,13 @@ import express from 'express';
 @ApiTags('Files')
 @ApiAuth()
 @Controller('files')
-
-
 export class FilesController {
   constructor(
-             private readonly filesService: FilesService
-            ,private readonly docsService:DocsService        
+    private readonly filesService: FilesService,
+    private readonly docsService: DocsService,
   ) {}
 
-   @Post('upload')
+  @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
@@ -76,14 +93,14 @@ export class FilesController {
       linkedToId,
     );
   }
-   
-  
-    @Post('upload-and-extract')
-    @UseInterceptors(FileInterceptor('file'))
+
+  @Post('upload-and-extract')
+  @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
     summary: 'Upload file and create document',
-    description: 'Upload a file (PDF, Word, text), extract text, and create a new document automatically',
+    description:
+      'Upload a file (PDF, Word, text), extract text, and create a new document automatically',
   })
   @ApiBody({
     schema: {
@@ -170,7 +187,7 @@ export class FilesController {
     let parsedTags: string[] = [];
     if (tags) {
       if (typeof tags === 'string') {
-        parsedTags = tags.split(',').map(t => t.trim());
+        parsedTags = tags.split(',').map((t) => t.trim());
       } else {
         parsedTags = tags;
       }
@@ -203,7 +220,9 @@ export class FilesController {
       document: {
         id: document.document.id,
         title: document.document.title,
-        content: extractedText.substring(0, 500) + (extractedText.length > 500 ? '...' : ''),
+        content:
+          extractedText.substring(0, 500) +
+          (extractedText.length > 500 ? '...' : ''),
         wordCount: extractedText.split(/\s+/).length,
         tags: document.document.tags,
         createdAt: document.document.createdAt,
@@ -211,7 +230,7 @@ export class FilesController {
       extractedTextLength: extractedText.length,
     };
   }
-  
+
   // Get all files
   @Get()
   @ApiOperation({
@@ -262,11 +281,11 @@ export class FilesController {
     description: 'Get file information and metadata',
   })
   @ApiResponse({
-    status: 200, 
+    status: 200,
     description: 'File metadata retrieved successfully',
-    type: FileResponseDto, 
+    type: FileResponseDto,
   })
-  @ApiResponse({ 
+  @ApiResponse({
     status: 404,
     description: 'File not found',
   })
@@ -288,7 +307,10 @@ export class FilesController {
     status: 404,
     description: 'File not found',
   })
-  async serveFile(@Param('filename') filename: string, @Res() res:express.Response) {
+  async serveFile(
+    @Param('filename') filename: string,
+    @Res() res: express.Response,
+  ) {
     const filePath = this.filesService.getFilePath(filename);
     return res.sendFile(filePath);
   }
@@ -321,5 +343,4 @@ export class FilesController {
 
     return this.filesService.remove(id, user.id);
   }
-  
 }

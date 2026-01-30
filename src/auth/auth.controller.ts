@@ -30,15 +30,15 @@ export class AuthController {
   })
   @ApiResponse({
     status: 201,
-    description: 'User registered successfully, verification code sent to email',
+    description:
+      'User registered successfully, verification code sent to email',
     schema: {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: true },
         message: {
           type: 'string',
-          example:
-            'User registered successfully, please verify your email',
+          example: 'User registered successfully, please verify your email',
         },
         data: {
           type: 'object',
@@ -162,7 +162,11 @@ export class AuthController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: false },
-        message: { type: 'array', items: { type: 'string' }, example: ['Invalid OTP'] },
+        message: {
+          type: 'array',
+          items: { type: 'string' },
+          example: ['Invalid OTP'],
+        },
       },
     },
   })

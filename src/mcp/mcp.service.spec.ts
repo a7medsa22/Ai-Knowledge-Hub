@@ -15,7 +15,9 @@ describe('McpService', () => {
   beforeEach(async () => {
     // Create mock services
     const mockDocsService = {
-      findUserDocs: jest.fn().mockResolvedValue({ documents: [{ id: '1', title: 'Test Doc' }] }),
+      findUserDocs: jest
+        .fn()
+        .mockResolvedValue({ documents: [{ id: '1', title: 'Test Doc' }] }),
       findOne: jest.fn(),
       getDocStats: jest.fn(),
     };
@@ -70,7 +72,7 @@ describe('McpService', () => {
 
     it('should include all expected tools', () => {
       const tools = service.getAvailableTools();
-      const toolNames = tools.tools.map(t => t.name);
+      const toolNames = tools.tools.map((t) => t.name);
 
       expect(toolNames).toContain('searchDocs');
       expect(toolNames).toContain('getDocument');
@@ -166,11 +168,7 @@ describe('McpService', () => {
 
   describe('executeTool - Unknown tool', () => {
     it('should return error for unknown tool', async () => {
-      const result = await service.executeTool(
-        'unknownTool',
-        {},
-        mockUserId,
-      );
+      const result = await service.executeTool('unknownTool', {}, mockUserId);
 
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();

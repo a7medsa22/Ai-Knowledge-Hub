@@ -9,8 +9,15 @@ import { LinkedToType } from 'src/files/dto/files.dto';
 
 @Injectable()
 export class DocsService {
-  constructor(private readonly prisma:PrismaService,private readonly filesService:FilesService){}
-  async create(authorId:string, dto: CreateDocDto,file?: Express.Multer.File):Promise<{document:Doc,uploadedFile?:File}> {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly filesService: FilesService,
+  ) {}
+  async create(
+    authorId: string,
+    dto: CreateDocDto,
+    file?: Express.Multer.File,
+  ): Promise<{ document: Doc; uploadedFile?: File }> {
     let content = dto.content;
     let uploaded;
 
@@ -28,20 +35,26 @@ export class DocsService {
 
       // Extract text from file
       const filePath = this.filesService.getFilePath(file.filename);
-      content = await this.filesService.extractTextFromFile(filePath, file.mimetype);
+      content = await this.filesService.extractTextFromFile(
+        filePath,
+        file.mimetype,
+      );
     }
 
     // Validate: must have either content or file
     if (!content || content.trim().length === 0) {
-      throw new Error('Must provide either content text or a file to extract content from');
+      throw new Error(
+        'Must provide either content text or a file to extract content from',
+      );
     }
-   const document = await this.prisma.doc.create({
-    data:{
-      ...dto,authorId,
-      content,
-    },
-    include:this.getDocIncloude(),
-   });
+    const document = await this.prisma.doc.create({
+      data: {
+        ...dto,
+        authorId,
+        content,
+      },
+      include: this.getDocIncloude(),
+    });
 
     if (uploaded) {
       await this.filesService.uploadFile(
@@ -52,7 +65,7 @@ export class DocsService {
       );
     }
 
- return {
+    return {
       document,
       ...(uploaded && {
         uploadedFile: {
@@ -62,60 +75,54 @@ export class DocsService {
           url: uploaded.url,
         },
       }),
-    }
-    }
+    };
+  }
 
+  async findAll(search?: SearchDocDto) {
+    const where = this.buildQuery(search, { isPublic: true });
+    return this.executeQuery(where, search);
+  }
 
- async findAll(search?:SearchDocDto) {
-   const where = this.buildQuery(search,{isPublic:true});
-   return this.executeQuery(where,search);
-  };
-  
-  async findUserDocs (search?:SearchDocDto,userId?:string){
-    const where = this.buildQuery(search,{authorId:userId});
-    return this.executeQuery(where,search);
-  };
+  async findUserDocs(search?: SearchDocDto, userId?: string) {
+    const where = this.buildQuery(search, { authorId: userId });
+    return this.executeQuery(where, search);
+  }
 
- async findOne(id: string,userId?:string) {  
-    if(userId)
-      await this.checkDocumentAccess(id,userId,'read');
+  async findOne(id: string, userId?: string) {
+    if (userId) await this.checkDocumentAccess(id, userId, 'read');
 
     const doc = await this.prisma.doc.findUniqueOrThrow({
-      where:{id},
-      include:this.getDocIncloude(),
+      where: { id },
+      include: this.getDocIncloude(),
     });
 
-    if (!userId && doc.isPublic) 
-      throw new ForbiddenException('Document is public');  
-    
+    if (!userId && doc.isPublic)
+      throw new ForbiddenException('Document is public');
+
     return doc;
   }
 
-
-async update(id: string,userId:string ,dto: UpdateDocDto) {
-    if(userId)
-      await this.checkDocumentAccess(id,userId,'write');
+  async update(id: string, userId: string, dto: UpdateDocDto) {
+    if (userId) await this.checkDocumentAccess(id, userId, 'write');
 
     return this.prisma.doc.update({
-      where:{id},
-      data:dto,
-      include:this.getDocIncloude()
+      where: { id },
+      data: dto,
+      include: this.getDocIncloude(),
     });
   }
 
+  async remove(id: string, userId?: string) {
+    if (userId) await this.checkDocumentAccess(id, userId, 'write');
 
- async remove(id: string,userId?:string) {
-   if(userId)
-      await this.checkDocumentAccess(id,userId,'write');
-    
-   return this.prisma.doc.delete({
-      where:{id},
+    return this.prisma.doc.delete({
+      where: { id },
     });
   }
 
-async getAllTags(where: any = {}): Promise<string[]> {
+  async getAllTags(where: any = {}): Promise<string[]> {
     const docs = await this.prisma.doc.findMany({
-      select: {tags: true},
+      select: { tags: true },
       where,
     });
 
@@ -127,7 +134,7 @@ async getAllTags(where: any = {}): Promise<string[]> {
   // Utility methods for statistics
   async getDocStats(userId?: string) {
     const where = userId ? { authorId: userId } : { isPublic: true };
-    
+
     const [totalDocs, totalTags] = await Promise.all([
       this.prisma.doc.count({ where }),
       this.getAllTags(where),
@@ -140,114 +147,115 @@ async getAllTags(where: any = {}): Promise<string[]> {
     };
   }
 
-    
-  private getDocIncloude(){
+  private getDocIncloude() {
     return {
-      author:{
-        select:{
-           id: true,
-            email: true,
-            name: true,
-            role: true,
-        }
-      },
-      notes:{
-       include:{
-       author:{
-       select:{
-           id: true,
-            email: true,
-            name: true,
+      author: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
         },
-       },
-       },
-        
-        orderBy:{createdAt:'desc' as const}
       },
-      _count:{select:{notes:true}},
-    }
+      notes: {
+        include: {
+          author: {
+            select: {
+              id: true,
+              email: true,
+              name: true,
+            },
+          },
+        },
+
+        orderBy: { createdAt: 'desc' as const },
+      },
+      _count: { select: { notes: true } },
+    };
   }
-  private buildQuery(search?:SearchDocDto,additionalWhere?:Prisma.DocWhereInput){
-    const {query , tags } = search || {} ; 
-    const where:Prisma.DocWhereInput = {...(additionalWhere || {})};
-    const and:Prisma.DocWhereInput[] = [];
-    
-    if(search?.query){
+  private buildQuery(
+    search?: SearchDocDto,
+    additionalWhere?: Prisma.DocWhereInput,
+  ) {
+    const { query, tags } = search || {};
+    const where: Prisma.DocWhereInput = { ...(additionalWhere || {}) };
+    const and: Prisma.DocWhereInput[] = [];
+
+    if (search?.query) {
       and.push({
-         OR:[
-            {title:{contains:query, mode:'insensitive'}},
-            {content:{contains:query,mode:'insensitive'}}
-          ]
+        OR: [
+          { title: { contains: query, mode: 'insensitive' } },
+          { content: { contains: query, mode: 'insensitive' } },
+        ],
       });
     }
 
-    if(tags?.length){
-      and.push({tags:{hasSome:tags} })
-    };
+    if (tags?.length) {
+      and.push({ tags: { hasSome: tags } });
+    }
 
-    if(and.length){
-      where.AND= and;
+    if (and.length) {
+      where.AND = and;
     }
     return where;
   }
 
-  private buildOrderBy(search?:SearchDocDto){
+  private buildOrderBy(search?: SearchDocDto) {
     const { sortBy = 'updatedAt', order = 'desc' } = search || {};
-    
+
     return {
       [sortBy]: order,
     };
-}
+  }
 
-private async executeQuery(where:Prisma.DocWhereInput,search?:SearchDocDto){
-  
-  const MAX_LIMIT = 100;
-  const offset = search?.offset ?? 0;
-  const limit = Math.min((search?.limit ?? 10), (MAX_LIMIT));
-  const [docs,total]= await this.prisma.$transaction([
-    this.prisma.doc.findMany({
-      where,
-      include: this.getDocIncloude(),
-      orderBy:this.buildOrderBy(search),
-      take:limit,
-      skip:offset
-    }),
-    this.prisma.doc.count({where})
-  ]);
-  return{
-    data:docs,
-    total,
-    limit,
-    offset,
-    hasMore: offset + limit <total,
-  };
+  private async executeQuery(
+    where: Prisma.DocWhereInput,
+    search?: SearchDocDto,
+  ) {
+    const MAX_LIMIT = 100;
+    const offset = search?.offset ?? 0;
+    const limit = Math.min(search?.limit ?? 10, MAX_LIMIT);
+    const [docs, total] = await this.prisma.$transaction([
+      this.prisma.doc.findMany({
+        where,
+        include: this.getDocIncloude(),
+        orderBy: this.buildOrderBy(search),
+        take: limit,
+        skip: offset,
+      }),
+      this.prisma.doc.count({ where }),
+    ]);
+    return {
+      data: docs,
+      total,
+      limit,
+      offset,
+      hasMore: offset + limit < total,
+    };
+  }
 
-  
-}
+  private async checkDocumentAccess(
+    id: string,
+    userId: string,
+    action: 'read' | 'write',
+  ) {
+    const doc = await this.prisma.doc.findUniqueOrThrow({
+      where: { id },
+      select: {
+        id: true,
+        authorId: true,
+        isPublic: true,
+      },
+    });
 
-private async checkDocumentAccess(id:string,userId:string,action:'read'|'write'){
+    if (action === 'write' && doc.authorId !== userId)
+      throw new ForbiddenException(
+        `You can only ${action === 'write' ? 'modify' : 'access'} your own documents`,
+      );
 
-  const doc = await this.prisma.doc.findUniqueOrThrow
-  ({
-    where:{id},
-    select:{
-      id:true,
-      authorId:true,
-      isPublic:true,
-    }
-  });
+    if (action === 'read' && !doc.isPublic && doc.authorId !== userId)
+      throw new ForbiddenException('Access denied to this private document');
 
-  if(action === 'write' && doc.authorId !== userId)
-        throw new ForbiddenException(`You can only ${action === 'write' ? 'modify' : 'access'} your own documents`);
-
-  
-  if (action === 'read' && !doc.isPublic && doc.authorId !== userId) 
-        throw new ForbiddenException('Access denied to this private document');
-  
-  return doc;
-
-}
-
-
-
+    return doc;
+  }
 }

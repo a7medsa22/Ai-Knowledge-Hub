@@ -8,7 +8,7 @@ export class BaseSearchService {
   // Build generic order by clause
   protected buildOrderBy<T extends { sortBy?: string; order?: 'asc' | 'desc' }>(
     searchDto?: T,
-    defaultSort: string = 'createdAt'
+    defaultSort: string = 'createdAt',
   ): Record<string, 'asc' | 'desc'> {
     const { sortBy = defaultSort, order = 'desc' } = searchDto || {};
     return { [sortBy]: order };
@@ -20,7 +20,7 @@ export class BaseSearchService {
     where: any,
     searchDto?: { limit?: number; offset?: number },
     include?: any,
-    orderBy?: any
+    orderBy?: any,
   ) {
     const { limit = 20, offset = 0 } = searchDto || {};
 
@@ -51,7 +51,7 @@ export class BaseSearchService {
     model: keyof PrismaService,
     id: string,
     userId: string,
-    ownerField: string = 'ownerId'
+    ownerField: string = 'ownerId',
   ) {
     const record = await (this.prisma[model] as any).findUnique({
       where: { id },
@@ -60,7 +60,9 @@ export class BaseSearchService {
 
     if (!record) throw new NotFoundException(`${String(model)} not found`);
     if (record[ownerField] !== userId)
-      throw new ForbiddenException(`You can only modify your own ${String(model)}s`);
+      throw new ForbiddenException(
+        `You can only modify your own ${String(model)}s`,
+      );
 
     return record;
   }

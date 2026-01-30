@@ -1,11 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateStatusDto, UpdateTaskDto } from './dto/update-task.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags,ApiOperation, ApiQuery, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiResponse,
+  ApiTags,
+  ApiOperation,
+  ApiQuery,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TaskResponseDto } from './dto/response-task.dto';
-import type {JwtUser} from 'src/common/interfaces/jwt-user.interface';
+import type { JwtUser } from 'src/common/interfaces/jwt-user.interface';
 import { SearchTasksDto } from './dto/search-task.dto';
 import { TaskStatus } from '@prisma/client';
 
@@ -17,173 +35,195 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Create a new task',
-    description: 'Create a new task for the current user' 
+    description: 'Create a new task for the current user',
   })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Task created successfully',
-    type: TaskResponseDto 
+    type: TaskResponseDto,
   })
-  @ApiResponse({ 
-    status: 401, 
-    description: 'Unauthorized' 
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
   })
   create(@GetUser() user: JwtUser, @Body() body: CreateTaskDto) {
     return this.tasksService.create(user.sub, body);
   }
 
-   @Get('stats')
-  @ApiOperation({ 
+  @Get('stats')
+  @ApiOperation({
     summary: 'Get tasks statistics',
-    description: 'Get statistics about current user tasks' 
+    description: 'Get statistics about current user tasks',
   })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Tasks statistics retrieved successfully' 
+  @ApiResponse({
+    status: 200,
+    description: 'Tasks statistics retrieved successfully',
   })
   getStats(@GetUser() user: JwtUser) {
     return this.tasksService.getTasksStats(user.sub);
   }
 
   @Get('upcoming')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get upcoming tasks',
-    description: 'Get upcoming tasks for the current user' 
+    description: 'Get upcoming tasks for the current user',
   })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Upcoming tasks retrieved successfully' 
+  @ApiResponse({
+    status: 200,
+    description: 'Upcoming tasks retrieved successfully',
   })
   getUpcomingTasks(@GetUser() user: JwtUser, @Query('days') days?: number) {
     return this.tasksService.getUpcomingTasks(user.sub, days);
   }
-  
+
   @Get('overdue')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get overdue tasks',
-    description: 'Get all overdue tasks that are not completed' 
+    description: 'Get all overdue tasks that are not completed',
   })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Overdue tasks retrieved successfully' 
+  @ApiResponse({
+    status: 200,
+    description: 'Overdue tasks retrieved successfully',
   })
   getOverdueTasks(@GetUser() user: JwtUser) {
     return this.tasksService.getOverdueTasks(user.sub);
   }
 
-
-    @Get()
-  @ApiOperation({ 
+  @Get()
+  @ApiOperation({
     summary: 'Get user tasks',
-    description: 'Get all tasks created by the current user with search and filter options' 
+    description:
+      'Get all tasks created by the current user with search and filter options',
   })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Tasks retrieved successfully' 
+  @ApiResponse({
+    status: 200,
+    description: 'Tasks retrieved successfully',
   })
-  @ApiQuery({ name: 'query', required: false, description: 'Search in task title and description' })
-  @ApiQuery({ name: 'status', required: false, description: 'Filter by status', enum: TaskStatus })
-  @ApiQuery({ name: 'priority', required: false, description: 'Filter by priority' })
-  @ApiQuery({ name: 'overdue', required: false, description: 'Filter overdue tasks' })
-  @ApiQuery({ name: 'limit', required: false, description: 'Number of results' })
+  @ApiQuery({
+    name: 'query',
+    required: false,
+    description: 'Search in task title and description',
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    description: 'Filter by status',
+    enum: TaskStatus,
+  })
+  @ApiQuery({
+    name: 'priority',
+    required: false,
+    description: 'Filter by priority',
+  })
+  @ApiQuery({
+    name: 'overdue',
+    required: false,
+    description: 'Filter overdue tasks',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Number of results',
+  })
   @ApiQuery({ name: 'offset', required: false, description: 'Skip results' })
   @ApiQuery({ name: 'sortBy', required: false, description: 'Sort by field' })
-  @ApiQuery({ name: 'order', required: false, description: 'Sort order', enum: ['asc', 'desc'] })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    description: 'Sort order',
+    enum: ['asc', 'desc'],
+  })
   findAll(@GetUser() user: JwtUser, @Query() searchDto: SearchTasksDto) {
     return this.tasksService.findAll(user.sub, searchDto);
   }
 
-   @Patch(':id/status')
-  @ApiOperation({ 
+  @Patch(':id/status')
+  @ApiOperation({
     summary: 'Update task status',
-    description: 'Quick update for task status only' 
+    description: 'Quick update for task status only',
   })
   @ApiParam({ name: 'id', required: true, description: 'Task ID' })
   @ApiBody({ type: UpdateStatusDto })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Task status updated successfully' 
+  @ApiResponse({
+    status: 200,
+    description: 'Task status updated successfully',
   })
   updateStatus(
     @Param('id') id: string,
     @GetUser() user: JwtUser,
     @Body() body: UpdateStatusDto,
   ) {
-    return this.tasksService.updateStatus(user.sub,id,body);
+    return this.tasksService.updateStatus(user.sub, id, body);
   }
-
 
   @Get(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get task by ID',
-    description: 'Get a specific task by its ID' 
+    description: 'Get a specific task by its ID',
   })
   @ApiParam({ name: 'id', required: true, description: 'Task ID' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Task retrieved successfully',
-    type: TaskResponseDto 
+    type: TaskResponseDto,
   })
-  @ApiResponse({ 
-    status: 404, 
-    description: 'Task not found or access denied' 
+  @ApiResponse({
+    status: 404,
+    description: 'Task not found or access denied',
   })
   findOne(@Param('id') id: string, @GetUser() user: JwtUser) {
-    return this.tasksService.findOne(user.sub,id);
+    return this.tasksService.findOne(user.sub, id);
   }
 
-   @Patch(':id')
-  @ApiOperation({ 
+  @Patch(':id')
+  @ApiOperation({
     summary: 'Update task',
-    description: 'Update a task (only by owner)' 
+    description: 'Update a task (only by owner)',
   })
   @ApiParam({ name: 'id', required: true, description: 'Task ID' })
   @ApiBody({ type: UpdateTaskDto })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Task updated successfully',
-    type: TaskResponseDto   
+    type: TaskResponseDto,
   })
-  @ApiResponse({ 
-    status: 404, 
-    description: 'Task not found' 
+  @ApiResponse({
+    status: 404,
+    description: 'Task not found',
   })
-  @ApiResponse({ 
-    status: 403, 
-    description: 'You can only update your own tasks' 
+  @ApiResponse({
+    status: 403,
+    description: 'You can only update your own tasks',
   })
-  update(@Param('id') id: string, @GetUser() user: JwtUser, @Body() body: UpdateTaskDto) {
-    return this.tasksService.update(user.sub,id,body);
+  update(
+    @Param('id') id: string,
+    @GetUser() user: JwtUser,
+    @Body() body: UpdateTaskDto,
+  ) {
+    return this.tasksService.update(user.sub, id, body);
   }
 
- 
   @Delete(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Delete task',
-    description: 'Delete a task (only by owner)' 
+    description: 'Delete a task (only by owner)',
   })
   @ApiParam({ name: 'id', required: true, description: 'Task ID' })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Task deleted successfully' 
+  @ApiResponse({
+    status: 200,
+    description: 'Task deleted successfully',
   })
-  @ApiResponse({ 
-    status: 404, 
-    description: 'Task not found' 
+  @ApiResponse({
+    status: 404,
+    description: 'Task not found',
   })
-  @ApiResponse({ 
-    status: 403, 
-    description: 'You can only delete your own tasks' 
+  @ApiResponse({
+    status: 403,
+    description: 'You can only delete your own tasks',
   })
   remove(@Param('id') id: string, @GetUser() user: JwtUser) {
-    return this.tasksService.deleteTask(user.sub,id);
+    return this.tasksService.deleteTask(user.sub, id);
   }
-
-
-
-
-
-
 }

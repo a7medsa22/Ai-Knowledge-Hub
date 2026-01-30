@@ -14,18 +14,18 @@ import { OllamaProvider } from './providers/ollama.provider';
 import { OpenAiProvider } from './providers/openai.provider';
 
 @Module({
-  imports:[
+  imports: [
     ConfigModule.forRoot({
-      isGlobal:true
+      isGlobal: true,
     }),
     HttpModule,
     PrismaModule,
     AuthModule,
     NotesModule,
     UsersModule,
-    DocsModule  
+    DocsModule,
   ],
   controllers: [AiController],
-  providers: [AiService,AiProviderFactory,OllamaProvider,OpenAiProvider],
+  providers: [AiService, AiProviderFactory, OllamaProvider, OpenAiProvider],
 })
 export class AiModule {}

@@ -1,74 +1,73 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsOptional, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class McpToolParameter {
-    @ApiProperty({
-        example: 'name',
-        description: 'Parameter name',
-    })
-    name: string;
-    @ApiProperty({
-        example: 'type',
-        description: 'Parameter type',
-    })
-    type: string;
+  @ApiProperty({
+    example: 'name',
+    description: 'Parameter name',
+  })
+  name: string;
+  @ApiProperty({
+    example: 'type',
+    description: 'Parameter type',
+  })
+  type: string;
 
-    @ApiProperty({
-        example: 'description',
-        description: 'Parameter description',
-    })
-    description: string;
+  @ApiProperty({
+    example: 'description',
+    description: 'Parameter description',
+  })
+  description: string;
 
-    @ApiProperty({
-        example: 'required',
-        description: 'Parameter required',
-        required:false
-    })
-    required?: boolean;
+  @ApiProperty({
+    example: 'required',
+    description: 'Parameter required',
+    required: false,
+  })
+  required?: boolean;
 }
 export class McpToolDefinition {
-    @ApiProperty({
-        example: 'name',
-        description: 'Tool name',
-    })
-    name: string;
+  @ApiProperty({
+    example: 'name',
+    description: 'Tool name',
+  })
+  name: string;
 
-    @ApiProperty({
-        example: 'type',
-        description: 'Tool type',
-    })
-    type: string;
-    @ApiProperty({
-        example: 'description',
-        description: 'Tool description',
-    })
-    description: string;
+  @ApiProperty({
+    example: 'type',
+    description: 'Tool type',
+  })
+  type: string;
+  @ApiProperty({
+    example: 'description',
+    description: 'Tool description',
+  })
+  description: string;
 
-    @ApiProperty({
-        example: 'parameters',
-        description: 'Tool parameters',
-        type: [McpToolParameter],
-    })
-    parameters: McpToolParameter[];
+  @ApiProperty({
+    example: 'parameters',
+    description: 'Tool parameters',
+    type: [McpToolParameter],
+  })
+  parameters: McpToolParameter[];
 }
 
 // MCP Tool Execution Request
 export class ExecuteToolDto {
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'searchDocs',
-    description: 'Name of the tool to execute'
+    description: 'Name of the tool to execute',
   })
   @IsString()
   toolName: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: { query: 'machine learning', limit: 5 },
-    description: 'Parameters for the tool'
+    description: 'Parameters for the tool',
   })
   @IsOptional()
   parameters?: Record<string, any>;
 }
-
 
 // MCP Response
 export class McpToolResponse {
@@ -111,8 +110,3 @@ export class McpToolExecutionRequest {
   @ApiProperty({ example: 'parameters' })
   parameters: any;
 }
-
-
-
-
-

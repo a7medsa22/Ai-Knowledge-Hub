@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { File, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LinkedToType, SearchFilesDto } from './dto/files.dto';
@@ -9,14 +14,13 @@ const pdfParse = require('pdf-parse');
 
 @Injectable()
 export class FilesService {
-
   private readonly logger = new Logger(FilesService.name);
   private readonly uploadDir = './uploads';
   private readonly baseUrl = process.env.APP_URL || 'http://localhost:3000';
-    
-      constructor(private readonly prisma: PrismaService) {}
 
-    private readonly allowedMimeTypes = [
+  constructor(private readonly prisma: PrismaService) {}
+
+  private readonly allowedMimeTypes = [
     'image/jpeg',
     'image/png',
     'image/gif',
@@ -30,18 +34,17 @@ export class FilesService {
     'text/csv',
   ];
 
-    validateFile(file: Express.Multer.File): void {
-      if(!file){
-     throw new BadRequestException('No file provided');
+  validateFile(file: Express.Multer.File): void {
+    if (!file) {
+      throw new BadRequestException('No file provided');
+    }
 
-      }
-
-     if (!this.allowedMimeTypes.includes(file.mimetype)) {
+    if (!this.allowedMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException(
         `File type ${file.mimetype} is not allowed. Allowed types: images, PDFs, Word, Excel, text files`,
       );
-    }   
-}
+    }
+  }
 
   async uploadFile(
     file: Express.Multer.File,
@@ -79,7 +82,7 @@ export class FilesService {
     return uploadedFile;
   }
 
-  // get all files 
+  // get all files
   async findAll(searchDto: SearchFilesDto): Promise<File[]> {
     const { linkedToType, linkedToId, mimeType } = searchDto;
     const where: Prisma.FileWhereInput = {};
@@ -101,20 +104,20 @@ export class FilesService {
       orderBy: {
         createdAt: 'desc',
       },
-      include:{
-        doc:{
-            select:{
-                id:true,
-                title:true,
-            }
-        }
-      }
+      include: {
+        doc: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+      },
     });
     return files;
   }
 
-    // get file by id
-    async findOne(id: string): Promise<File> {
+  // get file by id
+  async findOne(id: string): Promise<File> {
     const file = await this.prisma.file.findUnique({
       where: { id },
       include: {
@@ -134,7 +137,6 @@ export class FilesService {
     return file;
   }
 
-
   // Get file path for serving
   getFilePath(filename: string): string {
     const filePath = join(process.cwd(), this.uploadDir, filename);
@@ -145,8 +147,8 @@ export class FilesService {
 
     return filePath;
   }
-  
-   // Delete file
+
+  // Delete file
   async remove(id: string, userId: string): Promise<File> {
     const file = await this.findOne(id);
 
@@ -236,22 +238,27 @@ export class FilesService {
   }
 
   // Extract text from file
-  async extractTextFromFile(filePath: string, mimeType: string): Promise<string> {
+  async extractTextFromFile(
+    filePath: string,
+    mimeType: string,
+  ): Promise<string> {
     try {
       switch (mimeType) {
         case 'application/pdf':
           return await this.extractTextFromPdf(filePath);
-        
+
         case 'application/msword':
         case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
           return await this.extractTextFromWord(filePath);
-        
+
         case 'text/plain':
         case 'text/csv':
           return this.extractTextFromTxt(filePath);
-        
+
         default:
-          throw new BadRequestException('Cannot extract text from this file type');
+          throw new BadRequestException(
+            'Cannot extract text from this file type',
+          );
       }
     } catch (error) {
       this.logger.error(`Text extraction failed: ${error.message}`);
@@ -262,10 +269,10 @@ export class FilesService {
   // Extract text from PDF
   private async extractTextFromPdf(filePath: string): Promise<string> {
     const dataBuffer = readFileSync(filePath);
-    const data = await pdfParse(dataBuffer) ;
+    const data = await pdfParse(dataBuffer);
     return data.text;
   }
-  
+
   // Extract text from Word
   private async extractTextFromWord(filePath: string): Promise<string> {
     const result = await mammoth.extractRawText({ path: filePath });
@@ -288,5 +295,4 @@ export class FilesService {
     ];
     return extractableTypes.includes(mimeType);
   }
-
 }

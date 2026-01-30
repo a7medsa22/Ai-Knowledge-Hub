@@ -4,7 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
   constructor(private config: ConfigService) {
     super({
       datasources: {
@@ -12,12 +15,15 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
           url: config.get('DATABASE_URL'),
         },
       },
-      log: config.get('NODE_ENV') === 'development' ? ['query', 'info', 'warn'] : ['warn', 'error'],
+      log:
+        config.get('NODE_ENV') === 'development'
+          ? ['query', 'info', 'warn']
+          : ['warn', 'error'],
     });
   }
 
   async onModuleInit() {
-   try {
+    try {
       await this.$connect();
       console.log('✅ Database connected successfully');
     } catch (error) {
@@ -28,7 +34,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
   async onModuleDestroy() {
     await this.$disconnect();
-     console.log('🔌 Database disconnected');
-
+    console.log('🔌 Database disconnected');
   }
 }

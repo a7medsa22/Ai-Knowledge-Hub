@@ -12,32 +12,33 @@ import { AiModule } from './ai/ai.module';
 import { McpModule } from './mcp/mcp.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import{ ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app..controller';
 import { join } from 'path';
 import { AppService } from './app.service';
 import { FilesModule } from './files/files.module';
+import { RedisModule } from './infrastructure/cache/redis.module';
 @Module({
   imports: [
-       GraphQLModule.forRoot<ApolloDriverConfig>({
-        driver: ApolloDriver,
-        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-        playground: {
-          settings: {
-            'editor.theme': 'dark',
-            'editor.reuseHeaders': true,
-            'tracing.hideTracingResponse': true,
-          },
-        }, 
-        introspection: true,
-       })
-      ,ConfigModule.forRoot({
-        isGlobal:true,
-        envFilePath: '.env',
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      playground: {
+        settings: {
+          'editor.theme': 'dark',
+          'editor.reuseHeaders': true,
+          'tracing.hideTracingResponse': true,
+        },
+      },
+      introspection: true,
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
       expandVariables: true,
-      }),
-   
-         // Rate Limiting
+    }),
+
+    // Rate Limiting
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -54,33 +55,34 @@ import { FilesModule } from './files/files.module';
         },
         {
           name: 'upload',
-          ttl: 60 * 60 * 1000, // 1 hour  
+          ttl: 60 * 60 * 1000, // 1 hour
           limit: 10, // 10 file uploads per hour
         },
       ],
     }),
-    
-     AuthModule,
-     PrismaModule,
-     UsersModule,
-     DocsModule,
-     NotesModule,
-     TasksModule,
-     AiModule,
-     McpModule,
-     FilesModule
-        ],
+
+    AuthModule,
+    PrismaModule,
+    UsersModule,
+    DocsModule,
+    NotesModule,
+    TasksModule,
+    AiModule,
+    McpModule,
+    FilesModule,
+    RedisModule,
+  ],
   providers: [
-     {
+    {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
     {
-      provide:APP_GUARD,
-      useClass:ThrottlerGuard,
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
     AppService,
   ],
-  controllers:[AppController]
+  controllers: [AppController],
 })
 export class AppModule {}

@@ -1,5 +1,18 @@
-import { Controller, Get, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { JwtAuthGuard, GetUser } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/user.dto';
@@ -12,21 +25,26 @@ export class UsersController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth("JWT-auth")
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get current user profile' })
-  @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User profile retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@GetUser() user: JwtUser) {
     const userData = await this.usersService.findOne(user.sub);
-    return userData;    
+    return userData;
   }
-  
 
   @Put('profile')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth("JWT-auth")
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update current user profile' })
-  @ApiResponse({ status: 200, description: 'User profile updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User profile updated successfully',
+  })
   async updateProfile(
     @GetUser() user: JwtUser,
     @Body() updateUserDto: UpdateUserDto,
@@ -38,7 +56,10 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete current user account' })
-  @ApiResponse({ status: 200, description: 'User account deleted successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User account deleted successfully',
+  })
   async deleteProfile(@GetUser() user: JwtUser) {
     return this.usersService.delete(user.sub);
   }

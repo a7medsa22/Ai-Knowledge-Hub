@@ -1,35 +1,41 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
-import { IsArray, IsIn, IsInt, IsOptional, IsString, Max, Min } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import {
+  IsArray,
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class SearchDocDto {
-  
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'machine learning',
     description: 'Search query for title and content',
-    required: false 
+    required: false,
   })
   @IsString()
   @IsOptional()
   query?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: ['ai', 'tutorial'],
     description: 'Filter by tags',
     required: false,
-    type: [String]
+    type: [String],
   })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  @Transform(({ value }) => Array.isArray(value) ? value : [value])
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   tags?: string[];
 
-
-  @ApiProperty({ 
+  @ApiProperty({
     example: 10,
     description: 'Number of results to return',
-    required: false 
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -38,25 +44,26 @@ export class SearchDocDto {
   @Transform(({ value }) => parseInt(value))
   limit?: number;
 
-
-   @ApiProperty({ 
+  @ApiProperty({
     example: 0,
     description: 'Number of results to skip',
-    required: false 
+    required: false,
   })
   @IsOptional()
   @IsInt()
   @Min(0)
   @Transform(({ value }) => parseInt(value))
-  offset?:number;
+  offset?: number;
 
-
-  @ApiProperty({ example: 'createdAt', description: 'Sort by field', required: false })
+  @ApiProperty({
+    example: 'createdAt',
+    description: 'Sort by field',
+    required: false,
+  })
   @IsOptional()
   @IsString()
   sortBy?: 'createdAt' | 'updatedAt' | 'title';
 
-  
   @ApiProperty({ example: 'desc', description: 'Sort order', required: false })
   @IsOptional()
   @IsIn(['asc', 'desc'])

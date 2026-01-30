@@ -25,8 +25,10 @@ export class OpenAiProvider extends AiProvider {
   private getSummarySystemMessage(length: SummaryLength): string {
     const lengthInstructions = {
       [SummaryLength.SHORT]: 'Provide a concise summary in 2-3 sentences.',
-      [SummaryLength.MEDIUM]: 'Provide a comprehensive summary in 1-2 paragraphs.',
-      [SummaryLength.DETAILED]: 'Provide a detailed summary with key points and main concepts in 3-4 paragraphs.',
+      [SummaryLength.MEDIUM]:
+        'Provide a comprehensive summary in 1-2 paragraphs.',
+      [SummaryLength.DETAILED]:
+        'Provide a detailed summary with key points and main concepts in 3-4 paragraphs.',
     };
 
     return `You are an expert at summarizing text content. ${lengthInstructions[length]} Focus on the main ideas and key concepts.`;
@@ -37,12 +39,12 @@ export class OpenAiProvider extends AiProvider {
   }
 
   private async makeOpenAiRequest(
-    systemMessage: string, 
+    systemMessage: string,
     userMessage: string,
-    maxTokens?: number
+    maxTokens?: number,
   ): Promise<AiProviderResponse> {
     const startTime = Date.now();
-    
+
     try {
       const response = await firstValueFrom(
         this.httpService.post(
@@ -58,16 +60,16 @@ export class OpenAiProvider extends AiProvider {
           },
           {
             headers: {
-              'Authorization': `Bearer ${this.config.apiKey}`,
+              Authorization: `Bearer ${this.config.apiKey}`,
               'Content-Type': 'application/json',
             },
-          }
-        )
+          },
+        ),
       );
 
       const processingTime = Date.now() - startTime;
       const choice = response.data.choices[0];
-      
+
       return {
         result: choice.message.content.trim(),
         model: this.config.model,
@@ -76,22 +78,33 @@ export class OpenAiProvider extends AiProvider {
         outputTokens: response.data.usage?.completion_tokens,
       };
     } catch (error) {
-      this.logger.error('OpenAI request failed:', error.response?.data || error.message);
-      throw new Error(`OpenAI request failed: ${error.response?.data?.error?.message || error.message}`);
+      this.logger.error(
+        'OpenAI request failed:',
+        error.response?.data || error.message,
+      );
+      throw new Error(
+        `OpenAI request failed: ${error.response?.data?.error?.message || error.message}`,
+      );
     }
   }
 
-  async summarize(text: string, length: SummaryLength): Promise<AiProviderResponse> {
+  async summarize(
+    text: string,
+    length: SummaryLength,
+  ): Promise<AiProviderResponse> {
     const systemMessage = this.getSummarySystemMessage(length);
     const userMessage = `Please summarize this text:\n\n${text}`;
-    
+
     return this.makeOpenAiRequest(systemMessage, userMessage);
   }
 
-  async answerQuestion(question: string, context: string): Promise<AiProviderResponse> {
+  async answerQuestion(
+    question: string,
+    context: string,
+  ): Promise<AiProviderResponse> {
     const systemMessage = this.getQuestionAnswerSystemMessage();
     const userMessage = `Context:\n${context}\n\nQuestion: ${question}`;
-    
+
     return this.makeOpenAiRequest(systemMessage, userMessage);
   }
 
@@ -106,17 +119,22 @@ export class OpenAiProvider extends AiProvider {
           },
           {
             headers: {
-              'Authorization': `Bearer ${this.config.apiKey}`,
+              Authorization: `Bearer ${this.config.apiKey}`,
               'Content-Type': 'application/json',
             },
-          }
-        )
+          },
+        ),
       );
 
       return response.data.data[0].embedding;
     } catch (error) {
-      this.logger.error('OpenAI embedding request failed:', error.response?.data || error.message);
-      throw new Error(`OpenAI embedding request failed: ${error.response?.data?.error?.message || error.message}`);
+      this.logger.error(
+        'OpenAI embedding request failed:',
+        error.response?.data || error.message,
+      );
+      throw new Error(
+        `OpenAI embedding request failed: ${error.response?.data?.error?.message || error.message}`,
+      );
     }
   }
 
@@ -131,13 +149,16 @@ export class OpenAiProvider extends AiProvider {
       await firstValueFrom(
         this.httpService.get(`${this.config.baseUrl}/models`, {
           headers: {
-            'Authorization': `Bearer ${this.config.apiKey}`,
+            Authorization: `Bearer ${this.config.apiKey}`,
           },
-        })
+        }),
       );
       return true;
     } catch (error) {
-      this.logger.error('OpenAI availability check failed:', error.response?.data || error.message);
+      this.logger.error(
+        'OpenAI availability check failed:',
+        error.response?.data || error.message,
+      );
       return false;
     }
   }

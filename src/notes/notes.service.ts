@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { Note, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
@@ -7,11 +11,10 @@ import { UpdateNoteDto } from './dto/update-note.dto';
 
 @Injectable()
 export class NotesService {
-  constructor(private readonly prisma:PrismaService){}
-  
-  
-  public async create(userId:string,dto: CreateNoteDto):Promise<Note> {
-    const {content,docId} = dto;
+  constructor(private readonly prisma: PrismaService) {}
+
+  public async create(userId: string, dto: CreateNoteDto): Promise<Note> {
+    const { content, docId } = dto;
     if (docId) {
       await this.validateDocumentAccess(docId, userId);
     }
@@ -25,31 +28,31 @@ export class NotesService {
       include: this.gerNoteInclude(),
     });
   }
-  public findAll(userId:string,search?:SearchNoteDto) {
-     const where = this.buildWhereClause(userId, search);
-      return this.executeSearchQuery(where, search);
-    }  
+  public findAll(userId: string, search?: SearchNoteDto) {
+    const where = this.buildWhereClause(userId, search);
+    return this.executeSearchQuery(where, search);
+  }
 
-    public async findOne(id: string,userId:string): Promise<Note> {
+  public async findOne(id: string, userId: string): Promise<Note> {
     const note = await this.prisma.note.findFirstOrThrow({
       where: {
         id,
-        authorId: userId, 
+        authorId: userId,
       },
       include: this.gerNoteInclude(),
     });
 
     return note;
-  }; 
+  }
 
-   async findByDocument(userId: string, docId: string, search?: SearchNoteDto) {
+  async findByDocument(userId: string, docId: string, search?: SearchNoteDto) {
     await this.validateDocumentAccess(docId, userId);
 
     const where = this.buildWhereClause(userId, { ...search, docId });
     return this.executeSearchQuery(where, search);
   }
 
-async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
+  async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
     // Check ownership
     await this.checkNoteOwnership(id, userId);
 
@@ -60,8 +63,7 @@ async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
     });
   }
 
-
-   async remove(id: string, userId: string): Promise<Note> {
+  async remove(id: string, userId: string): Promise<Note> {
     // Check ownership
     await this.checkNoteOwnership(id, userId);
 
@@ -71,20 +73,20 @@ async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
     });
   }
 
-   // Utility methods
+  // Utility methods
   async getNotesStats(userId: string) {
     const [totalNotes, notesWithDocs, standaloneNotes] = await Promise.all([
       this.prisma.note.count({
         where: { authorId: userId },
       }),
       this.prisma.note.count({
-        where: { 
+        where: {
           authorId: userId,
           docId: { not: null },
         },
       }),
       this.prisma.note.count({
-        where: { 
+        where: {
           authorId: userId,
           docId: null,
         },
@@ -107,18 +109,18 @@ async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
       take: limit,
     });
   }
-  
-   //Standard include for note queries
-  private gerNoteInclude(){
-    return{
-      author:{
-        select:{id:true,email:true,name:true}
-  },
-  doc:{
-    select:{id:true,title:true,isPublic:true,authorId:true}
-  }
+
+  //Standard include for note queries
+  private gerNoteInclude() {
+    return {
+      author: {
+        select: { id: true, email: true, name: true },
+      },
+      doc: {
+        select: { id: true, title: true, isPublic: true, authorId: true },
+      },
     };
-  };
+  }
   // Validate document access for note operations
   private async validateDocumentAccess(docId: string, userId: string) {
     const doc = await this.prisma.doc.findUniqueOrThrow({
@@ -132,39 +134,50 @@ async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
 
     // User can add notes to their own docs or public docs
     if (!doc.isPublic && doc.authorId !== userId) {
-      throw new ForbiddenException('Cannot add notes to private documents you do not own');
+      throw new ForbiddenException(
+        'Cannot add notes to private documents you do not own',
+      );
     }
 
     return doc;
   }
-//Build where clause for search
-  private buildWhereClause(userId:string,search?:SearchNoteDto,additionalWhere?:Prisma.NoteWhereInput):Prisma.NoteWhereInput{
-    const where:Prisma.NoteWhereInput={ authorId:userId,...additionalWhere || {} };
-    if(search?.query){
-      where.OR=[
-        {content:{contains:search.query,mode:'insensitive'}},
-        {doc:{title:{contains:search.query,mode:'insensitive'}}}
+  //Build where clause for search
+  private buildWhereClause(
+    userId: string,
+    search?: SearchNoteDto,
+    additionalWhere?: Prisma.NoteWhereInput,
+  ): Prisma.NoteWhereInput {
+    const where: Prisma.NoteWhereInput = {
+      authorId: userId,
+      ...(additionalWhere || {}),
+    };
+    if (search?.query) {
+      where.OR = [
+        { content: { contains: search.query, mode: 'insensitive' } },
+        { doc: { title: { contains: search.query, mode: 'insensitive' } } },
       ];
     }
-    if(search?.docId){
-      where.docId=search.docId;
+    if (search?.docId) {
+      where.docId = search.docId;
     }
     return where;
   }
 
   //Build order by clause
-  private buildOrderBy(search?:SearchNoteDto):Prisma.NoteOrderByWithRelationInput{
-     const { sortBy = 'updatedAt', order = 'desc' } = search || {};
-     
+  private buildOrderBy(
+    search?: SearchNoteDto,
+  ): Prisma.NoteOrderByWithRelationInput {
+    const { sortBy = 'updatedAt', order = 'desc' } = search || {};
+
     return {
       [sortBy]: order,
     };
-  };
+  }
 
   // Execute paginated query
- private async executeSearchQuery(
+  private async executeSearchQuery(
     where: Prisma.NoteWhereInput,
-    searchDto?: SearchNoteDto
+    searchDto?: SearchNoteDto,
   ) {
     const { limit = 20, offset = 0 } = searchDto || {};
 
@@ -189,7 +202,7 @@ async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
       },
     };
   }
- // Check note ownership
+  // Check note ownership
   private async checkNoteOwnership(noteId: string, userId: string) {
     const note = await this.prisma.note.findUniqueOrThrow({
       where: { id: noteId },
@@ -205,6 +218,4 @@ async update(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
 
     return note;
   }
- 
- 
 }

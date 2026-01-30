@@ -4,7 +4,6 @@ import { UserRole } from 'src/common/enums/user-role.enum';
 import { UserStatus } from 'src/common/enums/user-status.enum';
 
 export class CreateUserDto {
-  
   @ApiProperty()
   @IsOptional()
   @IsString()
@@ -27,8 +26,8 @@ export class CreateUserDto {
   status: UserStatus;
 }
 
-export class UpdateUserDto  {
-     @ApiProperty({ required: false })
+export class UpdateUserDto {
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   name?: string;

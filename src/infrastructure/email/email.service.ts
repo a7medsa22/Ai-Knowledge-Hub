@@ -7,7 +7,11 @@ export class EmailService {
 
   constructor(private readonly mailerService: MailerService) {}
 
-  async sendEmailVerificationOtp(email: string, firstName: string, otp: string): Promise<void> {
+  async sendEmailVerificationOtp(
+    email: string,
+    firstName: string,
+    otp: string,
+  ): Promise<void> {
     try {
       const today = new Date().getFullYear();
       await this.mailerService.sendMail({
@@ -18,13 +22,19 @@ export class EmailService {
       });
       this.logger.log(`Email verification OTP sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send email verification OTP to ${email}`, error);
+      this.logger.error(
+        `Failed to send email verification OTP to ${email}`,
+        error,
+      );
       throw error;
     }
   }
 
-
-  async sendPasswordResetOtp(email: string, firstName: string, otp: string): Promise<void> {
+  async sendPasswordResetOtp(
+    email: string,
+    firstName: string,
+    otp: string,
+  ): Promise<void> {
     try {
       const today = new Date().getFullYear();
       await this.mailerService.sendMail({

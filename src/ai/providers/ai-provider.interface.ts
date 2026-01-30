@@ -1,4 +1,4 @@
-import { SummaryLength } from "../dto/ai.dto";
+import { SummaryLength } from '../dto/ai.dto';
 
 export interface AiProviderResponse {
   result: string;
@@ -16,25 +16,25 @@ export interface AiProviderConfig {
   maxTokens?: number;
 }
 export abstract class AiProvider {
-    protected config: AiProviderConfig;
-    
-    constructor(config: AiProviderConfig) {
-      this.config = config;
-    }
-  
-    abstract getName(): string;
-    
-    abstract summarize(
-      text: string, 
-      length: SummaryLength
-    ): Promise<AiProviderResponse>;
-    
-    abstract answerQuestion(
-      question: string, 
-      context: string
-    ): Promise<AiProviderResponse>;
-    
-    abstract generateEmbedding(text: string): Promise<number[]>;
-    
-    abstract isAvailable():  Promise<boolean>;
+  protected config: AiProviderConfig;
+
+  constructor(config: AiProviderConfig) {
+    this.config = config;
   }
+
+  abstract getName(): string;
+
+  abstract summarize(
+    text: string,
+    length: SummaryLength,
+  ): Promise<AiProviderResponse>;
+
+  abstract answerQuestion(
+    question: string,
+    context: string,
+  ): Promise<AiProviderResponse>;
+
+  abstract generateEmbedding(text: string): Promise<number[]>;
+
+  abstract isAvailable(): Promise<boolean>;
+}

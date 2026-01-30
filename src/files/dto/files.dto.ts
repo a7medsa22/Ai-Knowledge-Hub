@@ -8,27 +8,27 @@ export enum LinkedToType {
 }
 
 export class UploadFileDto {
-  @ApiProperty({ 
+  @ApiProperty({
     type: 'string',
     format: 'binary',
-    description: 'File to upload'
+    description: 'File to upload',
   })
   file: any;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'doc',
     enum: LinkedToType,
     required: false,
-    description: 'Type of entity to link file to'
+    description: 'Type of entity to link file to',
   })
   @IsEnum(LinkedToType)
   @IsOptional()
   linkedToType?: LinkedToType;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'doc123',
     required: false,
-    description: 'ID of entity to link file to'
+    description: 'ID of entity to link file to',
   })
   @IsString()
   @IsOptional()
@@ -65,27 +65,27 @@ export class FileResponseDto {
 }
 
 export class SearchFilesDto {
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'doc',
     enum: LinkedToType,
-    required: false
+    required: false,
   })
   @IsEnum(LinkedToType)
   @IsOptional()
   linkedToType?: LinkedToType;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'doc123',
-    required: false
+    required: false,
   })
   @IsString()
   @IsOptional()
   linkedToId?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'image/png',
     required: false,
-    description: 'Filter by MIME type'
+    description: 'Filter by MIME type',
   })
   @IsString()
   @IsOptional()

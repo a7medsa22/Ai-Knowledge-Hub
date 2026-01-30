@@ -1,16 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AiService } from './ai.service';
-import { BulkSummarizeDto, ExtractKeyPointsDto, QuestionAnswerDto, QuestionAnswerResponseDto, SemanticSearchDto, SummarizeDto, SummarizeResponseDto, SummaryLength } from './dto/ai.dto';
+import {
+  BulkSummarizeDto,
+  ExtractKeyPointsDto,
+  QuestionAnswerDto,
+  QuestionAnswerResponseDto,
+  SemanticSearchDto,
+  SummarizeDto,
+  SummarizeResponseDto,
+  SummaryLength,
+} from './dto/ai.dto';
 import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import * as client from '@prisma/client';
 import type { JwtUser } from 'src/common/interfaces/jwt-user.interface';
 
-
 @ApiTags('AI Research')
 @Controller('ai')
 export class AiController {
-  constructor(private readonly aiService:AiService){}
+  constructor(private readonly aiService: AiService) {}
 
   @Get('status')
   @ApiOperation({
@@ -30,7 +55,6 @@ export class AiController {
   async getStatus() {
     return this.aiService.getAiStatus();
   }
-
 
   @Post('summarize')
   @UseGuards(JwtAuthGuard)
@@ -57,7 +81,8 @@ export class AiController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Invalid input (text too short/long, or both text and docId provided)',
+    description:
+      'Invalid input (text too short/long, or both text and docId provided)',
   })
   @ApiResponse({
     status: 404,
@@ -89,7 +114,8 @@ export class AiController {
     type: QuestionAnswerResponseDto,
     example: {
       result: 'success',
-      answer: 'Machine learning algorithms can be categorized into three main types...',
+      answer:
+        'Machine learning algorithms can be categorized into three main types...',
       question: 'What are the main types of machine learning algorithms?',
       provider: 'ollama',
       model: 'phi3:3.8b',
@@ -165,14 +191,14 @@ export class AiController {
     return this.aiService.semanticSearch(searchDto, user?.sub);
   }
 
-
   @Post('extract-key-points')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Extract key points from text',
-    description: 'Use AI to extract the most important key points from text content.',
+    description:
+      'Use AI to extract the most important key points from text content.',
   })
   @ApiResponse({
     status: 200,
@@ -199,9 +225,7 @@ export class AiController {
     status: 500,
     description: 'Key point extraction failed',
   })
-  async extractKeyPoints(
-    @Body() body: ExtractKeyPointsDto,
-  ) {
+  async extractKeyPoints(@Body() body: ExtractKeyPointsDto) {
     const { text, count = 5 } = body;
     const keyPoints = await this.aiService.extractKeyPoints(text, count);
 
@@ -261,5 +285,4 @@ export class AiController {
       failed: results.filter((r) => r.error).length,
     };
   }
-
 }

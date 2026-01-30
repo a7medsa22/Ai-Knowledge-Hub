@@ -1,10 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { McpService } from './mcp.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiAuth } from '../common/decorators/api-auth.decorator';
 import { ExecuteToolDto, McpToolResponse } from './dto/mcp.dto';
 import { GetUser } from '../auth/guards/jwt-auth.guard';
-import type {JwtUser} from '../common/interfaces/jwt-user.interface';
+import type { JwtUser } from '../common/interfaces/jwt-user.interface';
 import { SearchDocDto } from '../docs/dto/search-doc.dto';
 import { CreateTaskDto } from '../tasks/dto/create-task.dto';
 import { CreateNoteDto } from '../notes/dto/create-note.dto';
@@ -15,7 +26,7 @@ import { CreateNoteDto } from '../notes/dto/create-note.dto';
 export class McpController {
   constructor(private readonly mcpService: McpService) {}
 
-   @Get('tools')
+  @Get('tools')
   @ApiOperation({
     summary: 'Get available MCP tools',
     description: 'List all available tools that can be executed via MCP',
@@ -46,7 +57,7 @@ export class McpController {
   }
 
   // Execute an MCP tool
-   @Post('execute')
+  @Post('execute')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Execute an MCP tool',
@@ -80,10 +91,13 @@ export class McpController {
     status: 401,
     description: 'Unauthorized',
   })
-  executeTool(@Body() body: ExecuteToolDto , @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool(body.toolName, body.parameters , user.sub);
+  executeTool(@Body() body: ExecuteToolDto, @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool(
+      body.toolName,
+      body.parameters,
+      user.sub,
+    );
   }
-
 
   @Post('execute-batch')
   @HttpCode(HttpStatus.OK)
@@ -114,9 +128,12 @@ export class McpController {
       failureCount: 0,
     },
   })
-  async executeBatchTools(@Body() body: ExecuteToolDto[] , @GetUser() user: JwtUser) {
+  async executeBatchTools(
+    @Body() body: ExecuteToolDto[],
+    @GetUser() user: JwtUser,
+  ) {
     const startTime = Date.now();
-    const results = await this.mcpService.executeBatchTools(body , user.sub);
+    const results = await this.mcpService.executeBatchTools(body, user.sub);
     const executionTime = Date.now() - startTime;
     const successCount = results.filter((result) => result.success).length;
     const failureCount = results.filter((result) => !result.success).length;
@@ -128,7 +145,6 @@ export class McpController {
     };
   }
 
-  
   @Get('health')
   @ApiOperation({
     summary: 'Check MCP service health',
@@ -162,7 +178,7 @@ export class McpController {
   @ApiResponse({
     status: 200,
     description: 'Documents retrieved successfully',
-    
+
     example: {
       documents: [
         {
@@ -182,8 +198,8 @@ export class McpController {
     status: 401,
     description: 'Unauthorized',
   })
-  quickSearchDocs(@Body() body: SearchDocDto , @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool('searchDocs', body , user.sub);
+  quickSearchDocs(@Body() body: SearchDocDto, @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('searchDocs', body, user.sub);
   }
 
   @Get('quick/get-doc')
@@ -209,8 +225,8 @@ export class McpController {
     status: 401,
     description: 'Unauthorized',
   })
-  quickGetDoc(@Body() body: { docId: string } , @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool('getDocument', body , user.sub);
+  quickGetDoc(@Body() body: { docId: string }, @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('getDocument', body, user.sub);
   }
 
   @Post('quick/add-note')
@@ -236,8 +252,8 @@ export class McpController {
     status: 401,
     description: 'Unauthorized',
   })
-  quickAddNote(@Body() body: CreateNoteDto , @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool('addNote', body , user.sub);
+  quickAddNote(@Body() body: CreateNoteDto, @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('addNote', body, user.sub);
   }
 
   @Post('quick/create-task')
@@ -265,38 +281,30 @@ export class McpController {
     status: 401,
     description: 'Unauthorized',
   })
-  quickCreateTask(@Body() body: CreateTaskDto , @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool('createTask', body , user.sub);
+  quickCreateTask(@Body() body: CreateTaskDto, @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('createTask', body, user.sub);
   }
 
-@Get('quick/user-stats')
-@HttpCode(HttpStatus.OK)
-@ApiOperation({
-  summary: 'Quick get user stats',
-  description: 'Get user stats',
-})
-@ApiResponse({
-  status: 200,
-  description: 'User stats retrieved successfully',
-  example: {
-    documents: 10,
-    notes: 5,
-    tasks: 3,
-  },
-})
-@ApiResponse({
-  status: 401,
-  description: 'Unauthorized',
-})
-quickUserStats(@GetUser() user: JwtUser) {
-  return this.mcpService.executeTool('getUserStats', {} , user.sub);
-}
-
-
-  
-  
-
-
-
-
+  @Get('quick/user-stats')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Quick get user stats',
+    description: 'Get user stats',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User stats retrieved successfully',
+    example: {
+      documents: 10,
+      notes: 5,
+      tasks: 3,
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  quickUserStats(@GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('getUserStats', {}, user.sub);
+  }
 }

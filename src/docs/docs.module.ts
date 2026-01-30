@@ -5,11 +5,9 @@ import { DocsResolver } from './docs.resolver';
 import { FilesModule } from 'src/files/files.module';
 
 @Module({
-   imports: [forwardRef(() => FilesModule)],
-   controllers: [DocsController],
-  providers: [DocsService,DocsResolver],
-  exports:[DocsService],
-
-
+  imports: [forwardRef(() => FilesModule)],
+  controllers: [DocsController],
+  providers: [DocsService, DocsResolver],
+  exports: [DocsService],
 })
 export class DocsModule {}

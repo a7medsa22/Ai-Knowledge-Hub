@@ -1,5 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ExecuteToolDto, McpToolDefinition, McpToolResponse } from './dto/mcp.dto';
+import {
+  ExecuteToolDto,
+  McpToolDefinition,
+  McpToolResponse,
+} from './dto/mcp.dto';
 import { DocsService } from '../docs/docs.service';
 import { NotesService } from '../notes/notes.service';
 import { TasksService } from '../tasks/tasks.service';
@@ -11,20 +15,24 @@ import { throws } from 'assert';
 export class McpService {
   private readonly logger = new Logger(McpService.name);
   constructor(
-      private readonly docsService:DocsService
-     ,private readonly notesService:NotesService
-     ,private readonly tasksService:TasksService){}
+    private readonly docsService: DocsService,
+    private readonly notesService: NotesService,
+    private readonly tasksService: TasksService,
+  ) {}
 
-      // Get all available MCP tools
-  getAvailableTools(){
-      const tools = MCP_Tools
-      return {tools , count:tools.length}
+  // Get all available MCP tools
+  getAvailableTools() {
+    const tools = MCP_Tools;
+    return { tools, count: tools.length };
   }
 
-  async executeTool(toolName:string,parameters:any,userId:string):Promise<McpToolResponse>{
+  async executeTool(
+    toolName: string,
+    parameters: any,
+    userId: string,
+  ): Promise<McpToolResponse> {
+    const startTime = Date.now();
 
-  const startTime = Date.now();
-    
     this.logger.log(`Executing tool: ${toolName} for user: ${userId}`);
 
     try {
@@ -36,38 +44,37 @@ export class McpService {
           break;
 
         case 'getDocument':
-          if(parameters.id == null){
+          if (parameters.id == null) {
             result = await this.docsService.findAll(parameters);
-          }
-          else{
+          } else {
             result = await this.docsService.findOne(parameters.id, userId);
           }
           break;
 
         case 'addNote':
-          result = await this.notesService.create(userId,parameters);
+          result = await this.notesService.create(userId, parameters);
           break;
 
         case 'searchNotes':
-          result = await this.notesService.findAll(userId,parameters);
+          result = await this.notesService.findAll(userId, parameters);
           break;
 
         case 'addTask':
-          result = await this.tasksService.create(userId,parameters);
+          result = await this.tasksService.create(userId, parameters);
           break;
 
         case 'searchTasks':
-          result = await this.tasksService.findAll(userId,parameters);
+          result = await this.tasksService.findAll(userId, parameters);
           break;
-          
+
         case 'createTask':
-          result = await this.tasksService.create(userId,parameters);
+          result = await this.tasksService.create(userId, parameters);
           break;
-          
+
         case 'listTasks':
-          result = await this.tasksService.findAll(userId,parameters);
+          result = await this.tasksService.findAll(userId, parameters);
           break;
-          
+
         case 'getUserStats':
           result = await this.notesService.getNotesStats(userId);
           break;
@@ -78,7 +85,9 @@ export class McpService {
 
       const executionTime = Date.now() - startTime;
 
-      this.logger.log(`Tool ${toolName} executed successfully in ${executionTime}ms`);
+      this.logger.log(
+        `Tool ${toolName} executed successfully in ${executionTime}ms`,
+      );
 
       return {
         success: true,
@@ -97,20 +106,19 @@ export class McpService {
         result: null,
         error: error.message,
         executionTime,
-      }; 
+      };
     }
   }
 
-  async executeBatchTools(tools: ExecuteToolDto[], userId: string): Promise<McpToolResponse[]> {
+  async executeBatchTools(
+    tools: ExecuteToolDto[],
+    userId: string,
+  ): Promise<McpToolResponse[]> {
     const results = await Promise.all(
-      tools.map(async (tool) => this.executeTool(tool.toolName, tool.parameters, userId))
+      tools.map(async (tool) =>
+        this.executeTool(tool.toolName, tool.parameters, userId),
+      ),
     );
     return results;
   }
-
-
-
-  
-    
-
 }

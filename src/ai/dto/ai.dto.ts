@@ -1,181 +1,234 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ArrayMinSize, IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min, MinLength } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator';
 
 export enum SummaryLength {
-    SHORT = "short",
-    MEDIUM = "medium",
-    DETAILED = "detailed"
+  SHORT = 'short',
+  MEDIUM = 'medium',
+  DETAILED = 'detailed',
 }
 export class SummarizeDto {
-    @ApiProperty({ 
+  @ApiProperty({
     example: 'Machine learning is a subset of artificial intelligence...',
     description: 'Text content to summarize (if not providing docId)',
-    required: false 
+    required: false,
   })
   @IsString()
   @IsOptional()
-  @MaxLength(10000, { message: 'Text content is too long (max 10,000 characters)' })
-    text?: string;
+  @MaxLength(10000, {
+    message: 'Text content is too long (max 10,000 characters)',
+  })
+  text?: string;
 
-
-      @ApiProperty({ 
+  @ApiProperty({
     example: 'clx1234567890',
     description: 'Document ID to summarize (if not providing text)',
-    required: false 
+    required: false,
   })
-    @IsOptional()
-    @IsString()
-    docId?: string;
+  @IsOptional()
+  @IsString()
+  docId?: string;
 
-
-     @ApiProperty({ 
+  @ApiProperty({
     example: SummaryLength.MEDIUM,
     description: 'Length of the summary',
     enum: SummaryLength,
-    required: false 
+    required: false,
   })
-    @IsOptional()
-    @IsEnum(SummaryLength)
-    length?: SummaryLength = SummaryLength.MEDIUM;
+  @IsOptional()
+  @IsEnum(SummaryLength)
+  length?: SummaryLength = SummaryLength.MEDIUM;
 }
 
 export class QuestionAnswerDto {
-     @ApiProperty({ 
-       example: 'What are the main types of machine learning algorithms?',
-       description: 'Question to ask about the content' 
-     })
-     @IsString()
-     @MinLength(5, { message: 'Question must be at least 5 characters long' })
-     @MaxLength(500, { message: 'Question is too long (max 500 characters)' })
-       question: string;
-   
-       @ApiProperty({ 
-       example: 'clx1234567890',
-       description: 'Document ID to use as context (if not providing text)',
-       required: false 
-     })
-     @IsString()
-     @IsOptional()
-       docId?: string;
-   
-       @ApiProperty({ 
-       example: 'Machine learning is a subset of artificial intelligence...',
-       description: 'Context text for answering the question (if not providing docId)',
-       required: false 
-     })
-     @IsString()
-     @IsOptional()
-     @MaxLength(15000, { message: 'Context text is too long (max 15,000 characters)' })
-       context?: string;
-}   
+  @ApiProperty({
+    example: 'What are the main types of machine learning algorithms?',
+    description: 'Question to ask about the content',
+  })
+  @IsString()
+  @MinLength(5, { message: 'Question must be at least 5 characters long' })
+  @MaxLength(500, { message: 'Question is too long (max 500 characters)' })
+  question: string;
+
+  @ApiProperty({
+    example: 'clx1234567890',
+    description: 'Document ID to use as context (if not providing text)',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  docId?: string;
+
+  @ApiProperty({
+    example: 'Machine learning is a subset of artificial intelligence...',
+    description:
+      'Context text for answering the question (if not providing docId)',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(15000, {
+    message: 'Context text is too long (max 15,000 characters)',
+  })
+  context?: string;
+}
 
 export class SemanticSearchDto {
-    @ApiProperty({ 
+  @ApiProperty({
     example: 'neural networks and deep learning',
-    description: 'Search query for semantic similarity' 
-    })
-    @IsString()
-    @MinLength(3, { message: 'Search query must be at least 3 characters long' })
-    @MaxLength(200, { message: 'Search query is too long (max 200 characters)' })
-    query: string;
-  
-    @ApiProperty({ 
-      example: 5,
-      description: 'Number of similar documents to return',
-      required: false 
-    })
-    @IsOptional()
-    limit?: number = 5;
+    description: 'Search query for semantic similarity',
+  })
+  @IsString()
+  @MinLength(3, { message: 'Search query must be at least 3 characters long' })
+  @MaxLength(200, { message: 'Search query is too long (max 200 characters)' })
+  query: string;
+
+  @ApiProperty({
+    example: 5,
+    description: 'Number of similar documents to return',
+    required: false,
+  })
+  @IsOptional()
+  limit?: number = 5;
 }
 
 export class AiResponseDto {
-    @ApiProperty({ example: 'This is a summarized text...', description: 'Response from AI operation' })
-    result: string;
+  @ApiProperty({
+    example: 'This is a summarized text...',
+    description: 'Response from AI operation',
+  })
+  result: string;
 
-    @ApiProperty({ example: 'openai', description: 'AI provider used for the operation', required: false })
-    @IsOptional()
-    @IsString()
-    provider?: string;
- 
-    @ApiProperty({ example: 'gpt-4', description: 'Model used for the operation', required: false })
-    @IsOptional()
-    @IsString()
-    model?: string;
-    
-    @ApiProperty({description: 'Processing time in milliseconds' })
-    @IsNumber()
-    processingTime: number;
+  @ApiProperty({
+    example: 'openai',
+    description: 'AI provider used for the operation',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  provider?: string;
 
-    @ApiProperty({ example: 150, description: 'Number of input tokens used', required: false })
-    @IsOptional()
-    @IsString()
-    inputTokens?: number;
+  @ApiProperty({
+    example: 'gpt-4',
+    description: 'Model used for the operation',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  model?: string;
 
-    @ApiProperty({ example: 300, description: 'Number of output tokens generated', required: false })
-    @IsOptional()
-    @IsString()
-    outputTokens?: number;
+  @ApiProperty({ description: 'Processing time in milliseconds' })
+  @IsNumber()
+  processingTime: number;
+
+  @ApiProperty({
+    example: 150,
+    description: 'Number of input tokens used',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  inputTokens?: number;
+
+  @ApiProperty({
+    example: 300,
+    description: 'Number of output tokens generated',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  outputTokens?: number;
 }
 
 export class SummarizeResponseDto extends AiResponseDto {
-    @ApiProperty({ example: 'This is a summarized text...', description: 'Generated summary' })
-    summary: string;
-    
-    @ApiProperty({ example: 'medium', description: 'Length of the summary' })
-    @IsEnum(SummaryLength)
-    length: SummaryLength;
-    
-    @ApiProperty({ example: 1200, description: 'Length of the original text in characters'})
-    @IsOptional()
-    @IsNumber()
-    originalTextLength?: number;
+  @ApiProperty({
+    example: 'This is a summarized text...',
+    description: 'Generated summary',
+  })
+  summary: string;
+
+  @ApiProperty({ example: 'medium', description: 'Length of the summary' })
+  @IsEnum(SummaryLength)
+  length: SummaryLength;
+
+  @ApiProperty({
+    example: 1200,
+    description: 'Length of the original text in characters',
+  })
+  @IsOptional()
+  @IsNumber()
+  originalTextLength?: number;
 }
 
 export class QuestionAnswerResponseDto extends AiResponseDto {
-    @ApiProperty({ example: 'The main types of machine learning algorithms are supervised, unsupervised, and reinforcement learning.', description: 'Answer to the question' })
-    answer: string;
+  @ApiProperty({
+    example:
+      'The main types of machine learning algorithms are supervised, unsupervised, and reinforcement learning.',
+    description: 'Answer to the question',
+  })
+  answer: string;
 
-    @ApiProperty({ example: 'What are the main types of machine learning algorithms?', description: 'The question that was asked' })
-    question: string;
+  @ApiProperty({
+    example: 'What are the main types of machine learning algorithms?',
+    description: 'The question that was asked',
+  })
+  question: string;
 
-    @ApiProperty({ example: 0.95, description: 'Confidence score of the answer (if provided by the AI model)', required: false })
-    confidence?: number;
+  @ApiProperty({
+    example: 0.95,
+    description: 'Confidence score of the answer (if provided by the AI model)',
+    required: false,
+  })
+  confidence?: number;
 }
 
 export class ExtractKeyPointsDto {
-  @ApiProperty({ example: 'This is a text to extract key points from', description: 'Text to extract key points from' })
+  @ApiProperty({
+    example: 'This is a text to extract key points from',
+    description: 'Text to extract key points from',
+  })
   @IsString()
   @IsNotEmpty()
   text: string;
 
-  @ApiProperty({ example: 5, description: 'Number of key points to extract', required: false })
+  @ApiProperty({
+    example: 5,
+    description: 'Number of key points to extract',
+    required: false,
+  })
   @IsInt()
   @Min(1)
   @IsOptional()
   count?: number = 5;
 }
 export class BulkSummarizeDto {
-  @ApiProperty({ 
+  @ApiProperty({
     example: ['doc123', 'doc456'],
     description: 'Array of document IDs to summarize',
-    type: [String]
+    type: [String],
   })
   @IsArray()
   @IsString({ each: true })
   docIds: string[];
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: SummaryLength.MEDIUM,
     description: 'Length of summaries',
     enum: SummaryLength,
-    required: false 
+    required: false,
   })
   @IsEnum(SummaryLength)
   @IsOptional()
   length?: SummaryLength = SummaryLength.MEDIUM;
 }
-
-
-
-   
-   

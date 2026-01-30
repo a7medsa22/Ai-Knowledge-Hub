@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateStatusDto, UpdateTaskDto } from './dto/update-task.dto';
-import { Priority, Prisma, PrismaClient, Task, TaskStatus } from '@prisma/client';
+import {
+  Priority,
+  Prisma,
+  PrismaClient,
+  Task,
+  TaskStatus,
+} from '@prisma/client';
 import { SearchTasksDto } from './dto/search-task.dto';
 import { BaseSearchService } from '../common/utils/base-search.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -9,10 +15,10 @@ import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class TasksService extends BaseSearchService {
   constructor(protected readonly prisma: PrismaService) {
-    super(prisma)
+    super(prisma);
   }
 
-   async create(userId: string, dto: CreateTaskDto): Promise<Task> {
+  async create(userId: string, dto: CreateTaskDto): Promise<Task> {
     const { title, description, priority = Priority.MEDIUM, dueDate } = dto;
 
     return this.prisma.task.create({
@@ -26,54 +32,64 @@ export class TasksService extends BaseSearchService {
       include: this.getTaskInclude(),
     });
   }
-  async findAll(userId:string,searchDto?:SearchTasksDto){
+  async findAll(userId: string, searchDto?: SearchTasksDto) {
     const where = this.buildWhereClause(userId, searchDto);
     const orderBy = this.buildOrderBy(searchDto, 'createdAt');
-    return this.executePaginatedQuery('task', where, searchDto, this.getTaskInclude(), orderBy);
+    return this.executePaginatedQuery(
+      'task',
+      where,
+      searchDto,
+      this.getTaskInclude(),
+      orderBy,
+    );
   }
 
-  async findOne(userId:string,taskId:string){
+  async findOne(userId: string, taskId: string) {
     const task = await this.prisma.task.findFirst({
-      where:{
-        id:taskId,
-        ownerId:userId,
+      where: {
+        id: taskId,
+        ownerId: userId,
       },
-      include:this.getTaskInclude(),
-    })
-    if(!task){
-      throw new Error('Task not found')
+      include: this.getTaskInclude(),
+    });
+    if (!task) {
+      throw new Error('Task not found');
     }
-    return task
+    return task;
   }
-  
-  async update(userId:string,taskId:string,dto:UpdateTaskDto):Promise<Task>{
+
+  async update(
+    userId: string,
+    taskId: string,
+    dto: UpdateTaskDto,
+  ): Promise<Task> {
     await this.checkTaskOwnership(taskId, userId);
     const { title, description, priority = Priority.MEDIUM, dueDate } = dto;
     return this.prisma.task.update({
-      where:{
-        id:taskId,
-        ownerId:userId,
+      where: {
+        id: taskId,
+        ownerId: userId,
       },
-      data:{
+      data: {
         title,
         description,
         priority,
         dueDate: dueDate ? new Date(dueDate) : null,
       },
-      include:this.getTaskInclude(),
-    })
+      include: this.getTaskInclude(),
+    });
   }
-  async deleteTask(userId:string,taskId:string){
+  async deleteTask(userId: string, taskId: string) {
     await this.checkTaskOwnership(taskId, userId);
     return this.prisma.task.delete({
-      where:{
-        id:taskId,
-        ownerId:userId,
+      where: {
+        id: taskId,
+        ownerId: userId,
       },
-    })
+    });
   }
-   // Utils Method
- async getTasksStats(userId: string) {
+  // Utils Method
+  async getTasksStats(userId: string) {
     const [
       totalTasks,
       todoTasks,
@@ -84,10 +100,18 @@ export class TasksService extends BaseSearchService {
       highPriorityTasks,
     ] = await Promise.all([
       this.prisma.task.count({ where: { ownerId: userId } }),
-      this.prisma.task.count({ where: { ownerId: userId, status: TaskStatus.TODO } }),
-      this.prisma.task.count({ where: { ownerId: userId, status: TaskStatus.IN_PROGRESS } }),
-      this.prisma.task.count({ where: { ownerId: userId, status: TaskStatus.DONE } }),
-      this.prisma.task.count({ where: { ownerId: userId, status: TaskStatus.CANCELLED } }),
+      this.prisma.task.count({
+        where: { ownerId: userId, status: TaskStatus.TODO },
+      }),
+      this.prisma.task.count({
+        where: { ownerId: userId, status: TaskStatus.IN_PROGRESS },
+      }),
+      this.prisma.task.count({
+        where: { ownerId: userId, status: TaskStatus.DONE },
+      }),
+      this.prisma.task.count({
+        where: { ownerId: userId, status: TaskStatus.CANCELLED },
+      }),
       this.prisma.task.count({
         where: {
           ownerId: userId,
@@ -114,12 +138,13 @@ export class TasksService extends BaseSearchService {
       },
       overdueTasks,
       highPriorityTasks,
-      completionRate: totalTasks > 0 ? ((doneTasks / totalTasks) * 100).toFixed(1) : '0',
+      completionRate:
+        totalTasks > 0 ? ((doneTasks / totalTasks) * 100).toFixed(1) : '0',
     };
   }
 
-  async getUpcomingTasks(userId: string, day?: number ) {
-    let days = day || 7;
+  async getUpcomingTasks(userId: string, day?: number) {
+    const days = day || 7;
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + days);
 
@@ -138,20 +163,20 @@ export class TasksService extends BaseSearchService {
       },
     });
   }
-    async updateStatus( userId: string,taskId: string, dto: UpdateStatusDto) { 
-        await this.checkTaskOwnership(taskId, userId);
-        return this.prisma.task.update({
-            where:{
-                id:taskId,
-                ownerId:userId,
-            },
-            data:{
-                status:dto.status,
-            },
-            include:this.getTaskInclude(),
-        })
-    }
-     async getOverdueTasks(userId: string) {
+  async updateStatus(userId: string, taskId: string, dto: UpdateStatusDto) {
+    await this.checkTaskOwnership(taskId, userId);
+    return this.prisma.task.update({
+      where: {
+        id: taskId,
+        ownerId: userId,
+      },
+      data: {
+        status: dto.status,
+      },
+      include: this.getTaskInclude(),
+    });
+  }
+  async getOverdueTasks(userId: string) {
     return this.prisma.task.findMany({
       where: {
         ownerId: userId,
@@ -165,7 +190,6 @@ export class TasksService extends BaseSearchService {
     });
   }
 
-  
   // Private Helper Method
   private getTaskInclude() {
     return {
@@ -174,11 +198,14 @@ export class TasksService extends BaseSearchService {
           id: true,
           email: true,
           name: true,
-        }, 
-      }
+        },
+      },
     };
   }
-    private buildWhereClause(userId: string, searchDto?: SearchTasksDto): Prisma.TaskWhereInput {
+  private buildWhereClause(
+    userId: string,
+    searchDto?: SearchTasksDto,
+  ): Prisma.TaskWhereInput {
     const { query, status, priority, overdue } = searchDto || {};
     const where: Prisma.TaskWhereInput = { ownerId: userId, AND: [] };
 
@@ -204,12 +231,16 @@ export class TasksService extends BaseSearchService {
   async searchTasks(userId: string, searchDto?: SearchTasksDto) {
     const where = this.buildWhereClause(userId, searchDto);
     const orderBy = this.buildOrderBy(searchDto, 'createdAt');
-    return this.executePaginatedQuery('task', where, searchDto, this.getTaskInclude(), orderBy);
+    return this.executePaginatedQuery(
+      'task',
+      where,
+      searchDto,
+      this.getTaskInclude(),
+      orderBy,
+    );
   }
 
   async checkTaskOwnership(taskId: string, userId: string) {
     return this.checkOwnership('task', taskId, userId, 'ownerId');
   }
-
-  
 }

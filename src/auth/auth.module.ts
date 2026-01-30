@@ -17,22 +17,30 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from 'src/infrastructure/email/email.module';
 
 @Module({
-  imports:[ 
-    PassportModule.register({defaultStrategy:'jwt'}),
-     JwtModule.registerAsync({
-      useFactory: async (config:ConfigService)=>
-    ({
-      secret:config.get('JWT_SECRET'),
-      signOptions:{expiresIn:config.get('JWT_EXPIRES_IN')},
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+      useFactory: async (config: ConfigService) => ({
+        secret: config.get('JWT_SECRET'),
+        signOptions: { expiresIn: config.get('JWT_EXPIRES_IN') },
+      }),
+      inject: [ConfigService],
     }),
-    inject:[ConfigService]
-     }),
-     JwtModule,
-     PassportModule,
-     UsersModule,
-     EmailModule,
+    JwtModule,
+    PassportModule,
+    UsersModule,
+    EmailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy,AccountStatusService,CredentialService,EmailVerificationService,OtpService,OtpRepository,AttemptPolicy]
+  providers: [
+    AuthService,
+    JwtStrategy,
+    AccountStatusService,
+    CredentialService,
+    EmailVerificationService,
+    OtpService,
+    OtpRepository,
+    AttemptPolicy,
+  ],
 })
 export class AuthModule {}

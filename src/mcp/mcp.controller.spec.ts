@@ -42,7 +42,7 @@ describe('McpController', () => {
 
   describe('getAvailableTools', () => {
     it('should return list of available tools', () => {
-      const mockTools:McpToolDefinition[] = [
+      const mockTools: McpToolDefinition[] = [
         {
           name: 'searchDocs',
           type: 'function',
@@ -57,7 +57,10 @@ describe('McpController', () => {
         },
       ];
 
-      service.getAvailableTools.mockReturnValue({ tools: mockTools , count: mockTools.length });
+      service.getAvailableTools.mockReturnValue({
+        tools: mockTools,
+        count: mockTools.length,
+      });
 
       const result = controller.getAvailableTools();
 
@@ -87,9 +90,7 @@ describe('McpController', () => {
         success: true,
         toolName: 'searchDocs',
         result: {
-          documents: [
-            { id: 'doc1', title: 'Test Doc' },
-          ],
+          documents: [{ id: 'doc1', title: 'Test Doc' }],
           total: 1,
         },
         executionTime: 100,
@@ -110,7 +111,7 @@ describe('McpController', () => {
     it('should execute tool with empty parameters', async () => {
       const executeToolDto = {
         toolName: 'getUserStats',
-        parameters: {}
+        parameters: {},
       };
 
       const mockResponse = {
@@ -237,11 +238,14 @@ describe('McpController', () => {
   describe('healthCheck', () => {
     it('should return health status', () => {
       const mockTools = [
-        { name: 'tool1', type: 'function',description: '', parameters: [] },
-        { name: 'tool2', type: 'function',description: '', parameters: [] },
+        { name: 'tool1', type: 'function', description: '', parameters: [] },
+        { name: 'tool2', type: 'function', description: '', parameters: [] },
       ];
 
-      service.getAvailableTools.mockReturnValue({ tools: mockTools , count: mockTools.length });
+      service.getAvailableTools.mockReturnValue({
+        tools: mockTools,
+        count: mockTools.length,
+      });
 
       const result = controller.healthCheck();
 
@@ -320,12 +324,11 @@ describe('McpController', () => {
 
     describe('quickCreateTask', () => {
       it('should execute quick create task', async () => {
-        const body:CreateTaskDto = {
+        const body: CreateTaskDto = {
           title: 'Test Task',
           description: 'Description',
           priority: 'HIGH',
           dueDate: '2025-11-01',
-          
         };
 
         const mockResponse = {

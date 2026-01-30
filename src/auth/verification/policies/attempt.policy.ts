@@ -9,9 +9,11 @@ export class AttemptPolicy {
 
   async check(email: string): Promise<void> {
     const attempts = await this.otpRepository.getAttempts(email);
-    
+
     if (attempts >= this.MAX_ATTEMPTS) {
-      throw new BadRequestException('Max attempts reached. Please try again later.');
+      throw new BadRequestException(
+        'Max attempts reached. Please try again later.',
+      );
     }
   }
 
