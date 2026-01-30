@@ -1,25 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
-import { UserMapper } from 'src/common/infrastructure/mappers/user.mapper';
+import { UserMapper } from '../common/infrastructure/mappers/user.mapper';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/user.dto';
-import { UserStatus } from 'src/common/enums/user-status.enum';
+import { UserStatus } from '../common/enums/user-status.enum';
 
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma:PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
-
-   async create(data: CreateUserDto): Promise<UserEntity> {
+  async create(data: CreateUserDto): Promise<UserEntity> {
     const user = await this.prisma.user.create({ data: data as Prisma.UserCreateInput });
-    if(!user) throw new Error('Error creating user');
+    if (!user) throw new Error('Error creating user');
     return UserMapper.toDomain(user);
   }
 
-      async findAll() {
-     return this.prisma.user.findMany({
+  async findAll() {
+    return this.prisma.user.findMany({
       select: {
         id: true,
         email: true,

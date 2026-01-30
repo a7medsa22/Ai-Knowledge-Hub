@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from "@nestjs/common";
 import { UsersService } from "src/users/users.service";
 import { CreateUserDto } from "src/users/dto/user.dto";
-import * as bcrypt from 'node_modules/bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import { UserStatus } from "src/common/enums/user-status.enum";
 import { RegisterDto } from "../dto/auth.dto";
 import { UserEntity } from "src/users/entities/user.entity";

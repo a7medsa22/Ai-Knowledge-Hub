@@ -18,9 +18,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@GetUser() user: JwtUser) {
     const userData = await this.usersService.findOne(user.sub);
-
-    const {password, ...userWithoutPassword} = userData!;
-    return userWithoutPassword;    
+    return userData;    
   }
   
 
