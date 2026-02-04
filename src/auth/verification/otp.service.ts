@@ -27,4 +27,9 @@ export class OtpService {
 
     return true;
   }
+    async resendOtp(email: string) {
+    await this.attemptPolicy.check(email);
+    const storedOtp = await this.otpRepo.find(email);
+    return storedOtp ? storedOtp : await this.generate(email);
+  }
 }

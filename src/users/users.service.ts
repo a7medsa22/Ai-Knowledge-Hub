@@ -61,6 +61,13 @@ export class UsersService {
     return UserMapper.toDomain(user);
   }
 
+    async updateLastActivity(userId: string) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { updatedAt: new Date() },
+    });
+  }
+
   async delete(id: string): Promise<UserEntity> {
     const user = await this.prisma.user.delete({
       where: { id },

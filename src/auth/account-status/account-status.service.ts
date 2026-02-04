@@ -4,7 +4,8 @@ import { UserEntity } from 'src/users/entities/user.entity';
 
 Injectable();
 export class AccountStatusService {
-  ensureCanLogin(user: UserEntity) {
+  /** Check if user can log in */
+  async ensureCanLogin(user: UserEntity) {
     switch (user.status) {
       case UserStatus.PENDING_EMAIL_VERIFICATION:
         throw new UnauthorizedException(

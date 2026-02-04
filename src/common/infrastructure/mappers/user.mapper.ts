@@ -4,17 +4,17 @@ import { UserStatus } from 'src/common/enums/user-status.enum';
 import { UserEntity } from 'src/users/entities/user.entity';
 
 export class UserMapper {
-  static toDomain(prismaUser: PrismaUser): UserEntity {
+  static toDomain(user: PrismaUser): UserEntity {
     return new UserEntity({
-      id: prismaUser.id,
-      email: prismaUser.email,
-      phone: prismaUser.phone as string,
-      name: prismaUser.name,
-      role: prismaUser.role as unknown as UserRole,
-      isActive: prismaUser.isActive,
-      status: prismaUser.status as unknown as UserStatus,
-      approvedAt: prismaUser.approvedAt,
-      createdAt: prismaUser.createdAt,
+      id: user.id,
+      email: user.email,
+      phone: user.phone as string,
+      name: user.name,
+      role: user.role as unknown as UserRole,
+      isActive: user.isActive,
+      status: user.status as unknown as UserStatus,
+      approvedAt: user.approvedAt,
+      createdAt: user.createdAt,
     });
   }
 }

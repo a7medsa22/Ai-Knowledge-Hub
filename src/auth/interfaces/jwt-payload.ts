@@ -1,15 +1,19 @@
+import { UserRole as PrismaUserRole } from '.prisma/client';
+import { UserStatus as PrismaUserStatus } from '.prisma/client';
 import { UserRole } from 'src/common/enums/user-role.enum';
-import { UserStatus } from 'src/common/enums/user-status.enum';
 
 export interface JwtPayload {
   sub: string;
   email: string;
-  role: UserRole;
-  status: UserStatus;
+  role: PrismaUserRole;
+  status: PrismaUserStatus;
   iat?: number;
   exp?: number;
 }
 export interface RefreshJwtPayload {
   sub: string;
   tokenId: string;
+}
+export interface UserRoleType {
+  role: UserRole;
 }

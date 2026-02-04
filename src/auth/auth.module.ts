@@ -15,6 +15,7 @@ import { OtpRepository } from './verification/repositories/otp.repository';
 import { AttemptPolicy } from './verification/policies/attempt.policy';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from 'src/infrastructure/email/email.module';
+import { AuthTokenService } from './verification/tokens/token.service';
 
 @Module({
   imports: [
@@ -26,7 +27,6 @@ import { EmailModule } from 'src/infrastructure/email/email.module';
       }),
       inject: [ConfigService],
     }),
-    JwtModule,
     PassportModule,
     UsersModule,
     EmailModule,
@@ -41,6 +41,7 @@ import { EmailModule } from 'src/infrastructure/email/email.module';
     OtpService,
     OtpRepository,
     AttemptPolicy,
+    AuthTokenService,
   ],
 })
 export class AuthModule {}

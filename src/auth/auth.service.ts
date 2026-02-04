@@ -15,6 +15,8 @@ import { UserEntity } from './../users/entities/user.entity';
 import { UserStatus } from '../common/enums/user-status.enum';
 import { CredentialService } from './credentials/credential.service';
 import { EmailVerificationService } from './verification/email-verification.service';
+import { AuthTokenService } from './verification/tokens/token.service';
+import { Request } from 'express';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -27,37 +29,43 @@ export class AuthService {
     private readonly accountStatusService: AccountStatusService,
     private readonly credentialService: CredentialService,
     private readonly emailVerification: EmailVerificationService,
+    private readonly tokenService: AuthTokenService,
   ) {}
 
-  /** Register a new user & send OTP */
+  /** 
+   * Register a new user & send OTP
+   */
   public async register(dto: RegisterDto) {
     const user = await this.credentialService.createUser(dto);
     await this.emailVerification.sendOtp(user.email);
+
     return {
       message: 'User registered. Please verify your email.',
       userId: user.id,
     };
   }
-
-  /** Verify email OTP */
-  public async verifyEmail(email: string, otp: string) {
-    const verified = await this.emailVerification.verify(email, otp);
-    if (!verified) throw new BadRequestException('Invalid or expired OTP');
-
-    await this.userService.updateStatus(email, UserStatus.ACTIVE);
-    return { message: 'Email verified successfully' };
-  }
-
+  
   /** Login user & generate tokens */
-  public async login(user: UserEntity): Promise<AuthResponse> {
-    if (!user) throw new UnauthorizedException('Invalid credentials');
-
-    this.accountStatusService.ensureCanLogin(user);
-
-    // Only allow login if email verified
-    if (user.status !== UserStatus.ACTIVE) {
-      throw new UnauthorizedException('Email not verified');
+  public async login(user: UserEntity,req:Request): Promise<AuthResponse> {
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
     }
+     const userAgentHeader = req.headers['user-agent'];
+    const deviceNameHeader = req.headers['x-device-name'];
+
+    const deviceInfo = {
+      userAgent: Array.isArray(userAgentHeader)
+        ? userAgentHeader.join(', ')
+        : (userAgentHeader ?? 'Unknown agent'),
+
+      deviceName: Array.isArray(deviceNameHeader)
+        ? deviceNameHeader.join(', ')
+        : (deviceNameHeader ?? 'Unknown device'),
+
+      ipAddress: req.ip ?? 'unknown',
+    };
+
+   await this.accountStatusService.ensureCanLogin(user);
 
     const payload: JwtPayload = {
       sub: user.id,
@@ -66,25 +74,12 @@ export class AuthService {
       status: user.status,
     };
 
-    const accessToken = await this.generateAccessToken(payload);
-    const refreshToken = await this.generateRefreshToken(payload);
+    const accessToken = await this.tokenService.generateAccessToken(payload);
 
-    // Store hashed refresh token
-    const hashedToken = await bcrypt.hash(refreshToken, 10);
-    await this.prisma.authToken.create({
-      data: {
-        authorId: user.id,
-        token: hashedToken,
-        type: 'REFRESH',
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7d
-      },
-    });
+    const  refreshToken = await this.tokenService.generateRefreshToken(user.id,deviceInfo);
 
     // Update last login
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { updatedAt: new Date() },
-    });
+    await this.userService.updateLastActivity(user.id);
 
     return {
       user: {
@@ -99,64 +94,64 @@ export class AuthService {
       expiresIn: Number(this.configService.get('JWT_EXPIRES_IN')),
     };
   }
-
-  /** Validate refresh token & rotate */
-  public async validateRefreshToken(userId: string, refreshToken: string) {
-    const tokenRecord = await this.prisma.authToken.findFirst({
-      where: { authorId: userId, type: 'REFRESH' },
-      orderBy: { createdAt: 'desc' },
+  // validation strategy
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        isActive: true,
+        status: true,
+      },
     });
+    if (!user || !user.password)
+      throw new UnauthorizedException('Invalid credentials');
 
-    if (
-      !tokenRecord ||
-      tokenRecord.expiresAt < new Date() ||
-      !(await bcrypt.compare(refreshToken, tokenRecord.token))
-    ) {
-      throw new UnauthorizedException('Invalid refresh token');
+   
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) throw new UnauthorizedException();
+  } 
+  //* Token Management //
+    async validateRefreshToken(userId: string, tokenId: string) {
+    return this.tokenService.validateRefreshToken(userId, tokenId);
+  }
+  async refreshTokens(userId: string, tokenId: string) {
+    return this.tokenService.refreshToken(userId, tokenId);
+  }
+  async validateJwtPayload(userId:string) {
+    return this.tokenService.validateAndGetUserFromJwt(userId);
+  }
+
+  //* Session Management *//
+    async getUserSessions(userId: string) {
+    return this.tokenService.getUserSessions(userId);
+  }
+  async revokeSession(userId: string, tokenId: string) {
+    return this.tokenService.revokeSession(userId, tokenId);
+  }
+
+  //* OTP Management */
+  public async verifyEmail(email: string, otp: string) {
+    const verified = await this.emailVerification.verify(email, otp);
+    if (!verified) {
+      throw new BadRequestException('Invalid or expired OTP');
     }
 
-    // Revoke old token
-    await this.prisma.authToken.update({
-      where: { id: tokenRecord.id },
-      data: { isRevoked: true },
-    });
-
-    return { userId };
+    await this.userService.updateStatus(email, UserStatus.ACTIVE);
+    return { message: 'Email verified successfully' };
+  }
+  // resend OTP
+   resendOtp(email: string) {
+    return this.emailVerification.resendOtp(email);
   }
 
-  /** Validate JWT payload */
-  public async validateJwtPayload(userId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user || user.status !== UserStatus.ACTIVE)
-      throw new UnauthorizedException('User not found or inactive');
-
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      status: user.status,
-    };
+  // Revoke all sessions
+  async revokeAllSessions(userId: string) {
+    return this.tokenService.revokeAllSessions(userId);
   }
 
-  /** Generate access token */
-  public async generateAccessToken(payload: JwtPayload): Promise<string> {
-    return this.jwtService.signAsync(payload, {
-      secret: this.configService.get('JWT_SECRET'),
-      expiresIn: this.configService.get('JWT_EXPIRES_IN', '15m'),
-    });
-  }
-
-  /** Generate refresh token */
-  public async generateRefreshToken(payload: JwtPayload): Promise<string> {
-    return this.jwtService.signAsync(payload, {
-      secret: this.configService.get('JWT_REFRESH_SECRET'),
-      expiresIn: this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d'),
-    });
-  }
-
-  /** Validate user credentials */
-  public async validateUser(email: string, password: string) {
-    return this.credentialService.validateUser(email, password);
-  }
 }
+

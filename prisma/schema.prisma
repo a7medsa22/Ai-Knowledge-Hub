@@ -29,6 +29,11 @@ model AuthToken {
   createdAt  DateTime  @default(now())
   expiresAt  DateTime
 
+  // Device info
+  userAgent  String?
+  deviceName String?
+  ipAddress  String?
+  
   // Relations
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 

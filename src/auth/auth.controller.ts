@@ -1,18 +1,24 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RegisterDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthResponse } from './interfaces/auth-response.interface';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
 
 @ApiTags('Authentication')
 @Controller('users/auth')
@@ -104,8 +110,14 @@ export class AuthController {
                 status: { type: 'string', example: 'ACTIVE' },
               },
             },
-            accessToken: { type: 'string', example: 'jwt-string' },
-            refreshToken: { type: 'string', example: 'jwt-refresh-string' },
+accessToken: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            },
+            refreshToken: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            },
             expiresIn: { type: 'number', example: 900 },
           },
         },
@@ -127,13 +139,43 @@ export class AuthController {
       },
     },
   })
-  async login(@Req() req): Promise<any> {
-    const result: AuthResponse = await this.authService.login(req.user);
+  async login(@Req() req) {
+    const result: AuthResponse = await this.authService.login(req.user,req);
     return {
       success: true,
       message: 'Login successful',
       data: result,
     };
+  }
+  @Post('forgot-password')
+  @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 attempts per 5 minutes
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Request password reset',
+    description: 'Send password reset OTP to user email if account exists',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Reset code sent to email if account exists',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: {
+          type: 'string',
+          example: 'Password reset code sent to your email.',
+        },
+        data: {
+          type: 'object',
+          properties: {
+            userId: { type: 'string', example: 'uuid-string' },
+          },
+        },
+      },
+    },
+  })
+  async forgotPassword(@Body() body: any) {
+    return {message:`wait v2`}
   }
 
   // ===============================================
@@ -176,5 +218,117 @@ export class AuthController {
       success: true,
       message: 'Email verified successfully',
     };
+  }
+  // ===============================================
+  // TOKEN MANAGEMENT
+  // ===============================================
+
+  @Post('refresh')
+  @UseGuards(RefreshTokenGuard)
+  @Throttle({ auth: { limit: 10, ttl: 60000 } }) // 10 refresh attempts per minute
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Refresh access token',
+    description: 'Get new access token using valid refresh token',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Token refreshed successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        data: {
+          type: 'object',
+          properties: {
+            accessToken: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            },
+            refreshToken: {
+              type: 'string',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Invalid refresh token',
+  })
+  async refreshToken(@Req() req) {
+    const { userId, tokenId } = req.user;
+    return this.authService.refreshTokens(userId, tokenId);
+  }
+
+  // ===============================================
+  // Sessions MANAGEMENT
+  // ===============================================
+
+  @Get('sessions')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: 'Get active sessions',
+    description: 'Retrieve a list of active sessions for the current user',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiResponse({
+    status: 200,
+    description: 'Sessions retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        data: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', example: '12345' },
+              createdAt: {
+                type: 'string',
+                format: 'date-time',
+                example: '2023-01-01T00:00:00Z',
+              },
+              lastActiveAt: {
+                type: 'string',
+                format: 'date-time',
+                example: '2023-01-01T12:00:00Z',
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async sessions(@CurrentUser('sub') userId: string) {
+    return this.authService.getUserSessions(userId);
+  }
+
+  @Delete('sessions/:tokenId')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: 'Revoke a session',
+    description:
+      'Revoke a specific session by its token ID for the current user',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiResponse({
+    status: 200,
+    description: 'Session revoked successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+      },
+    },
+  })
+  async revokeSession(
+    @Param('tokenId') tokenId: string,
+    @CurrentUser('sub') userId: string,
+  ) {
+    return this.authService.revokeSession(userId, tokenId);
   }
 }

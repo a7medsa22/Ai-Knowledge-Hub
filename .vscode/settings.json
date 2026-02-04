@@ -1,4 +1,5 @@
 {
     "CodeGPT.apiKey": "Ollama",
-    "editor.tabCompletion": "on"
+    "editor.tabCompletion": "on",
+    "material-icon-theme.activeIconPack": "nest"
 }

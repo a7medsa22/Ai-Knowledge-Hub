@@ -35,4 +35,7 @@ export class EmailVerificationService {
 
     return true;
   }
+  resendOtp(email: string) {
+    return this.otpService.resendOtp(email);
+  }
 }

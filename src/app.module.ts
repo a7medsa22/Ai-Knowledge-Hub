@@ -11,7 +11,6 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AiModule } from './ai/ai.module';
 import { McpModule } from './mcp/mcp.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app..controller';
 import { join } from 'path';
