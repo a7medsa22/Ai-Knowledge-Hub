@@ -11,7 +11,6 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AiModule } from './ai/ai.module';
 import { McpModule } from './mcp/mcp.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app..controller';
 import { join } from 'path';
 import { AppService } from './app.service';
@@ -19,18 +18,6 @@ import { FilesModule } from './files/files.module';
 import { RedisModule } from './infrastructure/cache/redis.module';
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: {
-        settings: {
-          'editor.theme': 'dark',
-          'editor.reuseHeaders': true,
-          'tracing.hideTracingResponse': true,
-        },
-      },
-      introspection: true,
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
