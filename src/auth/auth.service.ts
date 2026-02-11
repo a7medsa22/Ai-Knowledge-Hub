@@ -94,34 +94,27 @@ export class AuthService {
       expiresIn: Number(this.configService.get('JWT_EXPIRES_IN')),
     };
   }
-  // validation strategy
-  async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.prisma.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        email: true,
-        password: true,
-        isActive: true,
-        status: true,
-      },
-    });
-    if (!user || !user.password)
-      throw new UnauthorizedException('Invalid credentials');
-
-   
-    const match = await bcrypt.compare(password, user.password);
-
-    if (!match) throw new UnauthorizedException();
-  } 
-  //* Token Management //
-    async validateRefreshToken(userId: string, tokenId: string) {
-    return this.tokenService.validateRefreshToken(userId, tokenId);
+  /** Validate user credentials */
+  public async validateUser(email: string, pass: string) {
+    return this.credentialService.validateUser(email, pass);
   }
-  async refreshTokens(userId: string, tokenId: string) {
+
+  /** Validate refresh token */
+  public async validateRefreshToken(userId: string, tokenId: string) {
+    const isValid = await this.tokenService.validateRefreshToken(userId, tokenId);
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    return { userId, tokenId };
+  }
+
+  /** Refresh access token using refresh token */
+  public async refreshTokens(userId: string, tokenId: string) {
     return this.tokenService.refreshToken(userId, tokenId);
   }
-  async validateJwtPayload(userId:string) {
+
+  /** Validate JWT payload */
+  public async validateJwtPayload(userId: string) {
     return this.tokenService.validateAndGetUserFromJwt(userId);
   }
 

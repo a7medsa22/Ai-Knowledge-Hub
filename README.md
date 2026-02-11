@@ -256,7 +256,7 @@ Most endpoints require authentication. To authenticate:
 
 1. **Register a user**
 ```bash
-POST /auth/register
+POST /users/auth/register
 {
   "email": "user@example.com",
   "password": "password123",
@@ -266,7 +266,7 @@ POST /auth/register
 
 2. **Login**
 ```bash
-POST /auth/login
+POST /users/auth/login
 {
   "email": "user@example.com",
   "password": "password123"
@@ -286,8 +286,13 @@ In Swagger, click the 🔓 **Authorize** button and paste your token.
 
 ### 1. Auth Module
 **Endpoints:**
-- `POST /auth/register` - Register new user
-- `POST /auth/login` - Login and get JWT token
+- `POST /users/auth/register` - Register new user
+- `POST /users/auth/login` - Login and get JWT token
+- `POST /users/auth/verify-email` - Verify email with OTP
+- `POST /users/auth/refresh` - Refresh access token
+- `POST /users/auth/forgot-password` - Request password reset
+- `GET /users/auth/sessions` - Get active sessions
+- `DELETE /users/auth/sessions/:tokenId` - Revoke a session
 
 ### 2. Users Module
 **Endpoints:**

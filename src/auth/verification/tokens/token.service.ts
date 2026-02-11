@@ -27,13 +27,6 @@ export class AuthTokenService {
 
     if (!token) throw new UnauthorizedException('Token reuse detected');
 
-    await this.prisma.authToken.update({
-      where: { id: tokenId },
-      data: {
-        isRevoked: true,
-      },
-    });
-
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -97,23 +90,42 @@ export class AuthTokenService {
   }
 
   /**
-   * Validate refresh token & rotate it
+   * Validate refresh token
    */
-  public async validateAndRotateRefreshToken(userId: string, tokenId: string) {
-    const tokenRecord = await this.prisma.authToken.findFirst({
-      where: {
-        id: tokenId,
-        authorId: userId,
-        type: TokenType.REFRESH,
-        isRevoked: false,
-      },
-      orderBy: { createdAt: 'desc' },
+  public async validateRefreshToken(userId: string, tokenId: string): Promise<boolean> {
+    const tokenRecord = await this.prisma.authToken.findUnique({
+      where: { id: tokenId },
     });
 
     if (
       !tokenRecord ||
-      tokenRecord.expiresAt < new Date() ||
-      !(await bcrypt.compare(tokenId, tokenRecord.token))
+      tokenRecord.authorId !== userId ||
+      tokenRecord.type !== TokenType.REFRESH ||
+      tokenRecord.isRevoked ||
+      tokenRecord.expiresAt < new Date()
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Validate refresh token & rotate it
+   */
+  public async validateAndRotateRefreshToken(
+    userId: string,
+    tokenId: string,
+  ) {
+    const tokenRecord = await this.prisma.authToken.findUnique({
+      where: { id: tokenId },
+    });
+
+    if (
+      !tokenRecord ||
+      tokenRecord.authorId !== userId ||
+      tokenRecord.type !== TokenType.REFRESH ||
+      tokenRecord.isRevoked ||
+      tokenRecord.expiresAt < new Date()
     ) {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -127,21 +139,6 @@ export class AuthTokenService {
     return {
       userId,
       tokenId: tokenRecord.id,
-    };
-  }
-
-  // Validate refresh token
-  async validateRefreshToken(authorId: string, tokenId: string) {
-    const token = await this.prisma.authToken.findUnique({
-      where: { id: tokenId },
-    });
-    if (!token || token.isRevoked || token.expiresAt < new Date()) {
-      throw new UnauthorizedException('invalid refresh token');
-    }
-
-    return {
-      authorId,
-      tokenId,
     };
   }
 
