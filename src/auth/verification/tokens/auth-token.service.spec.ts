@@ -64,7 +64,7 @@ describe('AuthTokenService', () => {
       status: 'ACTIVE',
     };
 
-    const result = await service.refreshToken(user);
+    const result = await service.refreshToken(user.id, 'old-refresh-token');
 
     expect(result.refreshToken).toBe('refresh.jwt');
     expect(prisma.authToken.create).toHaveBeenCalled();

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/auth.dto';
-import { UserStatus } from '../common/enums/user-status.enum';
+import { UserStatus } from 'src/common/enums/user-status.enum';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -43,9 +43,10 @@ describe('AuthController', () => {
   describe('register', () => {
     it('should register a new user', async () => {
       const dto: RegisterDto = {
-        email: 'test@example.com',
-        password: 'password123',
+        email: 'test@test.com',
+        password: 'Password123!',
         name: 'Test User',
+        status: UserStatus.PENDING_EMAIL_VERIFICATION,
       };
       const result = {
         userId: 'uuid-123',

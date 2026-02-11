@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  extensions = [vector]
 }
 
 enum UserStatus {
@@ -77,8 +79,23 @@ model Doc {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   files     File[]
   notes     Note[]
+  embeddings Embedding[]
   @@index([authorId])
   @@map("docs")
+}
+
+model Embedding {
+  id          String   @id @default(uuid())
+  docId       String
+  content     String   // chunk text
+  vector      Unsupported("vector(1536)")
+  chunkIndex  Int
+  createdAt   DateTime @default(now())
+
+  doc         Doc      @relation(fields: [docId], references: [id], onDelete: Cascade)
+
+  @@index([docId])
+  @@map("embeddings")
 }
 
 model Note {

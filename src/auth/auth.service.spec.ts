@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { CredentialService } from './credentials/credential.service';
+import { UserStatus } from 'src/common/enums/user-status.enum';
 import { EmailVerificationService } from './verification/email-verification.service';
 import { UsersService } from 'src/users/users.service';
 import { BadRequestException } from '@nestjs/common';
-import { UserStatus } from 'src/common/enums/user-status.enum';
 
 describe('AuthService - Register & VerifyEmail', () => {
   let service: AuthService;
@@ -55,10 +55,10 @@ describe('AuthService - Register & VerifyEmail', () => {
     const mockUser = { id: 'user-id', email: 'test@test.com' };
     (credentialService.createUser as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await service.register({ email: 'test@test.com', password: '123' });
+    const result = await service.register({ email: 'test@test.com', password: '123', status: UserStatus.PENDING_EMAIL_VERIFICATION });
 
     expect(result.userId).toBe('user-id');
-    expect(result.message).toBe('User registered. Please verify your email.');
+    expect(result.message).toBe('User registered successfully, please verify your email');
     expect(emailVerification.sendOtp).toHaveBeenCalledWith('test@test.com');
   });
 

@@ -3,16 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   UseGuards,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -28,30 +24,20 @@ import {
   SummarizeResponseDto,
   SummaryLength,
 } from './dto/ai.dto';
-import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import * as client from '@prisma/client';
-import type { JwtUser } from 'src/common/interfaces/jwt-user.interface';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'; // Correct import
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator'; // Correct import
+import { AskQuestionRequestDto, AskQuestionResponseDto, SemanticSearchRequestDto, SemanticSearchResultDto } from './dto/rag.dto';
+import * as jwtUserInterface from 'src/common/interfaces/jwt-user.interface';
+
+
 
 @ApiTags('AI Research')
 @Controller('ai')
 export class AiController {
-  constructor(private readonly aiService: AiService) {}
+  constructor(private readonly aiService: AiService) { }
 
   @Get('status')
-  @ApiOperation({
-    summary: 'Get AI service status',
-    description: 'Check availability and configuration of AI services',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'AI service status retrieved successfully',
-    example: {
-      available: true,
-      providers: ['ollama', 'openai'],
-      currentProvider: 'ollama',
-      model: 'phi3:3.8b',
-    },
-  })
+  @ApiOperation({ summary: 'Get AI service status' })
   async getStatus() {
     return this.aiService.getAiStatus();
   }
@@ -60,175 +46,62 @@ export class AiController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Summarize text or document',
-    description:
-      'Generate an AI-powered summary of provided text or document. Supports different summary lengths.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Summary generated successfully',
-    type: SummarizeResponseDto,
-    example: {
-      result: 'success',
-      summary: 'This article discusses the fundamentals of machine learning...',
-      provider: 'ollama',
-      model: 'phi3:3.8b',
-      processingTime: 2500,
-      length: 'medium',
-      originalLength: 5000,
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description:
-      'Invalid input (text too short/long, or both text and docId provided)',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Document not found',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
+  @ApiOperation({ summary: 'Summarize text or document' })
+  @ApiResponse({ status: 200, type: SummarizeResponseDto })
   async summarize(
     @Body() summarizeDto: SummarizeDto,
-    @GetUser() user?: JwtUser,
+    @CurrentUser('sub') userId: string,
   ): Promise<SummarizeResponseDto> {
-    return this.aiService.summarize(summarizeDto, user?.sub);
+    return this.aiService.summarize(summarizeDto, userId);
   }
 
-  @Post('qa')
+  @Post('chat') // Kept for backward compatibility or different use case
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Ask questions about text or document',
-    description:
-      'Get AI-powered answers to questions based on provided context or document content.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Answer generated successfully',
-    type: QuestionAnswerResponseDto,
-    example: {
-      result: 'success',
-      answer:
-        'Machine learning algorithms can be categorized into three main types...',
-      question: 'What are the main types of machine learning algorithms?',
-      provider: 'ollama',
-      model: 'phi3:3.8b',
-      processingTime: 3000,
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid input (question too short, context missing)',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Document not found',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
-  async answerQuestion(
+  @ApiOperation({ summary: 'Answer question (Context provided manually)' })
+  @ApiResponse({ status: 200, type: QuestionAnswerResponseDto })
+  async answerQuestionLegacy(
     @Body() questionAnswerDto: QuestionAnswerDto,
-    @GetUser() user?: JwtUser,
+    @CurrentUser('sub') userId: string,
   ): Promise<QuestionAnswerResponseDto> {
-    return this.aiService.answerQuestion(questionAnswerDto, user?.sub);
+    return this.aiService.answerQuestionLegacy(questionAnswerDto, userId);
   }
 
   @Post('search')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Semantic search across documents',
-    description:
-      'Search documents using AI-powered semantic similarity (currently using text fallback)',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Search results retrieved successfully',
-    example: {
-      result: 'success',
-      data: [
-        {
-          id: 'doc123',
-          title: 'Introduction to Machine Learning',
-          content: '...',
-          relevance: 0.85,
-        },
-      ],
-      searchType: 'semantic',
-      provider: 'ollama',
-      meta: {
-        total: 10,
-        limit: 5,
-        offset: 0,
-      },
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid search query',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: 500,
-    description: 'Semantic search not implemented',
-  })
+  @ApiOperation({ summary: 'Semantic search across documents' })
+  @ApiResponse({ status: 200, type: [SemanticSearchResultDto] })
   async semanticSearch(
-    @Body() searchDto: SemanticSearchDto,
-    @GetUser() user?: JwtUser,
+    @Body() searchDto: SemanticSearchRequestDto,
+    @CurrentUser('sub') userId: string,
   ) {
-    return this.aiService.semanticSearch(searchDto, user?.sub);
+    return this.aiService.semanticSearch(searchDto, userId);
+  }
+
+  @Post('ask')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Ask question using RAG' })
+  @ApiResponse({ status: 200, type: AskQuestionResponseDto })
+  async askQuestion(
+    @Body() body: AskQuestionRequestDto,
+    @CurrentUser('sub') userId: string,
+  ) {
+    return this.aiService.askQuestion(body, userId);
   }
 
   @Post('extract-key-points')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Extract key points from text',
-    description:
-      'Use AI to extract the most important key points from text content.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Key points extracted successfully',
-    example: {
-      keyPoints: [
-        'Machine learning is a subset of artificial intelligence',
-        'There are three main types: supervised, unsupervised, and reinforcement learning',
-        'Neural networks are inspired by biological neurons',
-      ],
-      count: 3,
-      provider: 'ollama',
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid input',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: 500,
-    description: 'Key point extraction failed',
-  })
+  @ApiOperation({ summary: 'Extract key points from text' })
   async extractKeyPoints(@Body() body: ExtractKeyPointsDto) {
     const { text, count = 5 } = body;
     const keyPoints = await this.aiService.extractKeyPoints(text, count);
-
     return {
       keyPoints,
       count: keyPoints.length,
@@ -240,36 +113,10 @@ export class AiController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Bulk summarize multiple documents',
-    description: 'Generate summaries for multiple documents at once.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Bulk summarization completed',
-    example: {
-      results: [
-        {
-          docId: 'doc123',
-          summary: 'This document discusses...',
-        },
-        {
-          docId: 'doc456',
-          summary: 'This article covers...',
-        },
-      ],
-      total: 2,
-      successful: 2,
-      failed: 0,
-    },
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
+  @ApiOperation({ summary: 'Bulk summarize multiple documents' })
   async bulkSummarize(
     @Body() body: BulkSummarizeDto,
-    @GetUser() user: JwtUser,
+    @CurrentUser() user: jwtUserInterface.JwtUser,
   ) {
     const { docIds, length = SummaryLength.MEDIUM } = body;
     const results = await this.aiService.generateBulkSummaries(
@@ -277,7 +124,6 @@ export class AiController {
       user.sub,
       length,
     );
-
     return {
       results,
       total: results.length,

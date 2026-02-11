@@ -12,6 +12,8 @@ import { AiProviderFactory } from './providers/ai-provider.factory';
 import { AiProvider } from './providers/ai-provider.interface';
 import { OllamaProvider } from './providers/ollama.provider';
 import { OpenAiProvider } from './providers/openai.provider';
+import { EmbeddingService } from './embedding.service';
+import { Chunker } from './utils/chunker';
 
 @Module({
   imports: [
@@ -26,6 +28,14 @@ import { OpenAiProvider } from './providers/openai.provider';
     DocsModule,
   ],
   controllers: [AiController],
-  providers: [AiService, AiProviderFactory, OllamaProvider, OpenAiProvider],
+  providers: [
+    AiService,
+    AiProviderFactory,
+    OllamaProvider,
+    OpenAiProvider,
+    EmbeddingService,
+    Chunker,
+  ],
+  exports: [AiService, AiProviderFactory, EmbeddingService],
 })
-export class AiModule {}
+export class AiModule { }

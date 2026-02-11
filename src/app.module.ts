@@ -16,6 +16,8 @@ import { join } from 'path';
 import { AppService } from './app.service';
 import { FilesModule } from './files/files.module';
 import { RedisModule } from './infrastructure/cache/redis.module';
+import { BullModule } from '@nestjs/bullmq';
+import { EmbeddingQueueModule } from './queues/embedding.queue.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -57,6 +59,17 @@ import { RedisModule } from './infrastructure/cache/redis.module';
     McpModule,
     FilesModule,
     RedisModule,
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        connection: {
+          host: configService.get('REDIS_HOST', 'localhost'),
+          port: configService.get('REDIS_PORT', 6379),
+        },
+      }),
+      inject: [ConfigService],
+    }),
+    EmbeddingQueueModule,
   ],
   providers: [
     {
@@ -71,4 +84,4 @@ import { RedisModule } from './infrastructure/cache/redis.module';
   ],
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule { }
