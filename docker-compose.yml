@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 services:
   api:
     build: .
@@ -8,13 +8,13 @@ services:
       - postgres
       - redis
     environment:
-       DATABASE_URL: postgres://postgres:postgres123@postgres:5432/ai_knowledge_hub
-       REDIS_HOST: redis 
-       REDIS_PORT: 6379
+      DATABASE_URL: postgres://postgres:postgres123@postgres:5432/ai_knowledge_hub
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     ports:
-      - "5433:5432"
+      - '5433:5432'
   postgres:
-    image: postgres:15-alpine
+    image: pgvector/pgvector:pg16
     container_name: ai-knowledge-postgres
     restart: always
     environment:
@@ -22,7 +22,7 @@ services:
       POSTGRES_PASSWORD: postgres123
       POSTGRES_DB: ai_knowledge_hub
     ports:
-      - "5433:5432"
+      - '5433:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
   redis:
@@ -37,7 +37,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8080:80"
-  
+      - '8080:80'
+
 volumes:
   postgres_data:

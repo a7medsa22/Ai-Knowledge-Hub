@@ -7,12 +7,16 @@ import { SearchDocDto } from './dto/search-doc.dto';
 import { FilesService } from '../files/files.service';
 import { LinkedToType } from 'src/files/dto/files.dto';
 
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+
 @Injectable()
 export class DocsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly filesService: FilesService,
-  ) {}
+    @InjectQueue('embedding') private readonly embeddingQueue: Queue,
+  ) { }
   async create(
     authorId: string,
     dto: CreateDocDto,
@@ -65,6 +69,9 @@ export class DocsService {
       );
     }
 
+    // Trigger embedding generation
+    await this.embeddingQueue.add('generate', { docId: document.id });
+
     return {
       document,
       ...(uploaded && {
@@ -105,11 +112,18 @@ export class DocsService {
   async update(id: string, userId: string, dto: UpdateDocDto) {
     if (userId) await this.checkDocumentAccess(id, userId, 'write');
 
-    return this.prisma.doc.update({
+    const updatedDoc = await this.prisma.doc.update({
       where: { id },
       data: dto,
       include: this.getDocIncloude(),
     });
+
+    // Trigger embedding generation if content or title changed
+    if (dto.content || dto.title) {
+      await this.embeddingQueue.add('generate', { docId: id });
+    }
+
+    return updatedDoc;
   }
 
   async remove(id: string, userId?: string) {
