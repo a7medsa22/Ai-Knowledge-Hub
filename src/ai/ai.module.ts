@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AiService } from './ai.service';
 import { AiController } from './ai.controller';
 import { HttpModule } from '@nestjs/axios';
@@ -25,7 +25,8 @@ import { Chunker } from './utils/chunker';
     AuthModule,
     NotesModule,
     UsersModule,
-    DocsModule,
+    UsersModule,
+    forwardRef(() => DocsModule),
   ],
   controllers: [AiController],
   providers: [

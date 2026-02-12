@@ -7,7 +7,7 @@ import { EmbeddingQueueModule } from '../queues/embedding.queue.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports: [PrismaModule, FilesModule, EmbeddingQueueModule],
+  imports: [PrismaModule, forwardRef(() => FilesModule), EmbeddingQueueModule],
   controllers: [DocsController],
   providers: [DocsService, DocsResolver],
   exports: [DocsService],

@@ -11,7 +11,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AiModule } from './ai/ai.module';
 import { McpModule } from './mcp/mcp.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { AppController } from './app..controller';
+import { AppController } from './app.controller';
 import { join } from 'path';
 import { AppService } from './app.service';
 import { FilesModule } from './files/files.module';

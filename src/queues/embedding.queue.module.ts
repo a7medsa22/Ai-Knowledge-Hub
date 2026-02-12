@@ -1,17 +1,15 @@
 import { BullModule } from '@nestjs/bullmq';
-import { Module } from '@nestjs/common';
-import { EmbeddingWorker } from '../workers/embedding.worker';
-import { EmbeddingService } from '../ai/embedding.service';
-import { PrismaService } from '../prisma/prisma.service';
+import { forwardRef, Module } from '@nestjs/common';
 import { Chunker } from '../ai/utils/chunker';
 import { AiModule } from '../ai/ai.module';
+import { EmbeddingWorker } from 'src/workers/embedding.worker';
 
 @Module({
     imports: [
         BullModule.registerQueue({
             name: 'embedding',
         }),
-        AiModule,
+        forwardRef(() => AiModule),
     ],
     providers: [EmbeddingWorker, Chunker],
     exports: [BullModule],
