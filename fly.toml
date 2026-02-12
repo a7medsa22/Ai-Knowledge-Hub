@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for ai-research-proud-sun-1140 on 2026-02-04T03:03:02+02:00
+# fly.toml app configuration file generated for ai-research-weathered-waterfall-4110 on 2026-02-12T06:30:52+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'ai-research-proud-sun-1140'
+app = 'ai-research-weathered-waterfall-4110'
 primary_region = 'ams'
 
 [build]
