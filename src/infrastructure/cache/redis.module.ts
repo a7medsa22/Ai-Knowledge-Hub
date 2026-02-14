@@ -9,10 +9,7 @@ import { RedisService } from './redis.service';
       provide: REDIS_CLIENT,
       useFactory: async () => {
         const client = createClient({
-          socket: {
-            host: process.env.REDIS_HOST || 'redis',
-            port: Number(process.env.REDIS_PORT) || 6379,
-          },
+          url: process.env.REDIS_URL || `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
         });
         client.on('error', (err) => console.error('Redis Client Error', err));
 

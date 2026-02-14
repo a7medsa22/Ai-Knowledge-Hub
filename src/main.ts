@@ -68,7 +68,7 @@ async function bootstrap() {
     });
 
     // global versioning
-    const apiPrefix = config.get('API_PREFIX');
+    const apiPrefix = config.get('API_PREFIX', 'api');
     app.setGlobalPrefix(apiPrefix, {
         exclude: [{ path: 'graphql', method: RequestMethod.ALL }],
     });
@@ -81,7 +81,7 @@ async function bootstrap() {
     );
 
     // Swagger setup
-    if (config.get('NODE_ENV') === 'development') {
+    if (config.get('NODE_ENV') !== 'test') {
         const config = new DocumentBuilder()
             .setTitle('AI Research')
             .setDescription(

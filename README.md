@@ -551,7 +551,26 @@ test/
 
 ---
 
-## 🚀 Deployment (Ready to deploy)
+## 🚀 Deployment
+
+### Production URL
+The application is deployed and live at:
+- **API Base URL**: [https://ai-research-weathered-waterfall-4110.fly.dev](https://ai-research-weathered-waterfall-4110.fly.dev)
+- **Swagger Documentation**: [https://ai-research-weathered-waterfall-4110.fly.dev/api/docs](https://ai-research-weathered-waterfall-4110.fly.dev/api/docs)
+- **GraphQL Endpoint**: [https://ai-research-weathered-waterfall-4110.fly.dev/graphql](https://ai-research-weathered-waterfall-4110.fly.dev/graphql)
+
+### Fly.io Deployment
+The application is hosted on Fly.io.
+
+1. **Deploying Updates**
+```bash
+fly deploy
+```
+
+2. **Managing Secrets**
+```bash
+fly secrets set KEY=VALUE
+```
 
 ### Docker Production Build
 
