@@ -14,14 +14,14 @@ services:
     ports:
       - '5433:5432'
   postgres:
-    image: pgvector/pgvector:pg16
+    image: pgvector/pgvector:pg15
     container_name: ai-knowledge-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres123
       POSTGRES_DB: ai_knowledge_hub
-    ports:
+    ports: 
       - '5433:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -29,6 +29,8 @@ services:
     image: redis:7-alpine
     container_name: ai-knowledge-redis
     restart: always
+    ports:
+      - '6379:6379'
   pgadmin:
     image: dpage/pgadmin4
     container_name: ai-knowledge-pgadmin

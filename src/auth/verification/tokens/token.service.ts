@@ -27,6 +27,13 @@ export class AuthTokenService {
 
     if (!token) throw new UnauthorizedException('Token reuse detected');
 
+    await this.prisma.authToken.update({
+      where: { id: tokenId },
+      data: {
+        isRevoked: true,
+      },
+    });
+
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });

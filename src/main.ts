@@ -52,9 +52,10 @@ async function bootstrap() {
     );
     app.use(compression());
 
-    // Enable CORS for all origins (you can customize this as needed)
+    // Enable CORS
+    const allowedOrigins = config.get('ALLOWED_ORIGINS')?.split(',') || ['http://localhost:3000'];
     app.enableCors({
-        origin: 'http://localhost:3000',
+        origin: allowedOrigins,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
@@ -117,7 +118,7 @@ async function bootstrap() {
 
   // Start Server
     const port = process.env.PORT || 3000;
-    await app.listen(port);
+    await app.listen(port, '0.0.0.0');
 
     console.log(`
     Ai knowledge Hub Backend server is running...
