@@ -248,7 +248,7 @@ AI_BASE_URL=http://localhost:11434
 ### Interactive Documentation
 
 Once the server is running, visit:
-- **Swagger UI**: http://localhost:3000/api
+- **Swagger UI**: https://ai-research-weathered-waterfall-4110.fly.dev/api/docs
 
 ### Authentication
 
