@@ -251,7 +251,7 @@ AI_BASE_URL=http://localhost:11434
 ### Interactive Documentation
 
 Once the server is running, visit:
-- **Swagger UI**: http://localhost:3000/api
+- **Swagger UI**: https://ai-research-weathered-waterfall-4110.fly.dev/api/docs
 
 ### Authentication
 
@@ -658,4 +658,7 @@ For support, email ahmedsalahsotohy@gmail.com.
 ---
 
 **⭐ Star this repo if you find it helpful!**
+<<<<<<< HEAD
 **📢 Share with your team and help others build better authentication systems!**
+=======
+>>>>>>> b0d32a67e87fd90196dc573c9f9c09bc4c9f8938
