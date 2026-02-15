@@ -1,12 +1,15 @@
 # 🤖 AI Knowledge Hub
 
-> A powerful AI-powered knowledge management and research platform built with NestJS, featuring document management, intelligent summarization, Q&A capabilities, and MCP (Model Context Protocol) integration.
+> A powerful AI-powered knowledge management and research platform built with NestJS, featuring document management, intelligent summarization, Q&A capabilities, RAG system, and MCP (Model Context Protocol) integration.
 
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://www.prisma.io/)
 [![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+
 
 ---
 
@@ -30,10 +33,10 @@
 
 ## 🎯 Overview
 
-AI Knowledge Hub is a comprehensive platform designed for researchers, students, and knowledge workers to manage their documents, notes, and tasks with the power of artificial intelligence. The platform supports:
+AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, students, and knowledge workers to manage their documents, notes, and tasks with the power of artificial intelligence. The platform supports:
 
 - **Document Management**: Upload files (PDF, Word, text) or write content directly
-- **AI-Powered Analysis**: Automatic summarization, Q&A, and semantic search
+- **AI-Powered Analysis**: Automatic summarization, Q&A, and semantic search with (RAG system)
 - **Note Taking**: Organized notes linked to documents
 - **Task Management**: Track research tasks and deadlines
 - **MCP Integration**: AI agents can interact with your knowledge base through standardized tools
@@ -65,7 +68,7 @@ AI Knowledge Hub is a comprehensive platform designed for researchers, students,
 ### 🤖 AI Services
 - **Text Summarization**: Generate short, medium, or detailed summaries
 - **Question & Answer**: Ask questions about document content
-- **Semantic Search**: AI-powered similarity search (with fallback)
+- **Semantic Search**: AI-powered similarity search (with fallback),by embedding documents and notes.
 - **Key Point Extraction**: Automatically extract important points
 - **Bulk Operations**: Process multiple documents at once
 - **Provider Flexibility**: Switch between Ollama (local/free) and OpenAI
@@ -99,7 +102,7 @@ AI Knowledge Hub is a comprehensive platform designed for researchers, students,
 ---
 
 ## 🏗 Architecture
-
+# layered architecture
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        Client Layer                         │
@@ -614,7 +617,7 @@ npm run start:prod
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -635,7 +638,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Ahmed Salah Sotohy**
 - GitHub: [@a7medsa22](https://github.com/a7medsa22)
 - LinkedIn: [Ahmed Salah](https://linkedin.com/in/ahmed-salah-54822625a)
-- Email: abostohy123@gmail.com
+- Email: ahmedsalahsotoyh@gmail.com
 
 ---
 
@@ -650,8 +653,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email abostohy123@gmail.com or join our discord channel.
+For support, email ahmedsalahsotohy@gmail.com.
 
 ---
 
 **⭐ Star this repo if you find it helpful!**
+**📢 Share with your team and help others build better authentication systems!**
