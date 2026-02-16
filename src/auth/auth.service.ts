@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ForgotPasswordDto, RegisterDto, ResetPasswordDto } from './dto/auth.dto';
+import { ForgotPasswordDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from './dto/auth.dto';
 import { UsersService } from 'src/users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './interfaces/jwt-payload';
@@ -41,7 +41,6 @@ export class AuthService {
     await this.emailVerification.sendOtp(user.email);
 
     return {
-      success: true,
       message: 'User registered. Please verify your email.',
       userId: user.id,
     };
@@ -107,7 +106,7 @@ export class AuthService {
     if (!isValid) {
       throw new UnauthorizedException('Invalid refresh token');
     }
-    return { success: true, userId, tokenId };
+    return { userId, tokenId };
   }
 
   /** Refresh access token using refresh token */
@@ -121,26 +120,29 @@ export class AuthService {
   }
 
   //* Session Management *//
-    async getUserSessions(userId: string) {
+  /** Get all active sessions for a user */
+  async getUserSessions(userId: string) {
     return this.tokenService.getUserSessions(userId);
   }
   async revokeSession(userId: string, tokenId: string) {
-    return { success: true, message: this.tokenService.revokeSession(userId, tokenId) };
+    return this.tokenService.revokeSession(userId, tokenId);
   }
 
   //* OTP Management */
-  public async verifyEmail(email: string, otp: string) {
+  public async verifyEmail(dto: VerifyEmailDto) {
+    const { email, otp } = dto;
     const verified = await this.emailVerification.verify(email, otp);
     if (!verified) {
       throw new BadRequestException('Invalid or expired OTP');
     }
 
     await this.userService.updateStatus(email, UserStatus.ACTIVE);
-    return { success: true, message: 'Email verified successfully, please login' };
+    return { message: 'Email verified successfully, please login' };
   }
 
   
 
+  /** Reset user password using OTP */
   async resetPassword(dto: ResetPasswordDto) {
     const { email, otp, newPassword } = dto;
     const verified = await this.emailVerification.verify(email, otp);
@@ -148,25 +150,26 @@ export class AuthService {
       throw new BadRequestException('Invalid or expired OTP');
     }
     await this.credentialService.updatePassword(email, newPassword);
-    return { success: true, message: 'Password reset successfully, please login' };
+    return { message: 'Password reset successfully, please login' };
   }
 
-    // resend OTP
-   async resendOtp(email: string) {
-    return { success: true, message: this.emailVerification.resendOtp(email) };
+  /** Resend OTP for email verification */
+  async resendOtp(email: string) {
+    return { message: this.emailVerification.resendOtp(email) };
   }
-  // Revoke all sessions
+  /** Revoke all active sessions for a user */
   async revokeAllSessions(userId: string) {
-    return { success: true, message: this.tokenService.revokeAllSessions(userId) };
+    return this.tokenService.revokeAllSessions(userId) ;
   }
-  // Forgot password
+  /** Forgot password - send reset OTP */
+  /** Send OTP for password reset */
   async forgotPassword(dto: ForgotPasswordDto) {
     const user = await this.userService.findByEmail(dto.email);
     if (!user) {
       throw new NotFoundException('User not found');
     }
     await this.emailVerification.sendResetPasswordOtp(user.email);
-    return { success: true, message: 'OTP sent to email' };
+    return { message: `OTP sent to email ${user.email}` };
   }
 }
 

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TokenType } from '@prisma/client';
@@ -7,9 +7,7 @@ import { DeviceInfoDto } from 'src/auth/dto/auth.dto';
 
 import { JwtPayload } from 'src/auth/interfaces/jwt-payload';
 import { UserStatus } from 'src/common/enums/user-status.enum';
-import { UserMapper } from 'src/common/infrastructure/mappers/user.mapper';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthTokenService {
@@ -195,7 +193,7 @@ export class AuthTokenService {
       },
       data: { isRevoked: true },
     });
-    return { success: true };
+    return {message: 'Session revoked successfully'};
   }
 
   public async revokeAllSessions(authorId: string) {

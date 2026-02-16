@@ -20,9 +20,14 @@ export class RegisterDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: 'password123', minLength: 6 })
+  @ApiProperty({ example: 'Password123!', minLength: 8 })
   @IsString()
-  @MinLength(6)
+  @IsNotEmpty({ message: 'Password is required' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
+    message:
+      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+  })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
   password: string;
 
   @ApiProperty({ example: 'Ahmed Salah', required: false })
@@ -31,11 +36,14 @@ export class RegisterDto {
   name?: string;
 
   @ApiProperty({ enum: UserRole, default: UserRole.USER })
+  @IsEnum(UserRole)
   @IsOptional()
   role?: UserRole;
 
-  @ApiProperty({ enum: UserStatus })
-  status: UserStatus;
+  @ApiProperty({ enum: UserStatus, default: UserStatus.PENDING_EMAIL_VERIFICATION })
+  @IsEnum(UserStatus)
+  @IsOptional()
+  status?: UserStatus;
 }
 
 // class LoginDto
@@ -44,7 +52,7 @@ export class LoginDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: 'password123' })
+  @ApiProperty({ example: 'Password123!' })
   @IsString()
   password: string;
 }

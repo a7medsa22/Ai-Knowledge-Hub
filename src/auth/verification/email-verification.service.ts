@@ -2,7 +2,6 @@
 import {
   Injectable,
   BadRequestException,
-  UnauthorizedException,
   NotFoundException,
 } from '@nestjs/common';
 import { OtpService } from './otp.service';

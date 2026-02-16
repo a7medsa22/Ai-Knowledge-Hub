@@ -16,7 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto } from './dto/auth.dto';
+import { ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
@@ -77,12 +77,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 400, description: 'Validation error' })
   async register(@Body() body: RegisterDto) {
-    const result = await this.authService.register(body);
-    return {
-      success: true,
-      message: 'User registered successfully, please verify your email',
-      data: { userId: result.userId },
-    };
+    return this.authService.register(body);
   }
 
   // ===============================================
@@ -145,12 +140,7 @@ export class AuthController {
     },
   })
   async login(@Body() _body:LoginDto,@Req() req) {
-    const result: AuthResponse = await this.authService.login(req.user, req);
-    return {
-      success: true,
-      message: 'Login successful',
-      data: result,
-    };
+    return this.authService.login(req.user, req);
   }
   // ===============================================
   @Post('forgot-password')
@@ -181,12 +171,7 @@ export class AuthController {
     },
   })
   async forgotPassword(@Body() body: ForgotPasswordDto) {
-    await this.authService.forgotPassword(body);
-    return {
-      success: true,
-      message: 'Password reset code sent to your email.',
-      data: { userId: body.email },
-    };
+    return this.authService.forgotPassword(body);
   }
 
   // ===============================================
@@ -223,12 +208,8 @@ export class AuthController {
       },
     },
   })
-  async verifyEmail(@Body() body: { email: string; otp: string }) {
-    await this.authService.verifyEmail(body.email, body.otp);
-    return {
-      success: true,
-      message: 'Email verified successfully, please login',
-    };
+  async verifyEmail(@Body() body: VerifyEmailDto) {
+    return this.authService.verifyEmail(body);
   }
 
   @Post('reset-password')
@@ -265,11 +246,7 @@ export class AuthController {
     },
   })
   async resetPassword(@Body() body: ResetPasswordDto) {
-    const result = await this.authService.resetPassword(body);
-    return {
-      success: result.success,
-      message: result.message,
-    };
+    return this.authService.resetPassword(body);
   }
   
   // ===============================================
@@ -407,7 +384,6 @@ export class AuthController {
     },
   })
   async revokeAllSessions(@CurrentUser('sub') userId: string) {
-    await this.authService.revokeAllSessions(userId);
-    return { success: true, message: 'All sessions revoked' };
+    return this.authService.revokeAllSessions(userId);
   }
 }

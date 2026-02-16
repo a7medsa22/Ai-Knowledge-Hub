@@ -6,6 +6,7 @@ import { UserStatus } from 'src/common/enums/user-status.enum';
 import { RegisterDto, ResetPasswordDto } from '../dto/auth.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { UserMapper } from 'src/common/infrastructure/mappers/user.mapper';
+import { UserRole } from 'src/common/enums/user-role.enum';
 @Injectable()
 export class CredentialService {
   constructor(private readonly userService: UsersService) {}
@@ -22,6 +23,7 @@ export class CredentialService {
       name: data.name || 'User',
       email: data.email,
       password: haspassword,
+      role: data.role || UserRole.USER,
       status: UserStatus.PENDING_EMAIL_VERIFICATION,
     });
     return newUser;

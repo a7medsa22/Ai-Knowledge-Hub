@@ -22,8 +22,9 @@ export class CreateUserDto {
   @IsOptional()
   role?: UserRole;
 
-  @ApiProperty({ enum: UserStatus })
-  status: UserStatus;
+  @ApiProperty({ enum: UserStatus, default: UserStatus.PENDING_EMAIL_VERIFICATION })
+  @IsOptional()
+  status?: UserStatus;
 }
 
 export class UpdateUserDto {
