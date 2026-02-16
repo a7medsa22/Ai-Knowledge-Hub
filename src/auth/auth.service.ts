@@ -2,9 +2,10 @@ import {
   Injectable,
   UnauthorizedException,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterDto } from './dto/auth.dto';
+import { ForgotPasswordDto, RegisterDto, ResetPasswordDto } from './dto/auth.dto';
 import { UsersService } from 'src/users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './interfaces/jwt-payload';
@@ -40,6 +41,7 @@ export class AuthService {
     await this.emailVerification.sendOtp(user.email);
 
     return {
+      success: true,
       message: 'User registered. Please verify your email.',
       userId: user.id,
     };
@@ -105,7 +107,7 @@ export class AuthService {
     if (!isValid) {
       throw new UnauthorizedException('Invalid refresh token');
     }
-    return { userId, tokenId };
+    return { success: true, userId, tokenId };
   }
 
   /** Refresh access token using refresh token */
@@ -123,7 +125,7 @@ export class AuthService {
     return this.tokenService.getUserSessions(userId);
   }
   async revokeSession(userId: string, tokenId: string) {
-    return this.tokenService.revokeSession(userId, tokenId);
+    return { success: true, message: this.tokenService.revokeSession(userId, tokenId) };
   }
 
   //* OTP Management */
@@ -134,17 +136,37 @@ export class AuthService {
     }
 
     await this.userService.updateStatus(email, UserStatus.ACTIVE);
-    return { message: 'Email verified successfully' };
-  }
-  // resend OTP
-   resendOtp(email: string) {
-    return this.emailVerification.resendOtp(email);
+    return { success: true, message: 'Email verified successfully, please login' };
   }
 
+  
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const { email, otp, newPassword } = dto;
+    const verified = await this.emailVerification.verify(email, otp);
+    if (!verified) {
+      throw new BadRequestException('Invalid or expired OTP');
+    }
+    await this.credentialService.updatePassword(email, newPassword);
+    return { success: true, message: 'Password reset successfully, please login' };
+  }
+
+    // resend OTP
+   async resendOtp(email: string) {
+    return { success: true, message: this.emailVerification.resendOtp(email) };
+  }
   // Revoke all sessions
   async revokeAllSessions(userId: string) {
-    return this.tokenService.revokeAllSessions(userId);
+    return { success: true, message: this.tokenService.revokeAllSessions(userId) };
   }
-
+  // Forgot password
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const user = await this.userService.findByEmail(dto.email);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.emailVerification.sendResetPasswordOtp(user.email);
+    return { success: true, message: 'OTP sent to email' };
+  }
 }
 

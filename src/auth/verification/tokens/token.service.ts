@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TokenType } from '@prisma/client';
@@ -58,7 +58,6 @@ export class AuthTokenService {
       expiresIn: Number(this.configService.get('JWT_EXPIRES_IN')),
     };
   }
-
   /** Generate access token */
    async generateAccessToken(payload: JwtPayload): Promise<string> {
     return this.jwtService.signAsync(payload, {

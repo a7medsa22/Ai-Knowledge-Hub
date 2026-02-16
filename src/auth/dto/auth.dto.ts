@@ -64,10 +64,22 @@ export class ResetPasswordDto {
   })
   newPassword: string;
 
-  @ApiProperty({ example: '123456789012345678901234' })
-  @IsNotEmpty({ message: 'Reset token is required' })
-  @IsString()
-  resetToken: string;
+  @ApiProperty({ example: 'john.doe@example.com' })
+  @IsEmail({}, { message: 'Please provide a valid email address' })
+  email: string;
+
+  @ApiProperty({ example: '123456' })
+  @IsString({ message: 'OTP must be a string' })
+  @MinLength(6, { message: 'OTP must be at least 6 characters long' })
+  otp: string;
+}
+export class VerifyEmailDto {
+  @IsEmail({}, { message: 'Please provide a valid email address' })
+  email: string;
+
+  @IsString({ message: 'OTP must be a string' })
+  @MinLength(6, { message: 'OTP must be at least 6 characters long' })
+  otp: string;
 }
 export class DeviceInfoDto {
   @IsOptional()
@@ -80,3 +92,20 @@ export class DeviceInfoDto {
   @IsString()
   ipAddress?: string;
 }
+/**
+ * {
+  sub: userId,
+  email: email,
+  type: 'password_reset',
+  jti: uuid(), // لضمان عدم إعادة الاستخدام
+}
+  const resetToken = this.jwtService.sign(payload, { 
+  secret: process.env.PASSWORD_RESET_SECRET,
+  expiresIn: '5m' 
+});
+return {
+  success: true,
+  message: 'OTP verified. Use the resetToken to set a new password.',
+   { resetToken }
+};
+ */

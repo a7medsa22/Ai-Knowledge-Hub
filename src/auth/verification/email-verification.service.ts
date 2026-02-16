@@ -26,6 +26,15 @@ export class EmailVerificationService {
     await this.mailerService.sendEmailVerificationOtp(email, user.name, otp);
   }
 
+  async sendResetPasswordOtp(email: string) {
+    const user = await this.userService.findByEmail(email);
+    if (!user) throw new NotFoundException('User not found');
+
+    const otp = await this.otpService.generate(email);
+
+    await this.mailerService.sendPasswordResetOtp(email, user.name, otp);
+  }
+
   async verify(email: string, otp: string): Promise<boolean> {
     const isValid = await this.otpService.verify(email, otp);
 
@@ -38,4 +47,5 @@ export class EmailVerificationService {
   resendOtp(email: string) {
     return this.otpService.resendOtp(email);
   }
+  
 }

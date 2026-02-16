@@ -10,8 +10,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RegisterDto } from './dto/auth.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
@@ -27,7 +32,7 @@ export class AuthController {
 
   // ===============================================
   @Post('register')
-  @Throttle({ auth: { limit: 5, ttl: 60000 } }) // 3 requests per minute
+  @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 requests per 5 minutes
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Register a new user',
@@ -57,7 +62,7 @@ export class AuthController {
   })
   @ApiResponse({
     status: 409,
-    description: 'User with this email already exists',
+    description: '',
     schema: {
       type: 'object',
       properties: {
@@ -82,7 +87,7 @@ export class AuthController {
 
   // ===============================================
   @Post('login')
-  @Throttle({ auth: { limit: 5, ttl: 60000 } }) // 3 requests per minute
+  @Throttle({ auth: { limit: 3, ttl: 900000 } }) // 3 requests per 15 minutes
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -110,7 +115,7 @@ export class AuthController {
                 status: { type: 'string', example: 'ACTIVE' },
               },
             },
-accessToken: {
+            accessToken: {
               type: 'string',
               example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
             },
@@ -139,14 +144,15 @@ accessToken: {
       },
     },
   })
-  async login(@Req() req) {
-    const result: AuthResponse = await this.authService.login(req.user,req);
+  async login(@Body() _body:LoginDto,@Req() req) {
+    const result: AuthResponse = await this.authService.login(req.user, req);
     return {
       success: true,
       message: 'Login successful',
       data: result,
     };
   }
+  // ===============================================
   @Post('forgot-password')
   @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 attempts per 5 minutes
   @HttpCode(HttpStatus.OK)
@@ -174,13 +180,18 @@ accessToken: {
       },
     },
   })
-  async forgotPassword(@Body() body: any) {
-    return {message:`wait v2`}
+  async forgotPassword(@Body() body: ForgotPasswordDto) {
+    await this.authService.forgotPassword(body);
+    return {
+      success: true,
+      message: 'Password reset code sent to your email.',
+      data: { userId: body.email },
+    };
   }
 
   // ===============================================
   @Post('verify-email')
-  @Throttle({ auth: { limit: 5, ttl: 60000 } }) // 3 requests per minute
+  @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 requests per 5 minutes
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Verify email with OTP',
@@ -188,12 +199,12 @@ accessToken: {
   })
   @ApiResponse({
     status: 200,
-    description: 'Email verified successfully',
+    description: 'Email verified successfully, please login',
     schema: {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: true },
-        message: { type: 'string', example: 'Email verified successfully' },
+        message: { type: 'string', example: 'Email verified successfully, please login' },
       },
     },
   })
@@ -216,9 +227,51 @@ accessToken: {
     await this.authService.verifyEmail(body.email, body.otp);
     return {
       success: true,
-      message: 'Email verified successfully',
+      message: 'Email verified successfully, please login',
     };
   }
+
+  @Post('reset-password')
+  @Throttle({ auth: { limit: 3, ttl: 900000 } }) // 3 requests per 15 minutes
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Reset password',
+    description: 'Reset the user password using the OTP sent to email.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Password reset successfully, please login',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Password reset successfully, please login' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid or expired OTP',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: {
+          type: 'array',
+          items: { type: 'string' },
+          example: ['Invalid OTP'],
+        },
+      },
+    },
+  })
+  async resetPassword(@Body() body: ResetPasswordDto) {
+    const result = await this.authService.resetPassword(body);
+    return {
+      success: result.success,
+      message: result.message,
+    };
+  }
+  
   // ===============================================
   // TOKEN MANAGEMENT
   // ===============================================
@@ -269,6 +322,7 @@ accessToken: {
 
   @Get('sessions')
   @UseGuards(JwtAuthGuard)
+  @Throttle({ auth: { limit: 3, ttl: 60000 } }) // 3 requests per minute
   @ApiOperation({
     summary: 'Get active sessions',
     description: 'Retrieve a list of active sessions for the current user',
@@ -309,6 +363,7 @@ accessToken: {
 
   @Delete('sessions/:tokenId')
   @UseGuards(JwtAuthGuard)
+  @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 requests per 5 minutes
   @ApiOperation({
     summary: 'Revoke a session',
     description:
@@ -330,5 +385,29 @@ accessToken: {
     @CurrentUser('sub') userId: string,
   ) {
     return this.authService.revokeSession(userId, tokenId);
+  }
+
+  @Delete('sessions')
+  @UseGuards(JwtAuthGuard)
+  @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 requests per 5 minutes
+  @ApiOperation({
+    summary: 'Revoke all sessions',
+    description: 'Revoke all active sessions for the current user',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiResponse({
+    status: 200,
+    description: 'All sessions revoked successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'All sessions revoked' },
+      },
+    },
+  })
+  async revokeAllSessions(@CurrentUser('sub') userId: string) {
+    await this.authService.revokeAllSessions(userId);
+    return { success: true, message: 'All sessions revoked' };
   }
 }
