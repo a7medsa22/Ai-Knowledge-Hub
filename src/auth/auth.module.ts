@@ -10,10 +10,8 @@ import { AccountStatusService } from './account-status/account-status.service';
 import { CredentialService } from './credentials/credential.service';
 import { EmailVerificationService } from './verification/email-verification.service';
 import { OtpService } from './verification/otp.service';
-import { EmailService } from 'src/infrastructure/email/email.service';
 import { OtpRepository } from './verification/repositories/otp.repository';
 import { AttemptPolicy } from './verification/policies/attempt.policy';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from 'src/infrastructure/email/email.module';
 import { AuthTokenService } from './verification/tokens/token.service';
 

@@ -14,7 +14,7 @@ export class CredentialService {
   async createUser(data: RegisterDto) {
     const existingUser = await this.userService.findByEmail(data.email);
     if (existingUser) {
-      throw new ConflictException('');
+      throw new ConflictException('if you already have an account, please login');
     }
     const salt = await bcrypt.genSalt(12);
     const haspassword = await bcrypt.hash(data.password, salt);
