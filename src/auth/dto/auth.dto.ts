@@ -39,11 +39,6 @@ export class RegisterDto {
   @IsEnum(UserRole)
   @IsOptional()
   role?: UserRole;
-
-  @ApiProperty({ enum: UserStatus, default: UserStatus.PENDING_EMAIL_VERIFICATION })
-  @IsEnum(UserStatus)
-  @IsOptional()
-  status?: UserStatus;
 }
 
 // class LoginDto
@@ -82,9 +77,11 @@ export class ResetPasswordDto {
   otp: string;
 }
 export class VerifyEmailDto {
+  @ApiProperty({ example: 'john.doe@example.com' })
   @IsEmail({}, { message: 'Please provide a valid email address' })
   email: string;
 
+  @ApiProperty({ example: '123456' })
   @IsString({ message: 'OTP must be a string' })
   @MinLength(6, { message: 'OTP must be at least 6 characters long' })
   otp: string;
@@ -100,20 +97,8 @@ export class DeviceInfoDto {
   @IsString()
   ipAddress?: string;
 }
-/**
- * {
-  sub: userId,
-  email: email,
-  type: 'password_reset',
-  jti: uuid(), // لضمان عدم إعادة الاستخدام
+export class RefreshTokenDto {
+  @ApiProperty({ example: 'refreshToken' })
+  @IsString()
+  refreshToken: string;
 }
-  const resetToken = this.jwtService.sign(payload, { 
-  secret: process.env.PASSWORD_RESET_SECRET,
-  expiresIn: '5m' 
-});
-return {
-  success: true,
-  message: 'OTP verified. Use the resetToken to set a new password.',
-   { resetToken }
-};
- */

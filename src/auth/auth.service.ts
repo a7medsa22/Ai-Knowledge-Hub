@@ -4,12 +4,10 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ForgotPasswordDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from './dto/auth.dto';
 import { UsersService } from 'src/users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './interfaces/jwt-payload';
-import { PrismaService } from '../prisma/prisma.service';
 import { AuthResponse } from './interfaces/auth-response.interface';
 import { AccountStatusService } from './account-status/account-status.service';
 import { UserEntity } from './../users/entities/user.entity';
@@ -18,13 +16,10 @@ import { CredentialService } from './credentials/credential.service';
 import { EmailVerificationService } from './verification/email-verification.service';
 import { AuthTokenService } from './verification/tokens/token.service';
 import { Request } from 'express';
-import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly jwtService: JwtService,
-    private readonly prisma: PrismaService,
     private readonly userService: UsersService,
     private readonly configService: ConfigService,
     private readonly accountStatusService: AccountStatusService,
@@ -129,19 +124,6 @@ export class AuthService {
   }
 
   //* OTP Management */
-  public async verifyEmail(dto: VerifyEmailDto) {
-    const { email, otp } = dto;
-    const verified = await this.emailVerification.verify(email, otp);
-    if (!verified) {
-      throw new BadRequestException('Invalid or expired OTP');
-    }
-
-    await this.userService.updateStatus(email, UserStatus.ACTIVE);
-    return { message: 'Email verified successfully, please login' };
-  }
-
-  
-
   /** Reset user password using OTP */
   async resetPassword(dto: ResetPasswordDto) {
     const { email, otp, newPassword } = dto;

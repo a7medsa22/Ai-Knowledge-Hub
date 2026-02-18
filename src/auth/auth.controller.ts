@@ -16,11 +16,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from './dto/auth.dto';
+import { ForgotPasswordDto, LoginDto, RefreshTokenDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthResponse } from './interfaces/auth-response.interface';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
@@ -175,43 +174,6 @@ export class AuthController {
   }
 
   // ===============================================
-  @Post('verify-email')
-  @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 requests per 5 minutes
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Verify email with OTP',
-    description: 'Verify the user email using the OTP sent to email.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Email verified successfully, please login',
-    schema: {
-      type: 'object',
-      properties: {
-        success: { type: 'boolean', example: true },
-        message: { type: 'string', example: 'Email verified successfully, please login' },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid or expired OTP',
-    schema: {
-      type: 'object',
-      properties: {
-        success: { type: 'boolean', example: false },
-        message: {
-          type: 'array',
-          items: { type: 'string' },
-          example: ['Invalid OTP'],
-        },
-      },
-    },
-  })
-  async verifyEmail(@Body() body: VerifyEmailDto) {
-    return this.authService.verifyEmail(body);
-  }
-
   @Post('reset-password')
   @Throttle({ auth: { limit: 3, ttl: 900000 } }) // 3 requests per 15 minutes
   @HttpCode(HttpStatus.OK)
@@ -252,7 +214,6 @@ export class AuthController {
   // ===============================================
   // TOKEN MANAGEMENT
   // ===============================================
-
   @Post('refresh')
   @UseGuards(RefreshTokenGuard)
   @Throttle({ auth: { limit: 10, ttl: 60000 } }) // 10 refresh attempts per minute
@@ -288,7 +249,7 @@ export class AuthController {
     status: 401,
     description: 'Invalid refresh token',
   })
-  async refreshToken(@Req() req) {
+  async refreshToken(@Body() _body: RefreshTokenDto,@Req() req) {
     const { userId, tokenId } = req.user;
     return this.authService.refreshTokens(userId, tokenId);
   }
@@ -296,7 +257,6 @@ export class AuthController {
   // ===============================================
   // Sessions MANAGEMENT
   // ===============================================
-
   @Get('sessions')
   @UseGuards(JwtAuthGuard)
   @Throttle({ auth: { limit: 3, ttl: 60000 } }) // 3 requests per minute
@@ -363,6 +323,7 @@ export class AuthController {
   ) {
     return this.authService.revokeSession(userId, tokenId);
   }
+
 
   @Delete('sessions')
   @UseGuards(JwtAuthGuard)
