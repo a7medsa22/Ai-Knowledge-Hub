@@ -7,6 +7,7 @@ import {
 import { OtpService } from './otp.service';
 import { EmailService } from 'src/infrastructure/email/email.service';
 import { UsersService } from 'src/users/users.service';
+import { UserStatus } from 'src/common/enums/user-status.enum';
 
 @Injectable()
 export class EmailVerificationService {
@@ -14,7 +15,7 @@ export class EmailVerificationService {
     private readonly otpService: OtpService,
     private readonly mailerService: EmailService,
     private readonly userService: UsersService,
-  ) {}
+  ) { }
 
   async sendOtp(email: string) {
     const user = await this.userService.findByEmail(email);
@@ -43,8 +44,18 @@ export class EmailVerificationService {
 
     return true;
   }
-  resendOtp(email: string) {
-    return this.otpService.resendOtp(email);
+  async resendOtp(email: string) {
+    const user = await this.userService.findByEmail(email);
+    if (!user) throw new NotFoundException('User not found');
+
+    if (user.status !== UserStatus.PENDING_EMAIL_VERIFICATION) {
+      throw new BadRequestException(
+        'Email is already verified or account is not in pending state',
+      );
+    }
+    const otp = await this.otpService.resendOtp(email);
+    await this.mailerService.sendEmailVerificationOtp(email, user.name, otp);
+    return { message: 'OTP sent successfully' };
   }
-  
+
 }

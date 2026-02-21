@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from 'src/common/enums/user-role.enum';
-import { UserStatus } from 'src/common/enums/user-status.enum';
 
 // simple dto for register and login
 // class RegisterDto
@@ -102,3 +101,9 @@ export class RefreshTokenDto {
   @IsString()
   refreshToken: string;
 }
+
+export class ResendOtpDto {
+  @ApiProperty({ example: 'john.doe@example.com' })
+  @IsEmail({}, { message: 'Please provide a valid email address' })
+  email: string;
+} 

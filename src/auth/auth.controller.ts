@@ -16,7 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ForgotPasswordDto, LoginDto, RefreshTokenDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from './dto/auth.dto';
+import { ForgotPasswordDto, LoginDto, RefreshTokenDto, RegisterDto, ResendOtpDto, ResetPasswordDto, VerifyEmailDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
@@ -27,7 +27,7 @@ import { RefreshTokenGuard } from './guards/refresh-token.guard';
 @ApiTags('Authentication')
 @Controller('users/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   // ===============================================
   @Post('register')
@@ -138,7 +138,7 @@ export class AuthController {
       },
     },
   })
-  async login(@Body() _body:LoginDto,@Req() req) {
+  async login(@Body() _body: LoginDto, @Req() req) {
     return this.authService.login(req.user, req);
   }
   // ===============================================
@@ -174,6 +174,44 @@ export class AuthController {
   }
 
   // ===============================================
+  @Post('verify-email')
+  @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 requests per 5 minutes
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Verify email with OTP',
+    description: 'Verify the user email using the OTP sent to email.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Email verified successfully, please login',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Email verified successfully, please login' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid or expired OTP',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: {
+          type: 'array',
+          items: { type: 'string' },
+          example: ['Invalid OTP'],
+        },
+      },
+    },
+  })
+  async verifyEmail(@Body() body: VerifyEmailDto) {
+    return this.authService.verifyEmail(body);
+  }
+
+
   @Post('reset-password')
   @Throttle({ auth: { limit: 3, ttl: 900000 } }) // 3 requests per 15 minutes
   @HttpCode(HttpStatus.OK)
@@ -210,7 +248,61 @@ export class AuthController {
   async resetPassword(@Body() body: ResetPasswordDto) {
     return this.authService.resetPassword(body);
   }
-  
+
+  @Post('resend-otp')
+  @Throttle({ auth: { limit: 3, ttl: 300000 } }) // 3 requests per 5 minutes
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Resend OTP',
+    description: 'Resend OTP to user email if account exists',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'OTP resent successfully if account exists',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: {
+          type: 'string',
+          example: 'OTP resent successfully.',
+        },
+        data: {
+          type: 'object',
+          properties: {
+            userId: { type: 'string', example: 'uuid-string' },
+          },
+        },
+      },
+    },
+  })
+  async resendOtp(@Body() data: ResendOtpDto) {
+    return this.authService.resendOtp(data.email);
+  }
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Logout',
+    description: 'Revoke the current session',
+  })
+  @ApiBearerAuth('JWT-auth')
+  @ApiResponse({
+    status: 200,
+    description: 'Logged out successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Logged out successfully' },
+      },
+    },
+  })
+  async logout(@Req() req) {
+    const { userId, tokenId } = req.user;
+    return this.authService.logout(userId, tokenId);
+  }
+
   // ===============================================
   // TOKEN MANAGEMENT
   // ===============================================
@@ -249,7 +341,7 @@ export class AuthController {
     status: 401,
     description: 'Invalid refresh token',
   })
-  async refreshToken(@Body() _body: RefreshTokenDto,@Req() req) {
+  async refreshToken(@Body() _body: RefreshTokenDto, @Req() req) {
     const { userId, tokenId } = req.user;
     return this.authService.refreshTokens(userId, tokenId);
   }

@@ -8,7 +8,7 @@ import { UserStatus } from '../common/enums/user-status.enum';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(data: CreateUserDto): Promise<UserEntity> {
     const user = await this.prisma.user.create({
@@ -43,7 +43,7 @@ export class UsersService {
     }
     return UserMapper.toDomain(user);
   }
-  async findByEmailValidat(email: string) {
+  async findByEmailWithPassword(email: string) {
     const user = await this.prisma.user.findUniqueOrThrow({ where: { email } });
     return user;
   }
@@ -56,15 +56,15 @@ export class UsersService {
     return UserMapper.toDomain(user);
   }
 
-  async updateStatus(id: string, status: UserStatus) {
+  async updateStatus(email: string, status: UserStatus) {
     const user = await this.prisma.user.update({
-      where: { id },
+      where: { email },
       data: { status },
     });
     return UserMapper.toDomain(user);
   }
 
-    async updateLastActivity(userId: string) {
+  async updateLastActivity(userId: string) {
     return this.prisma.user.update({
       where: { id: userId },
       data: { updatedAt: new Date() },

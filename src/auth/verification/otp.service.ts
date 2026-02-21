@@ -7,7 +7,7 @@ export class OtpService {
   constructor(
     private readonly otpRepo: OtpRepository,
     private readonly attemptPolicy: AttemptPolicy,
-  ) {}
+  ) { }
   async generate(email: string) {
     const otp = crypto.randomInt(100000, 999999).toString();
     await this.otpRepo.save(email, otp);
@@ -27,9 +27,13 @@ export class OtpService {
 
     return true;
   }
-    async resendOtp(email: string) {
+  async resendOtp(email: string) {
     await this.attemptPolicy.check(email);
     const storedOtp = await this.otpRepo.find(email);
-    return storedOtp ? storedOtp : await this.generate(email);
+    if (storedOtp) {
+      await this.otpRepo.save(email, storedOtp);
+      return storedOtp;
+    }
+    return await this.generate(email);
   }
 }

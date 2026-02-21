@@ -9,7 +9,7 @@ import { UserMapper } from 'src/common/infrastructure/mappers/user.mapper';
 import { UserRole } from 'src/common/enums/user-role.enum';
 @Injectable()
 export class CredentialService {
-  constructor(private readonly userService: UsersService) {}
+  constructor(private readonly userService: UsersService) { }
 
   async createUser(data: RegisterDto) {
     const existingUser = await this.userService.findByEmail(data.email);
@@ -38,8 +38,8 @@ export class CredentialService {
   }
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userService.findByEmailValidat(email);
-    if(user.status !== UserStatus.ACTIVE){
+    const user = await this.userService.findByEmailWithPassword(email);
+    if (user.status !== UserStatus.ACTIVE) {
       throw new ConflictException('User not active');
     }
     if (user && (await bcrypt.compare(password, user.password))) {

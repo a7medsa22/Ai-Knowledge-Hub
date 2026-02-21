@@ -3,11 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TokenType } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
+import { SrvRecord } from 'dns';
 import { DeviceInfoDto } from 'src/auth/dto/auth.dto';
 
 import { JwtPayload } from 'src/auth/interfaces/jwt-payload';
 import { UserStatus } from 'src/common/enums/user-status.enum';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { parseDurationToSeconds } from 'src/common/utils/duration.util';
 
 @Injectable()
 export class AuthTokenService {
@@ -15,21 +18,24 @@ export class AuthTokenService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   /**
    * Refresh Token and Rotate
    */
   public async refreshToken(userId: string, tokenId: string) {
-    const token = await this.validateAndRotateRefreshToken(userId, tokenId);
+    const tokenRecord = await this.prisma.authToken.findUnique({
+      where: { id: tokenId },
+    });
 
-    if (!token) throw new UnauthorizedException('Token reuse detected');
+    if (!tokenRecord || tokenRecord.authorId !== userId || tokenRecord.isRevoked) {
+      throw new UnauthorizedException('Invalid or rotated token');
+    }
 
+    // Revoke old token
     await this.prisma.authToken.update({
       where: { id: tokenId },
-      data: {
-        isRevoked: true,
-      },
+      data: { isRevoked: true },
     });
 
     const user = await this.prisma.user.findUnique({
@@ -48,16 +54,24 @@ export class AuthTokenService {
     };
 
     const accessToken = await this.generateAccessToken(payload);
-    const refreshToken = await this.generateRefreshToken(user.id);
+
+    // Preserve device info during rotation
+    const deviceInfo: DeviceInfoDto = {
+      userAgent: tokenRecord.userAgent || undefined,
+      deviceName: tokenRecord.deviceName || undefined,
+      ipAddress: tokenRecord.ipAddress || undefined,
+    };
+
+    const refreshToken = await this.generateRefreshToken(user.id, deviceInfo);
 
     return {
       accessToken,
       refreshToken,
-      expiresIn: Number(this.configService.get('JWT_EXPIRES_IN')),
+      expiresIn: parseDurationToSeconds(this.configService.get<string>('JWT_EXPIRES_IN', '900')),
     };
   }
   /** Generate access token */
-   async generateAccessToken(payload: JwtPayload): Promise<string> {
+  async generateAccessToken(payload: JwtPayload): Promise<string> {
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('JWT_SECRET'),
       expiresIn: this.configService.get<string>('JWT_EXPIRES_IN', '15m'),
@@ -79,13 +93,18 @@ export class AuthTokenService {
 
     const hash = await bcrypt.hash(refreshToken, 10);
 
+    // Calculate expiration date
+    const expiresInStr = this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d');
+    const days = parseInt(expiresInStr) || 7;
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * days);
+
     await this.prisma.authToken.create({
       data: {
         id: tokenId,
         authorId,
         token: hash,
         type: TokenType.REFRESH,
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        expiresAt,
         ...deviceInfo,
       },
     });
@@ -184,7 +203,7 @@ export class AuthTokenService {
    * Revoke refresh tokens for user 
    */
 
-    // Revoke a specific session
+  // Revoke a specific session
   async revokeSession(authorId: string, tokenId: string) {
     await this.prisma.authToken.updateMany({
       where: {
@@ -193,7 +212,7 @@ export class AuthTokenService {
       },
       data: { isRevoked: true },
     });
-    return {message: 'Session revoked successfully'};
+    return { message: 'Session revoked successfully' };
   }
 
   public async revokeAllSessions(authorId: string) {

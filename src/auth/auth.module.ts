@@ -14,6 +14,8 @@ import { OtpRepository } from './verification/repositories/otp.repository';
 import { AttemptPolicy } from './verification/policies/attempt.policy';
 import { EmailModule } from 'src/infrastructure/email/email.module';
 import { AuthTokenService } from './verification/tokens/token.service';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { AuthTokenService } from './verification/tokens/token.service';
     OtpRepository,
     AttemptPolicy,
     AuthTokenService,
+    LocalStrategy,
+    JwtRefreshStrategy,
   ],
 })
-export class AuthModule {}
+export class AuthModule { }
