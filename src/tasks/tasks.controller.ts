@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
+import { Throttle } from '@nestjs/throttler';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateStatusDto, UpdateTaskDto } from './dto/update-task.dto';
 import {
@@ -53,6 +54,7 @@ export class TasksController {
   }
 
   @Get('stats')
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @ApiOperation({
     summary: 'Get tasks statistics',
     description: 'Get statistics about current user tasks',
@@ -66,6 +68,7 @@ export class TasksController {
   }
 
   @Get('upcoming')
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @ApiOperation({
     summary: 'Get upcoming tasks',
     description: 'Get upcoming tasks for the current user',
@@ -79,6 +82,7 @@ export class TasksController {
   }
 
   @Get('overdue')
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @ApiOperation({
     summary: 'Get overdue tasks',
     description: 'Get all overdue tasks that are not completed',
@@ -92,6 +96,7 @@ export class TasksController {
   }
 
   @Get()
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @ApiOperation({
     summary: 'Get user tasks',
     description:

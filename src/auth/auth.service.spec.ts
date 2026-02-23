@@ -55,7 +55,7 @@ describe('AuthService - Register & VerifyEmail', () => {
     const mockUser = { id: 'user-id', email: 'test@test.com' };
     (credentialService.createUser as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await service.register({ email: 'test@test.com', password: '123', status: UserStatus.PENDING_EMAIL_VERIFICATION });
+    const result = await service.register({ email: 'test@test.com', password: '123' });
 
     expect(result.userId).toBe('user-id');
     expect(result.message).toBe('User registered successfully, please verify your email');
@@ -63,17 +63,20 @@ describe('AuthService - Register & VerifyEmail', () => {
   });
 
   it('should verify email successfully', async () => {
+    const mockUser = { id: 'user-id', email: 'test@test.com' };
     (emailVerification.verify as jest.Mock).mockResolvedValue(true);
+    (usersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
+    (usersService.update as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await service.verifyEmail('test@test.com', '123456');
+    const result = await service.verifyEmail({ email: 'test@test.com', otp: '123456' });
 
-    expect(result.message).toBe('Email verified successfully');
-    expect(usersService.updateStatus).toHaveBeenCalledWith('test@test.com', UserStatus.ACTIVE);
+    expect(result.message).toBe('Email verified successfully, please login');
+    expect(usersService.update).toHaveBeenCalled();
   });
 
   it('should throw BadRequestException for invalid OTP', async () => {
     (emailVerification.verify as jest.Mock).mockResolvedValue(false);
 
-    await expect(service.verifyEmail('test@test.com', 'wrong-otp')).rejects.toThrow(BadRequestException);
+    await expect(service.verifyEmail({ email: 'test@test.com', otp: 'wrong-otp' })).rejects.toThrow(BadRequestException);
   });
 });

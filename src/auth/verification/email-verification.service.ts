@@ -48,14 +48,21 @@ export class EmailVerificationService {
     const user = await this.userService.findByEmail(email);
     if (!user) throw new NotFoundException('User not found');
 
-    if (user.status !== UserStatus.PENDING_EMAIL_VERIFICATION) {
-      throw new BadRequestException(
-        'Email is already verified or account is not in pending state',
-      );
+    if (user.status === UserStatus.PENDING_EMAIL_VERIFICATION) {
+      const otp = await this.otpService.resendOtp(email);
+      await this.mailerService.sendEmailVerificationOtp(email, user.name, otp);
+      return { message: 'Verification OTP sent successfully' };
     }
-    const otp = await this.otpService.resendOtp(email);
-    await this.mailerService.sendEmailVerificationOtp(email, user.name, otp);
-    return { message: 'OTP sent successfully' };
+
+    if (user.status === UserStatus.ACTIVE) {
+      const otp = await this.otpService.resendOtp(email);
+      await this.mailerService.sendPasswordResetOtp(email, user.name, otp);
+      return { message: 'Password reset OTP sent successfully' };
+    }
+
+    throw new BadRequestException(
+      'Account is not in a state that allows resending OTPs',
+    );
   }
 
 }

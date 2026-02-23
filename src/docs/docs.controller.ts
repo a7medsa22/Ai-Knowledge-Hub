@@ -22,6 +22,7 @@ import {
 } from '@nestjs/swagger';
 
 import { DocsService } from './docs.service';
+import { Throttle } from '@nestjs/throttler';
 import { JwtAuthGuard, GetUser } from '../auth/guards/jwt-auth.guard';
 import { CreateDocDto } from './dto/create-doc.dto';
 import { SearchDocDto } from './dto/search-doc.dto';
@@ -98,6 +99,8 @@ export class DocsController {
   }
 
   @Get('my-docs')
+  // allow a higher rate for document listing since front‑end may poll/search frequently
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({
@@ -163,6 +166,8 @@ export class DocsController {
   }
 
   @Get()
+  // public listing/search endpoint gets throttled too, increase limit to avoid quick 429s
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @ApiOperation({
     summary: 'Get all public documents',
     description: 'Search and filter public documents',

@@ -132,7 +132,13 @@ export class AuthService {
             throw new BadRequestException('Invalid or expired OTP');
         }
 
-        await this.userService.updateStatus(email, UserStatus.ACTIVE);
+        const user = await this.userService.findByEmail(email);
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        const activationData = await this.accountStatusService.activateAccount(user);
+        await this.userService.update(user.id, activationData);
         return { message: 'Email verified successfully, please login' };
     }
 

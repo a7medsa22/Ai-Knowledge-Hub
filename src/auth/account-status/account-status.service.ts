@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserStatus } from 'src/common/enums/user-status.enum';
 import { UserEntity } from 'src/users/entities/user.entity';
 
-Injectable();
+@Injectable()
 export class AccountStatusService {
   /** Check if user can log in */
   async ensureCanLogin(user: UserEntity) {

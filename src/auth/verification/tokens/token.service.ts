@@ -169,7 +169,7 @@ export class AuthTokenService {
   public async validateAndGetUserFromJwt(userId: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-    if (!user || user.status !== UserStatus.ACTIVE || !user.isActive) {
+    if (!user || user.status !== UserStatus.ACTIVE) {
       throw new UnauthorizedException('User not found or inactive');
     }
 
