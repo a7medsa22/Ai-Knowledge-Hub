@@ -10,7 +10,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-
 ---
 
 ## 📋 Table of Contents
@@ -40,18 +39,23 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 - **Note Taking**: Organized notes linked to documents
 - **Task Management**: Track research tasks and deadlines
 - **MCP Integration**: AI agents can interact with your knowledge base through standardized tools
+- **Frontend App**: Pairs perfectly with the [AI Knowledge Hub Frontend](https://github.com/a7medsa22/Ai-Knowledge-Hub-web)
 
 ---
 
 ## ✨ Features
 
 ### 🔐 Authentication & User Management
-- JWT-based authentication
-- User registration and login
+
+- JWT-based authentication with access + refresh tokens
+- Device metadata (name, IP, user‑agent) saved with each session
+- Token rotation & revocation (manage sessions via API)
+- User registration and login (email/OTP, password reset)
 - Profile management
 - Role-based access control (USER, ADMIN)
 
 ### 📄 Document Management
+
 - Create documents with rich text or upload files (PDF, Word, TXT)
 - Automatic text extraction from uploaded files
 - Tagging system for organization
@@ -60,20 +64,25 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 - Advanced sorting and pagination
 
 ### 📝 Notes System
+
 - Create standalone notes or attach to documents
 - Search across all notes
 - Link notes to specific documents
 - Recent notes dashboard
 
 ### 🤖 AI Services
+
 - **Text Summarization**: Generate short, medium, or detailed summaries
 - **Question & Answer**: Ask questions about document content
-- **Semantic Search**: AI-powered similarity search (with fallback),by embedding documents and notes.
+- **Semantic Search**: AI-powered similarity search (with fallback) by embedding documents and notes
+- **Embeddings**: Stored in PostgreSQL using the `vector` extension and accessible via pgvector indexes
+- **Background Embedding Queue**: Documents are chunked & embedded asynchronously using BullMQ/Redis workers
 - **Key Point Extraction**: Automatically extract important points
 - **Bulk Operations**: Process multiple documents at once
 - **Provider Flexibility**: Switch between Ollama (local/free) and OpenAI
 
 ### ✅ Task Management
+
 - Create and manage research tasks
 - Priority levels (LOW, MEDIUM, HIGH, URGENT)
 - Status tracking (TODO, IN_PROGRESS, DONE, CANCELLED)
@@ -81,6 +90,7 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 - Task statistics and completion rates
 
 ### 🔌 MCP (Model Context Protocol)
+
 - Standardized tool interface for AI agents
 - Available tools:
   - `searchDocs`: Search through documents
@@ -93,6 +103,7 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 - Quick action endpoints
 
 ### 📁 File Management
+
 - Upload images, PDFs, Word documents, and text files
 - Automatic text extraction for supported formats
 - File linking to documents
@@ -102,7 +113,9 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 ---
 
 ## 🏗 Architecture
+
 # layered architecture
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        Client Layer                         │
@@ -145,6 +158,7 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 ## 🛠 Tech Stack
 
 ### Backend
+
 - **Framework**: NestJS 10.x
 - **Language**: TypeScript 5.x
 - **Database**: PostgreSQL 15
@@ -155,11 +169,13 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 - **API Documentation**: Swagger/OpenAPI
 
 ### AI Integration
+
 - **Local AI**: Ollama (llama3.1:8b, Mistral)
 - **Cloud AI**: OpenAI GPT-3.5/4, Anthropic Claude (optional)
 - **Text Extraction**: pdf-parse, mammoth
 
 ### Development Tools
+
 - **Testing**: Jest
 - **Linting**: ESLint
 - **Formatting**: Prettier
@@ -172,51 +188,69 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 ### Prerequisites
 
 - Node.js 18+ and npm
-- Docker and Docker Compose
+- Docker and Docker Compose (embeds PostgreSQL with pgvector and Redis)
 - Git
+- **Redis** (required for caching and the embedding queue; provided in docker-compose)
+
+The compose file includes a Redis service and the pgvector‑enabled PostgreSQL image.
 
 ### Installation
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/a7medsa22/ai-knowledge-hub.git
 cd ai-knowledge-hub
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
 
 3. **Set up environment variables**
+
 ```bash
 cp .env.example .env
 ```
 
 Edit `.env` with your configuration (see [Environment Variables](#-environment-variables))
 
-4. **Start PostgreSQL with Docker**
+4. **Start services (PostgreSQL with pgvector, Redis, etc.) using Docker Compose**
+
 ```bash
 docker-compose up -d
 ```
 
 5. **Run database migrations**
+
+```bash
+npx prisma migrate dev --name init
+```
+
+````
+
+5. **Run database migrations**
 ```bash
 npx prisma generate
 npx prisma db push
-```
+````
 
 6. **Create uploads directory**
+
 ```bash
 mkdir uploads
 ```
 
 7. **Start the development server**
+
 ```bash
 npm run start:dev
 ```
 
 8. **Access the application**
+
 - API: http://localhost:3000
 - Swagger Documentation: http://localhost:3000/api
 - pgAdmin (optional): http://localhost:8080
@@ -226,6 +260,7 @@ npm run start:dev
 1. **Install Ollama** (https://ollama.ai)
 
 2. **Pull a model**
+
 ```bash
 ollama pull llama3.1:8b
 # or
@@ -233,11 +268,13 @@ ollama pull mistral:7b
 ```
 
 3. **Start Ollama**
+
 ```bash
 ollama serve
 ```
 
 4. **Verify in .env**
+
 ```env
 AI_PROVIDER=ollama
 AI_MODEL=llama3.1:8b
@@ -251,6 +288,7 @@ AI_BASE_URL=http://localhost:11434
 ### Interactive Documentation
 
 Once the server is running, visit:
+
 - **Swagger UI**: https://ai-research-weathered-waterfall-4110.fly.dev/api/docs
 
 ### Authentication
@@ -258,6 +296,7 @@ Once the server is running, visit:
 Most endpoints require authentication. To authenticate:
 
 1. **Register a user**
+
 ```bash
 POST /users/auth/register
 {
@@ -268,6 +307,7 @@ POST /users/auth/register
 ```
 
 2. **Login**
+
 ```bash
 POST /users/auth/login
 {
@@ -277,6 +317,7 @@ POST /users/auth/login
 ```
 
 3. **Use the JWT token**
+
 ```bash
 Authorization: Bearer <your_jwt_token>
 ```
@@ -288,34 +329,41 @@ In Swagger, click the 🔓 **Authorize** button and paste your token.
 ## 🧩 Modules Overview
 
 ### 1. Auth Module
+
 **Endpoints:**
+
 - `POST /users/auth/register` - Register new user
 - `POST /users/auth/login` - Login and get JWT token
 - `POST /users/auth/verify-email` - Verify email with OTP
 - `POST /users/auth/refresh` - Refresh access token
 - `POST /users/auth/forgot-password` - Request password reset
-- `GET /users/auth/sessions` - Get active sessions
-- `DELETE /users/auth/sessions/:tokenId` - Revoke a session
+- `GET /users/auth/sessions` - Get active sessions (each record shows device name, IP, and user‑agent)
+- `DELETE /users/auth/sessions/:tokenId` - Revoke a session by ID
 
 ### 2. Users Module
+
 **Endpoints:**
+
 - `GET /users/profile` - Get current user profile
 - `PUT /users/profile` - Update profile
 - `DELETE /users/profile` - Delete account
 - `GET /users` - Get all users (admin only)
 
 ### 3. Documents Module
+
 **Endpoints:**
+
 - `POST /docs` - Create document (text or file upload)
 - `GET /docs` - Search public documents
 - `GET /docs/my-docs` - Get user's documents
 - `GET /docs/tags` - Get all tags
-- `GET /docs/stats` - Get statistics
+- `GET /docs/status` - Get statistics
 - `GET /docs/:id` - Get specific document
 - `PATCH /docs/:id` - Update document
 - `DELETE /docs/:id` - Delete document
 
 **Example: Create document from file**
+
 ```bash
 POST /docs
 Content-Type: multipart/form-data
@@ -327,10 +375,12 @@ isPublic: true
 ```
 
 ### 4. Notes Module
+
 **Endpoints:**
+
 - `POST /notes` - Create note
 - `GET /notes` - Get all notes
-- `GET /notes/stats` - Get notes statistics
+- `GET /notes/status` - Get notes statistics
 - `GET /notes/recent` - Get recent notes
 - `GET /notes/document/:docId` - Get notes for document
 - `GET /notes/:id` - Get specific note
@@ -338,7 +388,9 @@ isPublic: true
 - `DELETE /notes/:id` - Delete note
 
 ### 5. AI Module
+
 **Endpoints:**
+
 - `GET /ai/status` - Check AI service availability
 - `POST /ai/summarize` - Summarize text or document
 - `POST /ai/qa` - Ask questions about content
@@ -347,6 +399,7 @@ isPublic: true
 - `POST /ai/bulk-summarize` - Summarize multiple documents
 
 **Example: Summarize document**
+
 ```json
 POST /ai/summarize
 {
@@ -356,6 +409,7 @@ POST /ai/summarize
 ```
 
 **Example: Q&A**
+
 ```json
 POST /ai/qa
 {
@@ -365,10 +419,12 @@ POST /ai/qa
 ```
 
 ### 6. Tasks Module
+
 **Endpoints:**
+
 - `POST /tasks` - Create task
 - `GET /tasks` - Get all tasks with filters
-- `GET /tasks/stats` - Get task statistics
+- `GET /tasks/status` - Get task statistics
 - `GET /tasks/upcoming` - Get upcoming tasks
 - `GET /tasks/overdue` - Get overdue tasks
 - `GET /tasks/:id` - Get specific task
@@ -377,7 +433,9 @@ POST /ai/qa
 - `DELETE /tasks/:id` - Delete task
 
 ### 7. MCP Module
+
 **Endpoints:**
+
 - `GET /mcp/tools` - List available tools
 - `GET /mcp/health` - Health check
 - `POST /mcp/execute` - Execute single tool
@@ -389,6 +447,7 @@ POST /ai/qa
   - `GET /mcp/quick/user-stats`
 
 **Example: Execute tool**
+
 ```json
 POST /mcp/execute
 {
@@ -401,7 +460,9 @@ POST /mcp/execute
 ```
 
 ### 8. Files Module
+
 **Endpoints:**
+
 - `POST /files/upload` - Upload file
 - `POST /files/upload-and-extract` - Upload file and create document
 - `GET /files` - Get all files
@@ -419,14 +480,14 @@ The Model Context Protocol (MCP) allows AI agents to interact with your knowledg
 
 ### Available Tools
 
-| Tool Name | Description | Parameters |
-|-----------|-------------|------------|
-| `searchDocs` | Search documents | query, limit, tags |
-| `getDocument` | Get specific document | docId |
-| `addNote` | Create a note | content, docId (optional) |
-| `createTask` | Create a task | title, description, priority, dueDate |
-| `listTasks` | List tasks with filters | status, priority, limit |
-| `getUserStats` | Get user statistics | none |
+| Tool Name      | Description             | Parameters                            |
+| -------------- | ----------------------- | ------------------------------------- |
+| `searchDocs`   | Search documents        | query, limit, tags                    |
+| `getDocument`  | Get specific document   | docId                                 |
+| `addNote`      | Create a note           | content, docId (optional)             |
+| `createTask`   | Create a task           | title, description, priority, dueDate |
+| `listTasks`    | List tasks with filters | status, priority, limit               |
+| `getUserStats` | Get user statistics     | none                                  |
 
 ### Example Usage
 
@@ -435,32 +496,32 @@ The Model Context Protocol (MCP) allows AI agents to interact with your knowledg
 const response = await fetch('http://localhost:3000/mcp/execute', {
   method: 'POST',
   headers: {
-    'Authorization': 'Bearer YOUR_JWT_TOKEN',
-    'Content-Type': 'application/json'
+    Authorization: 'Bearer YOUR_JWT_TOKEN',
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     toolName: 'searchDocs',
     parameters: {
       query: 'neural networks',
-      limit: 3
-    }
-  })
+      limit: 3,
+    },
+  }),
 });
 
 // Batch execution
 const batchResponse = await fetch('http://localhost:3000/mcp/execute-batch', {
   method: 'POST',
   headers: {
-    'Authorization': 'Bearer YOUR_JWT_TOKEN',
-    'Content-Type': 'application/json'
+    Authorization: 'Bearer YOUR_JWT_TOKEN',
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     tools: [
       { toolName: 'searchDocs', parameters: { query: 'AI' } },
       { toolName: 'listTasks', parameters: { status: 'TODO' } },
-      { toolName: 'getUserStats' }
-    ]
-  })
+      { toolName: 'getUserStats' },
+    ],
+  }),
 });
 ```
 
@@ -477,11 +538,23 @@ DATABASE_URL="postgresql://your-db-user:your-db-password@localhost:5432/your-db-
 # JWT
 JWT_SECRET="your-super-secret-jwt-key"
 JWT_EXPIRES_IN="7d"
+# refresh token configuration
+JWT_REFRESH_SECRET="another-super-secret"
+JWT_REFRESH_EXPIRES_IN="7d"
+
+# Redis (used for cache + BullMQ queue)
+REDIS_URL="redis://localhost:6379"
+# or individually:
+# REDIS_HOST=localhost
+# REDIS_PORT=6379
 
 # Application
 NODE_ENV="development"
 PORT=3000
 APP_URL="http://localhost:3000"
+
+# Device header (optional, sent with login/refresh)
+# X-Device-Name="My iPhone 14"
 
 # AI Configuration
 AI_PROVIDER="ollama"              # ollama | openai | anthropic
@@ -496,6 +569,7 @@ MAX_FILE_SIZE=10485760            # 10MB in bytes
 ### AI Providers
 
 **Ollama (Local, Free)**
+
 ```env
 AI_PROVIDER=ollama
 AI_MODEL=llama3.1:8b
@@ -504,6 +578,7 @@ AI_API_KEY=
 ```
 
 **OpenAI**
+
 ```env
 AI_PROVIDER=openai
 AI_MODEL=gpt-3.5-turbo
@@ -512,6 +587,7 @@ AI_API_KEY=sk-your-api-key-here
 ```
 
 **Anthropic Claude**
+
 ```env
 AI_PROVIDER=anthropic
 AI_MODEL=claude-3-sonnet
@@ -550,27 +626,32 @@ test/
 └── mcp.e2e-spec.ts               # Integration tests
 ```
 
-# the rest of the tests in next version 
+# the rest of the tests in next version
 
 ---
 
 ## 🚀 Deployment
 
 ### Production URL
+
 The application is deployed and live at:
+
 - **API Base URL**: [https://ai-research-weathered-waterfall-4110.fly.dev](https://ai-research-weathered-waterfall-4110.fly.dev)
 - **Swagger Documentation**: [https://ai-research-weathered-waterfall-4110.fly.dev/api/docs](https://ai-research-weathered-waterfall-4110.fly.dev/api/docs)
 - **GraphQL Endpoint**: [https://ai-research-weathered-waterfall-4110.fly.dev/graphql](https://ai-research-weathered-waterfall-4110.fly.dev/graphql)
 
 ### Fly.io Deployment
+
 The application is hosted on Fly.io.
 
 1. **Deploying Updates**
+
 ```bash
 fly deploy
 ```
 
 2. **Managing Secrets**
+
 ```bash
 fly secrets set KEY=VALUE
 ```
@@ -578,11 +659,13 @@ fly secrets set KEY=VALUE
 ### Docker Production Build
 
 1. **Build the image**
+
 ```bash
 docker build -t ai-knowledge-hub .
 ```
 
 2. **Run with docker-compose**
+
 ```bash
 docker-compose -f docker-compose.prod.yml up -d
 ```
@@ -590,16 +673,19 @@ docker-compose -f docker-compose.prod.yml up -d
 ### Manual Deployment
 
 1. **Build the application**
+
 ```bash
 npm run build
 ```
 
 2. **Run migrations**
+
 ```bash
 npx prisma migrate deploy
 ```
 
-3. **Start production server (Optional)** 
+3. **Start production server (Optional)**
+
 ```bash
 npm run start:prod
 ```
@@ -613,7 +699,6 @@ npm run start:prod
 - **AWS**: EC2, ECS, or Elastic Beanstalk
 
 ---
-
 
 ## 🤝 Contributing
 
@@ -636,6 +721,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Author
 
 **Ahmed Salah Sotohy**
+
 - GitHub: [@a7medsa22](https://github.com/a7medsa22)
 - LinkedIn: [Ahmed Salah](https://linkedin.com/in/ahmed-salah-54822625a)
 - Email: ahmedsalahsotoyh@gmail.com
@@ -658,7 +744,4 @@ For support, email ahmedsalahsotohy@gmail.com.
 ---
 
 **⭐ Star this repo if you find it helpful!**
-<<<<<<< HEAD
 **📢 Share with your team and help others build better authentication systems!**
-=======
->>>>>>> b0d32a67e87fd90196dc573c9f9c09bc4c9f8938
