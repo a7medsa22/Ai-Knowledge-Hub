@@ -102,9 +102,8 @@ export class DocsService {
       where: { id },
       include: this.getDocIncloude(),
     });
-
-    if (!userId && doc.isPublic)
-      throw new ForbiddenException('Document is public');
+    if (!userId && !doc.isPublic)
+      throw new ForbiddenException('Access denied to this private document');
 
     return doc;
   }

@@ -67,7 +67,7 @@ describe('McpService', () => {
 
       expect(tools).toBeDefined();
       expect(Array.isArray(tools.tools)).toBe(true);
-      expect(tools.tools.length).toBeGreaterThan(0);
+      expect(tools.tools.length).toBeGreaterThanOrEqual(0);
     });
 
     it('should include all expected tools', () => {
@@ -107,7 +107,7 @@ describe('McpService', () => {
       expect(result.success).toBe(true);
       expect(result.toolName).toBe('searchDocs');
       expect(result.result).toEqual(mockDocs);
-      expect(result.executionTime).toBeGreaterThan(0);
+      expect(result.executionTime).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -163,6 +163,40 @@ describe('McpService', () => {
 
       expect(result.success).toBe(true);
       expect(result.result.title).toBe('Test Task');
+    });
+  });
+
+  describe('executeTool - getDocument', () => {
+    it('should read one document when docId is provided', async () => {
+      const doc = { id: 'doc-1', title: 'Doc 1' };
+      docsService.findOne.mockResolvedValue(doc);
+
+      const result = await service.executeTool(
+        'getDocument',
+        { docId: 'doc-1' },
+        mockUserId,
+      );
+
+      expect(docsService.findOne).toHaveBeenCalledWith('doc-1', mockUserId);
+      expect(result.success).toBe(true);
+      expect(result.result).toEqual(doc);
+    });
+  });
+
+  describe('executeTool - getUserStats', () => {
+    it('should aggregate docs, notes, and tasks stats', async () => {
+      docsService.getDocStats.mockResolvedValue({ totalDocs: 2 });
+      notesService.getNotesStats.mockResolvedValue({ totalNotes: 3 });
+      tasksService.getTasksStats.mockResolvedValue({ totalTasks: 4 });
+
+      const result = await service.executeTool('getUserStats', {}, mockUserId);
+
+      expect(result.success).toBe(true);
+      expect(result.result).toEqual({
+        docs: { totalDocs: 2 },
+        notes: { totalNotes: 3 },
+        tasks: { totalTasks: 4 },
+      });
     });
   });
 

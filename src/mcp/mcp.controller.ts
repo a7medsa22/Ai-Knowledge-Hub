@@ -3,12 +3,9 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
   HttpCode,
   HttpStatus,
+  Query
 } from '@nestjs/common';
 import { McpService } from './mcp.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -24,7 +21,7 @@ import { CreateNoteDto } from '../notes/dto/create-note.dto';
 @ApiAuth()
 @Controller('mcp')
 export class McpController {
-  constructor(private readonly mcpService: McpService) {}
+  constructor(private readonly mcpService: McpService) { }
 
   @Get('tools')
   @ApiOperation({
@@ -199,7 +196,7 @@ export class McpController {
     description: 'Unauthorized',
   })
   quickSearchDocs(@Body() body: SearchDocDto, @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool('searchDocs', body, user.sub);
+    return this.mcpService.executeTool('searchDocs', body as any, user.sub);
   }
 
   @Get('quick/get-doc')
@@ -225,8 +222,8 @@ export class McpController {
     status: 401,
     description: 'Unauthorized',
   })
-  quickGetDoc(@Body() body: { docId: string }, @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool('getDocument', body, user.sub);
+  quickGetDoc(@Query('docId') docId: string, @GetUser() user: JwtUser) {
+    return this.mcpService.executeTool('getDocument', { docId }, user.sub);
   }
 
   @Post('quick/add-note')
@@ -253,7 +250,7 @@ export class McpController {
     description: 'Unauthorized',
   })
   quickAddNote(@Body() body: CreateNoteDto, @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool('addNote', body, user.sub);
+    return this.mcpService.executeTool('addNote', body as any, user.sub);
   }
 
   @Post('quick/create-task')
@@ -282,7 +279,7 @@ export class McpController {
     description: 'Unauthorized',
   })
   quickCreateTask(@Body() body: CreateTaskDto, @GetUser() user: JwtUser) {
-    return this.mcpService.executeTool('createTask', body, user.sub);
+    return this.mcpService.executeTool('createTask', body as any, user.sub);
   }
 
   @Get('quick/user-stats')
