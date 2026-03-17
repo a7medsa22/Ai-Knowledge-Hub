@@ -61,12 +61,27 @@ import { EmbeddingQueueModule } from './queues/embedding.queue.module';
     RedisModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        connection: {
-          host: configService.get('REDIS_HOST', 'localhost'),
-          port: configService.get('REDIS_PORT', 6379),
-        },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const redisUrl = configService.get('REDIS_URL');
+        if (redisUrl) {
+          const url = new URL(redisUrl);
+          return {
+            connection: {
+              host: url.hostname,
+              port: parseInt(url.port, 10),
+              username: url.username || undefined,
+              password: url.password || undefined,
+              tls: url.protocol === 'rediss:' ? { rejectUnauthorized: false } : undefined,
+            },
+          };
+        }
+        return {
+          connection: {
+            host: configService.get('REDIS_HOST', 'localhost'),
+            port: configService.get('REDIS_PORT', 6379),
+          },
+        };
+      },
       inject: [ConfigService],
     }),
     EmbeddingQueueModule,

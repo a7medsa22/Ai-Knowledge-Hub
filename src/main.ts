@@ -53,9 +53,19 @@ async function bootstrap() {
     app.use(compression());
 
     // Enable CORS
-    const allowedOrigins = config.get('ALLOWED_ORIGINS')?.split(',') || ['http://localhost:3000'];
+    const allowedOrigins =
+        process.env.NODE_ENV === 'production'
+            ? config.get('ALLOWED_ORIGINS')
+            : ['http://localhost:8080', 'http://localhost:3000'];
+
     app.enableCors({
-        origin: allowedOrigins,
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
@@ -116,7 +126,7 @@ async function bootstrap() {
         });
     }
 
-  // Start Server
+    // Start Server
     const port = process.env.PORT || 3000;
     await app.listen(port, '0.0.0.0');
 
@@ -126,6 +136,6 @@ async function bootstrap() {
 📚 API Documentation: http://localhost:${port}/${apiPrefix}/docs
 🌌 GraphQL Playground: http://localhost:${port}/graphql
 🔧 Environment: ${config.get('NODE_ENV', 'development')}
-  `);
+`);
 }
 bootstrap();
