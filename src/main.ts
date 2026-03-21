@@ -48,8 +48,6 @@ async function bootstrap() {
           defaultSrc: ["'self'"],
           scriptSrc: [
             "'self'",
-            "'unsafe-inline'",
-            "'unsafe-eval'",
             'https://cdn.jsdelivr.net',
           ],
           styleSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
@@ -68,7 +66,14 @@ async function bootstrap() {
   app.use(compression());
 
   // ------------------- CORS -------------------
-  const normalizeOrigin = (origin: string) => origin.replace(/\/+$/, '');
+  const normalizeOrigin = (value: string) => {
+    const trimmed = value.trim().replace(/\/+$/, '');
+    try {
+      return new URL(trimmed).origin;
+    } catch {
+      return trimmed;
+    }
+  };
 
   const parseOrigins = (value?: string) =>
     value
@@ -82,9 +87,18 @@ async function bootstrap() {
 
   const configuredAppUrl = config.get<string>('APP_URL');
 
-  const defaultAllowedOrigins = configuredAppUrl
-    ? [normalizeOrigin(configuredAppUrl)]
-    : [];
+  const defaultAllowedOrigins = (() => {
+    if (!configuredAppUrl) return [];
+
+    try {
+      const u = new URL(configuredAppUrl);
+      return [u.origin, `https://${u.host}`, `http://${u.host}`].map(
+        normalizeOrigin,
+      );
+    } catch {
+      return [normalizeOrigin(configuredAppUrl)];
+    }
+  })();
 
   const allowedOrigins = Array.from(
     new Set([
@@ -111,7 +125,7 @@ async function bootstrap() {
         return callback(null, true);
       }
 
-      return callback(null, false);
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
