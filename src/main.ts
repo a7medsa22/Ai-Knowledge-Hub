@@ -68,16 +68,17 @@ async function bootstrap() {
   app.use(compression());
 
   // ------------------- CORS -------------------
-  const normalizeOrigin = (origin: string) =>
-    origin.replace(/\/+$/, '');
+  const normalizeOrigin = (origin: string) => origin.replace(/\/+$/, '');
 
-  const envAllowedOrigins =
-    config
-      .get<string>('ALLOWED_ORIGINS')
+  const parseOrigins = (value?: string) =>
+    value
       ?.split(',')
       .map((o) => o.trim())
       .filter(Boolean)
       .map(normalizeOrigin) ?? [];
+
+  const envAllowedOrigins = parseOrigins(config.get<string>('ALLOWED_ORIGINS'));
+  const cspAllowedOrigins = parseOrigins(config.get<string>('CSP_CONNECT_SRC'));
 
   const configuredAppUrl = config.get<string>('APP_URL');
 
@@ -85,7 +86,13 @@ async function bootstrap() {
     ? [normalizeOrigin(configuredAppUrl)]
     : [];
 
-  const allowedOrigins = [...defaultAllowedOrigins, ...envAllowedOrigins];
+  const allowedOrigins = Array.from(
+    new Set([
+      ...defaultAllowedOrigins,
+      ...envAllowedOrigins,
+      ...cspAllowedOrigins,
+    ]),
+  );
 
   const isDevViteOrigin = (origin: string) =>
     /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
@@ -104,7 +111,7 @@ async function bootstrap() {
         return callback(null, true);
       }
 
-      return callback(new Error('Not allowed by CORS'));
+      return callback(null, false);
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -152,8 +159,7 @@ async function bootstrap() {
           scheme: 'bearer',
           bearerFormat: 'JWT',
           name: 'JWT',
-          description:
-            'Enter JWT token as: Bearer {token}',
+          description: 'Enter JWT token as: Bearer {token}',
           in: 'header',
         },
         'JWT-auth',

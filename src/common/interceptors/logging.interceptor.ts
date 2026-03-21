@@ -24,8 +24,7 @@ export class LoggingInterceptor implements NestInterceptor {
     const userAgent = headers['user-agent'] || '';
     const userId = (request.user as JwtPayload)?.sub || 'anonymous';
     const origin =
-      request.headers.origin ||
-      `${request.protocol}://${request.headers.host}`;
+      request.headers.origin || `${request.protocol}://${request.headers.host}`;
 
     const startTime = Date.now();
 
