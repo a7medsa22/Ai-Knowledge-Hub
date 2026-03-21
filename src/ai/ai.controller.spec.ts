@@ -58,7 +58,10 @@ describe('AiController', () => {
 
   describe('summarize', () => {
     it('should call service.summarize with correct parameters', async () => {
-      const dto: SummarizeDto = { text: 'content', length: SummaryLength.SHORT };
+      const dto: SummarizeDto = {
+        text: 'content',
+        length: SummaryLength.SHORT,
+      };
       const expectedResult = { summary: 'result' };
       mockAiService.summarize.mockResolvedValue(expectedResult);
 
@@ -122,7 +125,10 @@ describe('AiController', () => {
         count: 3,
         provider: 'gpt',
       });
-      expect(service.extractKeyPoints).toHaveBeenCalledWith(dto.text, dto.count);
+      expect(service.extractKeyPoints).toHaveBeenCalledWith(
+        dto.text,
+        dto.count,
+      );
     });
   });
 
@@ -139,7 +145,11 @@ describe('AiController', () => {
       expect(result.total).toBe(1);
       expect(result.successful).toBe(1);
       expect(result.failed).toBe(0);
-      expect(service.generateBulkSummaries).toHaveBeenCalledWith(dto.docIds, userId, SummaryLength.MEDIUM);
+      expect(service.generateBulkSummaries).toHaveBeenCalledWith(
+        dto.docIds,
+        userId,
+        SummaryLength.MEDIUM,
+      );
     });
   });
 });

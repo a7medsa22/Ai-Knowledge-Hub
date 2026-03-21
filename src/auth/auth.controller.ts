@@ -16,7 +16,15 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ForgotPasswordDto, LoginDto, RefreshTokenDto, RegisterDto, ResendOtpDto, ResetPasswordDto, VerifyEmailDto } from './dto/auth.dto';
+import {
+  ForgotPasswordDto,
+  LoginDto,
+  RefreshTokenDto,
+  RegisterDto,
+  ResendOtpDto,
+  ResetPasswordDto,
+  VerifyEmailDto,
+} from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
@@ -27,7 +35,7 @@ import { RefreshTokenGuard } from './guards/refresh-token.guard';
 @ApiTags('Authentication')
 @Controller('users/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   // ===============================================
   @Post('register')
@@ -188,7 +196,10 @@ export class AuthController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: true },
-        message: { type: 'string', example: 'Email verified successfully, please login' },
+        message: {
+          type: 'string',
+          example: 'Email verified successfully, please login',
+        },
       },
     },
   })
@@ -211,7 +222,6 @@ export class AuthController {
     return this.authService.verifyEmail(body);
   }
 
-
   @Post('reset-password')
   @Throttle({ auth: { limit: 3, ttl: 900000 } }) // 3 requests per 15 minutes
   @HttpCode(HttpStatus.OK)
@@ -226,7 +236,10 @@ export class AuthController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: true },
-        message: { type: 'string', example: 'Password reset successfully, please login' },
+        message: {
+          type: 'string',
+          example: 'Password reset successfully, please login',
+        },
       },
     },
   })
@@ -415,7 +428,6 @@ export class AuthController {
   ) {
     return this.authService.revokeSession(userId, tokenId);
   }
-
 
   @Delete('sessions')
   @UseGuards(JwtAuthGuard)

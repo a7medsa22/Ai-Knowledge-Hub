@@ -78,7 +78,7 @@ describe('AuthController', () => {
         headers: {
           'user-agent': 'jest-test',
         },
-        ip: '127.0.0.1'
+        ip: '127.0.0.1',
       };
 
       const serviceResult = {
@@ -110,11 +110,16 @@ describe('AuthController', () => {
   describe('verifyEmail', () => {
     it('should verify email with OTP', async () => {
       const body = { email: 'test@example.com', otp: '123456' };
-      mockAuthService.verifyEmail.mockResolvedValue({ message: 'Email verified successfully' });
+      mockAuthService.verifyEmail.mockResolvedValue({
+        message: 'Email verified successfully',
+      });
 
       const response = await controller.verifyEmail(body);
 
-      expect(authService.verifyEmail).toHaveBeenCalledWith(body.email, body.otp);
+      expect(authService.verifyEmail).toHaveBeenCalledWith(
+        body.email,
+        body.otp,
+      );
       expect(response).toEqual({
         success: true,
         message: 'Email verified successfully',
@@ -139,7 +144,10 @@ describe('AuthController', () => {
 
       const response = await controller.refreshToken(req);
 
-      expect(authService.refreshTokens).toHaveBeenCalledWith(req.user.userId, req.user.tokenId);
+      expect(authService.refreshTokens).toHaveBeenCalledWith(
+        req.user.userId,
+        req.user.tokenId,
+      );
       expect(response).toEqual(result);
     });
   });

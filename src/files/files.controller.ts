@@ -307,10 +307,7 @@ export class FilesController {
     status: 404,
     description: 'File not found',
   })
-  async serveFile(
-    @Param('filename') filename: string,
-    @Res() res: express.Response,
-  ) {
+  serveFile(@Param('filename') filename: string, @Res() res: express.Response) {
     const filePath = this.filesService.getFilePath(filename);
     return res.sendFile(filePath);
   }

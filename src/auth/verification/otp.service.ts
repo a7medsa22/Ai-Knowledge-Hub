@@ -7,7 +7,7 @@ export class OtpService {
   constructor(
     private readonly otpRepo: OtpRepository,
     private readonly attemptPolicy: AttemptPolicy,
-  ) { }
+  ) {}
   async generate(email: string) {
     const otp = crypto.randomInt(100000, 999999).toString();
     await this.otpRepo.save(email, otp);

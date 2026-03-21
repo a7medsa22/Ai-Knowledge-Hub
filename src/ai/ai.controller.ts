@@ -26,15 +26,18 @@ import {
 } from './dto/ai.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'; // Correct import
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator'; // Correct import
-import { AskQuestionRequestDto, AskQuestionResponseDto, SemanticSearchRequestDto, SemanticSearchResultDto } from './dto/rag.dto';
+import {
+  AskQuestionRequestDto,
+  AskQuestionResponseDto,
+  SemanticSearchRequestDto,
+  SemanticSearchResultDto,
+} from './dto/rag.dto';
 import * as jwtUserInterface from 'src/common/interfaces/jwt-user.interface';
-
-
 
 @ApiTags('AI Research')
 @Controller('ai')
 export class AiController {
-  constructor(private readonly aiService: AiService) { }
+  constructor(private readonly aiService: AiService) {}
 
   @Get('status')
   @ApiOperation({ summary: 'Get AI service status' })

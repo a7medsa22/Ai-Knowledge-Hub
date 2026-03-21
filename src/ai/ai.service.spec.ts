@@ -104,7 +104,8 @@ describe('AiService', () => {
       mockDocsService.findOne.mockResolvedValue({
         id: 'doc-123',
         title: 'Doc Title',
-        content: 'Document content goes here and it must be sufficiently long to verify that the summarization logic works correctly without throwing validation errors.',
+        content:
+          'Document content goes here and it must be sufficiently long to verify that the summarization logic works correctly without throwing validation errors.',
       });
 
       mockProvider.summarize.mockResolvedValue({
@@ -117,7 +118,9 @@ describe('AiService', () => {
       const result = await service.summarize(dto, userId);
 
       expect(mockDocsService.findOne).toHaveBeenCalledWith('doc-123', userId);
-      expect(mockDocsService.update).toHaveBeenCalledWith('doc-123', userId, { summary: 'Doc summary' });
+      expect(mockDocsService.update).toHaveBeenCalledWith('doc-123', userId, {
+        summary: 'Doc summary',
+      });
       expect(result.summary).toBe('Doc summary');
     });
 
@@ -127,14 +130,18 @@ describe('AiService', () => {
         docId: 'doc-123',
       };
 
-      await expect(service.summarize(dto, userId)).rejects.toThrow(BadRequestException);
+      await expect(service.summarize(dto, userId)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw NotFoundException if document not found', async () => {
       mockDocsService.findOne.mockResolvedValue(null);
       const dto: SummarizeDto = { docId: 'doc-123' };
 
-      await expect(service.summarize(dto, userId)).rejects.toThrow(NotFoundException);
+      await expect(service.summarize(dto, userId)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -158,18 +165,24 @@ describe('AiService', () => {
 
       const result = await service.semanticSearch(dto, userId);
 
-      expect(embeddingService.generateEmbedding).toHaveBeenCalledWith('search query');
+      expect(embeddingService.generateEmbedding).toHaveBeenCalledWith(
+        'search query',
+      );
       expect(prisma.$queryRaw).toHaveBeenCalled();
       expect(result).toHaveLength(2);
       expect(result[0].docId).toBe('doc-1');
     });
 
     it('should handle search errors', async () => {
-      mockEmbeddingService.generateEmbedding.mockRejectedValue(new Error('Embedding failed'));
+      mockEmbeddingService.generateEmbedding.mockRejectedValue(
+        new Error('Embedding failed'),
+      );
 
       const dto: SemanticSearchRequestDto = { query: 'fail' };
 
-      await expect(service.semanticSearch(dto, userId)).rejects.toThrow(BadRequestException);
+      await expect(service.semanticSearch(dto, userId)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -184,7 +197,7 @@ describe('AiService', () => {
       // Mock semantic search internal call by mocking dependencies
       mockEmbeddingService.generateEmbedding.mockResolvedValue([0.1]);
       mockPrismaService.$queryRaw.mockResolvedValue([
-        { docId: 'doc-1', content: 'Context about X', similarity: 0.9 }
+        { docId: 'doc-1', content: 'Context about X', similarity: 0.9 },
       ]);
 
       mockProvider.answerQuestion.mockResolvedValue({
@@ -196,7 +209,7 @@ describe('AiService', () => {
 
       expect(mockProvider.answerQuestion).toHaveBeenCalledWith(
         'What is X?',
-        expect.stringContaining('Context about X')
+        expect.stringContaining('Context about X'),
       );
       expect(result.answer).toBe('X is ...');
       expect(result.contextUsed).toContain('doc-1');
@@ -237,7 +250,9 @@ describe('AiService', () => {
 
     it('should handle extraction errors', async () => {
       mockProvider.summarize.mockRejectedValue(new Error('Extraction failed'));
-      await expect(service.extractKeyPoints('text')).rejects.toThrow(BadRequestException);
+      await expect(service.extractKeyPoints('text')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -248,8 +263,16 @@ describe('AiService', () => {
       const docIds = ['doc-1', 'doc-2'];
 
       // Mock findOne for each doc
-      mockDocsService.findOne.mockResolvedValueOnce({ id: 'doc-1', content: 'Content 1 is now long enough to be summarized by the AI service without issues...........' });
-      mockDocsService.findOne.mockResolvedValueOnce({ id: 'doc-2', content: 'Content 2 is also long enough to be summarized by the AI service without issues...........' });
+      mockDocsService.findOne.mockResolvedValueOnce({
+        id: 'doc-1',
+        content:
+          'Content 1 is now long enough to be summarized by the AI service without issues...........',
+      });
+      mockDocsService.findOne.mockResolvedValueOnce({
+        id: 'doc-2',
+        content:
+          'Content 2 is also long enough to be summarized by the AI service without issues...........',
+      });
 
       mockProvider.summarize.mockResolvedValue({
         result: 'Summary',
@@ -270,7 +293,11 @@ describe('AiService', () => {
       // First doc fails
       mockDocsService.findOne.mockRejectedValueOnce(new Error('Doc not found'));
       // Second doc succeeds
-      mockDocsService.findOne.mockResolvedValueOnce({ id: 'doc-2', content: 'Content 2 is also long enough to be summarized by the AI service without issues...........' });
+      mockDocsService.findOne.mockResolvedValueOnce({
+        id: 'doc-2',
+        content:
+          'Content 2 is also long enough to be summarized by the AI service without issues...........',
+      });
       mockProvider.summarize.mockResolvedValue({ result: 'Summary' });
 
       const results = await service.generateBulkSummaries(docIds, userId);
@@ -283,7 +310,10 @@ describe('AiService', () => {
 
   describe('getAiStatus', () => {
     it('should return AI status', async () => {
-      mockAiProviderFactory.getAvailableProviders.mockResolvedValue(['openai', 'anthropic']);
+      mockAiProviderFactory.getAvailableProviders.mockResolvedValue([
+        'openai',
+        'anthropic',
+      ]);
       mockConfigService.get.mockReturnValue('gpt-4');
 
       const result = await service.getAiStatus();
@@ -295,7 +325,9 @@ describe('AiService', () => {
     });
 
     it('should return unavailable status on error', async () => {
-      mockAiProviderFactory.getAvailableProviders.mockRejectedValue(new Error('Error'));
+      mockAiProviderFactory.getAvailableProviders.mockRejectedValue(
+        new Error('Error'),
+      );
 
       const result = await service.getAiStatus();
 

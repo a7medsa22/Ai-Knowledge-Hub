@@ -1,6 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe, VersioningType, RequestMethod } from '@nestjs/common';
+import {
+  ValidationPipe,
+  VersioningType,
+  RequestMethod,
+  Logger,
+} from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { ConfigService } from '@nestjs/config';
@@ -10,132 +15,172 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    const config = app.get(ConfigService);
+  const logger = new Logger('Bootstrap');
 
-    // Global Validation Pipe
-    app.useGlobalPipes(
-        new ValidationPipe({
-            transform: true,
-            transformOptions: { enableImplicitConversion: true },
-            whitelist: true,
-            forbidNonWhitelisted: true,
-            skipMissingProperties: false,
-            skipNullProperties: false,
-            skipUndefinedProperties: false,
-        }),
-    );
+  const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
 
-    // Secure the app by setting various HTTP headers
-    app.use(
-        helmet({
-            contentSecurityPolicy: {
-                directives: {
-                    defaultSrc: ["'self'"],
-                    scriptSrc: [
-                        "'self'",
-                        "'unsafe-inline'",
-                        "'unsafe-eval'",
-                        'https://cdn.jsdelivr.net',
-                    ],
-                    styleSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
-                    imgSrc: ["'self'", 'data:', 'https://cdn.jsdelivr.net'],
-                    connectSrc: ["'self'"],
-                    fontSrc: ["'self'", 'https://cdn.jsdelivr.net'],
-                    objectSrc: ["'none'"],
-                    frameSrc: ["'self'"],
-                    upgradeInsecureRequests: [],
-                },
-            },
-            crossOriginEmbedderPolicy: false,
-        }),
-    );
-    app.use(compression());
+  const nodeEnv =
+    config.get<string>('NODE_ENV') ?? process.env.NODE_ENV ?? 'development';
+  const isProduction = nodeEnv === 'production';
 
-    // Enable CORS
-    const allowedOrigins =
-        process.env.NODE_ENV === 'production'
-            ? config.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim())
-            : ['http://localhost:8080', 'http://localhost:3000'];
+  // Global Validation Pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
-    app.enableCors({
-        origin: (origin, callback) => {
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
+  // ------------------- Security (Helmet + CSP) -------------------
+  const cspConnectSrc =
+    config
+      .get<string>('CSP_CONNECT_SRC')
+      ?.split(',')
+      .map((o) => o.trim()) ?? [];
+
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            "'unsafe-eval'",
+            'https://cdn.jsdelivr.net',
+          ],
+          styleSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+          imgSrc: ["'self'", 'data:', 'https://cdn.jsdelivr.net'],
+          connectSrc: ["'self'", ...cspConnectSrc],
+          fontSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+          objectSrc: ["'none'"],
+          frameSrc: ["'self'"],
+          upgradeInsecureRequests: [],
         },
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
-        credentials: true,
+      },
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
+
+  app.use(compression());
+
+  // ------------------- CORS -------------------
+  const normalizeOrigin = (origin: string) =>
+    origin.replace(/\/+$/, '');
+
+  const envAllowedOrigins =
+    config
+      .get<string>('ALLOWED_ORIGINS')
+      ?.split(',')
+      .map((o) => o.trim())
+      .filter(Boolean)
+      .map(normalizeOrigin) ?? [];
+
+  const configuredAppUrl = config.get<string>('APP_URL');
+
+  const defaultAllowedOrigins = configuredAppUrl
+    ? [normalizeOrigin(configuredAppUrl)]
+    : [];
+
+  const allowedOrigins = [...defaultAllowedOrigins, ...envAllowedOrigins];
+
+  const isDevViteOrigin = (origin: string) =>
+    /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
+
+  app.enableCors({
+    origin: (origin, callback) => {
+      const normalized = origin ? normalizeOrigin(origin) : undefined;
+
+      // allow swagger / postman / server-to-server
+      if (!origin) return callback(null, true);
+
+      if (
+        (normalized && allowedOrigins.includes(normalized)) ||
+        (!isProduction && isDevViteOrigin(origin))
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'));
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  });
+
+  // ------------------- Versioning -------------------
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
+
+  // ------------------- Global Prefix -------------------
+  const apiPrefix = config.get('API_PREFIX', 'api');
+
+  app.setGlobalPrefix(apiPrefix, {
+    exclude: [{ path: 'graphql', method: RequestMethod.ALL }],
+  });
+
+  // ------------------- Global Filters & Interceptors -------------------
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(
+    new LoggingInterceptor(),
+    new TransformInterceptor(),
+  );
+
+  // ------------------- Swagger -------------------
+  if (nodeEnv !== 'test') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('AI Research')
+      .setDescription(
+        'API for AI-powered research and knowledge management platform',
+      )
+      .setVersion('1.0')
+      .addTag('Authentication')
+      .addTag('Users')
+      .addTag('AI Research')
+      .addTag('Documents')
+      .addTag('Tasks')
+      .addTag('Notes')
+      .addTag('MCP (Model Context Protocol)')
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          name: 'JWT',
+          description:
+            'Enter JWT token as: Bearer {token}',
+          in: 'header',
+        },
+        'JWT-auth',
+      )
+      .build();
+
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+
+    SwaggerModule.setup(`${apiPrefix}/docs`, app, document, {
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
     });
+  }
 
-    // API versioning
-    app.enableVersioning({
-        type: VersioningType.URI,
-        defaultVersion: '1',
-    });
+  // ------------------- Start Server -------------------
+  const port = process.env.PORT || 3000;
 
-    // global versioning
-    const apiPrefix = config.get('API_PREFIX', 'api');
-    app.setGlobalPrefix(apiPrefix, {
-        exclude: [{ path: 'graphql', method: RequestMethod.ALL }],
-    });
+  await app.listen(port, '0.0.0.0');
 
-    // Global Filters & Interceptors
-    app.useGlobalFilters(new HttpExceptionFilter());
-    app.useGlobalInterceptors(
-        new LoggingInterceptor(),
-        new TransformInterceptor(),
-    );
-
-    // Swagger setup
-    if (config.get('NODE_ENV') !== 'test') {
-        const config = new DocumentBuilder()
-            .setTitle('AI Research')
-            .setDescription(
-                'API for AI-powered research and knowledge management platform',
-            )
-            .setVersion('1.0')
-            .addTag('Authentication')
-            .addTag('Users')
-            .addTag('AI Research')
-            .addTag('Documents')
-            .addTag('Tasks')
-            .addTag('Notes')
-            .addTag('MCP (Model Context Protocol)')
-            .addBearerAuth(
-                {
-                    type: 'http',
-                    scheme: 'bearer',
-                    bearerFormat: 'JWT',
-                    name: 'JWT',
-                    description:
-                        'JWT Authorization header using the bearer scheme. \n\nEnter JWT token as Bearer + {token}',
-                    in: 'header',
-                },
-                'JWT-auth',
-            )
-            .build();
-        const document = () => SwaggerModule.createDocument(app, config);
-        SwaggerModule.setup(`${apiPrefix}/docs`, app, document, {
-            swaggerOptions: {
-                persistAuthorization: true,
-            },
-        });
-    }
-
-    // Start Server
-    const port = process.env.PORT || 3000;
-    await app.listen(port, '0.0.0.0');
-
-    console.log(`
-    Ai knowledge Hub Backend server is running...
-🚀 Server running on: http://localhost:${port}  
-📚 API Documentation: http://localhost:${port}/${apiPrefix}/docs
-🌌 GraphQL Playground: http://localhost:${port}/graphql
-🔧 Environment: ${config.get('NODE_ENV', 'development')}
-`);
+  // ------------------- Startup Logs (clean) -------------------
+  logger.log(`🚀 Server started`);
+  logger.log(`🌍 Environment: ${nodeEnv}`);
+  logger.log(`📡 Port: ${port}`);
+  logger.log(`📚 Local-Docs: http://localhost:${port}/${apiPrefix}/docs`);
+  logger.log(`📚 Public-Docs: ${configuredAppUrl}/${apiPrefix}/docs`);
+  logger.log(`🔗 GraphQL: /graphql`);
 }
+
 bootstrap();

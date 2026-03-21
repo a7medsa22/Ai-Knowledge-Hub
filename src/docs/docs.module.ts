@@ -12,4 +12,4 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   providers: [DocsService, DocsResolver],
   exports: [DocsService],
 })
-export class DocsModule { }
+export class DocsModule {}

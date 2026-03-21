@@ -9,12 +9,14 @@ import { UserMapper } from 'src/common/infrastructure/mappers/user.mapper';
 import { UserRole } from 'src/common/enums/user-role.enum';
 @Injectable()
 export class CredentialService {
-  constructor(private readonly userService: UsersService) { }
+  constructor(private readonly userService: UsersService) {}
 
   async createUser(data: RegisterDto) {
     const existingUser = await this.userService.findByEmail(data.email);
     if (existingUser) {
-      throw new ConflictException('if you already have an account, please login');
+      throw new ConflictException(
+        'if you already have an account, please login',
+      );
     }
     const salt = await bcrypt.genSalt(12);
     const haspassword = await bcrypt.hash(data.password, salt);
@@ -47,5 +49,4 @@ export class CredentialService {
     }
     return null;
   }
-
 }

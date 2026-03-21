@@ -8,7 +8,7 @@ import { UserStatus } from '../common/enums/user-status.enum';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: CreateUserDto): Promise<UserEntity> {
     const user = await this.prisma.user.create({

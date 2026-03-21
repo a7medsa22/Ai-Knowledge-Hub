@@ -18,7 +18,12 @@ import { ConfigService } from '@nestjs/config';
 import { EmbeddingService } from './embedding.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { RAG_CONFIG } from '../config/rag.config';
-import { AskQuestionRequestDto, AskQuestionResponseDto, SemanticSearchRequestDto, SemanticSearchResultDto } from './dto/rag.dto';
+import {
+  AskQuestionRequestDto,
+  AskQuestionResponseDto,
+  SemanticSearchRequestDto,
+  SemanticSearchResultDto,
+} from './dto/rag.dto';
 
 @Injectable()
 export class AiService {
@@ -30,7 +35,7 @@ export class AiService {
     private readonly config: ConfigService,
     private readonly embeddingService: EmbeddingService,
     private readonly prisma: PrismaService,
-  ) { }
+  ) {}
 
   // ... (Existing methods: getTextContent, summarize - keep them)
   private async getTextContent(
@@ -88,8 +93,12 @@ export class AiService {
       // ... saving result logic ...
       if (docId && userId) {
         try {
-          await this.docsService.update(docId, userId, { summary: response.result });
-        } catch (e) { this.logger.warn('Failed to save summary: ' + e.message) }
+          await this.docsService.update(docId, userId, {
+            summary: response.result,
+          });
+        } catch (e) {
+          this.logger.warn('Failed to save summary: ' + e.message);
+        }
       }
 
       return {
@@ -122,7 +131,8 @@ export class AiService {
 
     try {
       // 1. Generate embedding for query
-      const queryEmbedding = await this.embeddingService.generateEmbedding(query);
+      const queryEmbedding =
+        await this.embeddingService.generateEmbedding(query);
 
       // 2. Vector similarity search
       // Note: We use raw query because Prisma doesn't support vector operations natively in type-safe API yet (except via extension in raw)
@@ -130,7 +140,7 @@ export class AiService {
       const embeddingString = `[${queryEmbedding.join(',')}]`;
 
       // TODO: Add user filtering if userId is present (need to join with Doc table)
-      // For now, let's assume public search or filter after (which is inefficient) 
+      // For now, let's assume public search or filter after (which is inefficient)
       // OR better: RAW SQL JOIN
 
       const results = await this.prisma.$queryRaw<any[]>`
@@ -151,7 +161,6 @@ export class AiService {
         content: r.content,
         similarity: r.similarity,
       }));
-
     } catch (error) {
       this.logger.error(`Semantic search failed: ${error.message}`);
       throw new BadRequestException(`Search failed: ${error.message}`);
@@ -160,21 +169,25 @@ export class AiService {
 
   async askQuestion(
     dto: AskQuestionRequestDto,
-    userId?: string
+    userId?: string,
   ): Promise<AskQuestionResponseDto> {
     const { question } = dto;
 
     // 1. Retrieve relevant context
-    const searchResults = await this.semanticSearch({ query: question, topK: 3 }, userId);
+    const searchResults = await this.semanticSearch(
+      { query: question, topK: 3 },
+      userId,
+    );
 
     if (searchResults.length === 0) {
       return {
-        answer: "I couldn't find any relevant information in your documents to answer this question.",
-        contextUsed: []
+        answer:
+          "I couldn't find any relevant information in your documents to answer this question.",
+        contextUsed: [],
       };
     }
 
-    const context = searchResults.map(r => r.content).join('\n---\n');
+    const context = searchResults.map((r) => r.content).join('\n---\n');
 
     // 2. Generate Answer using LLM
     const provider = await this.aiProviderFactory.getProvider();
@@ -183,7 +196,7 @@ export class AiService {
       const response = await provider.answerQuestion(question, context);
       return {
         answer: response.result,
-        contextUsed: searchResults.map(r => r.docId) // Return doc IDs as reference
+        contextUsed: searchResults.map((r) => r.docId), // Return doc IDs as reference
       };
     } catch (error) {
       this.logger.error(`RAG Q&A failed: ${error.message}`);
@@ -304,12 +317,15 @@ export class AiService {
 
     try {
       // reusing summarize/answerQuestion or if provider has specific method?
-      // Assuming we use answerQuestion or summarize with prompt. 
+      // Assuming we use answerQuestion or summarize with prompt.
       // Let's use summarize as it's general text generation usually.
       // Or better, use answerQuestion with the prompt as question? No.
       // The previous implementation used summarize with content.
       // But wait, the previous implementation in step 181 used summarize.
-      const response = await provider.summarize(customPrompt, SummaryLength.MEDIUM);
+      const response = await provider.summarize(
+        customPrompt,
+        SummaryLength.MEDIUM,
+      );
 
       // Parse the response to extract numbered points
       const points = response.result

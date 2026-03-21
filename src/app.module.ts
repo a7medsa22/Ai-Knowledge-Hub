@@ -13,7 +13,6 @@ import { McpModule } from './mcp/mcp.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { join } from 'path';
-import { AppService } from './app.service';
 import { FilesModule } from './files/files.module';
 import { RedisModule } from './infrastructure/cache/redis.module';
 import { BullModule } from '@nestjs/bullmq';
@@ -61,7 +60,7 @@ import { EmbeddingQueueModule } from './queues/embedding.queue.module';
     RedisModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
+      useFactory: (configService: ConfigService) => {
         const redisUrl = configService.get('REDIS_URL');
         if (redisUrl) {
           const url = new URL(redisUrl);
@@ -71,7 +70,10 @@ import { EmbeddingQueueModule } from './queues/embedding.queue.module';
               port: parseInt(url.port, 10),
               username: url.username || undefined,
               password: url.password || undefined,
-              tls: url.protocol === 'rediss:' ? { rejectUnauthorized: false } : undefined,
+              tls:
+                url.protocol === 'rediss:'
+                  ? { rejectUnauthorized: false }
+                  : undefined,
             },
           };
         }
@@ -95,8 +97,7 @@ import { EmbeddingQueueModule } from './queues/embedding.queue.module';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
-    AppService,
   ],
   controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}

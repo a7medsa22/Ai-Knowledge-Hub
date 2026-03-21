@@ -7,7 +7,7 @@ export class OtpRepository {
   constructor(private readonly redis: RedisService) {}
   async save(email: string, otp: string) {
     await this.redis.set(`otp:${email}`, otp, REDIS_CACHE_TTL);
-  } 
+  }
   async getAttempts(email: string) {
     const attempts = await this.redis.get(`attempts:${email}`);
     return attempts ? parseInt(attempts) : 0;

@@ -5,13 +5,13 @@ import { AiModule } from '../ai/ai.module';
 import { EmbeddingWorker } from 'src/workers/embedding.worker';
 
 @Module({
-    imports: [
-        BullModule.registerQueue({
-            name: 'embedding',
-        }),
-        forwardRef(() => AiModule),
-    ],
-    providers: [EmbeddingWorker, Chunker],
-    exports: [BullModule],
+  imports: [
+    BullModule.registerQueue({
+      name: 'embedding',
+    }),
+    forwardRef(() => AiModule),
+  ],
+  providers: [EmbeddingWorker, Chunker],
+  exports: [BullModule],
 })
-export class EmbeddingQueueModule { }
+export class EmbeddingQueueModule {}

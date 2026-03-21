@@ -106,4 +106,4 @@ export class ResendOtpDto {
   @ApiProperty({ example: 'john.doe@example.com' })
   @IsEmail({}, { message: 'Please provide a valid email address' })
   email: string;
-} 
+}

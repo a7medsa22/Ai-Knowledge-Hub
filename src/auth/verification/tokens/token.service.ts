@@ -18,7 +18,7 @@ export class AuthTokenService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   /**
    * Refresh Token and Rotate
@@ -28,7 +28,11 @@ export class AuthTokenService {
       where: { id: tokenId },
     });
 
-    if (!tokenRecord || tokenRecord.authorId !== userId || tokenRecord.isRevoked) {
+    if (
+      !tokenRecord ||
+      tokenRecord.authorId !== userId ||
+      tokenRecord.isRevoked
+    ) {
       throw new UnauthorizedException('Invalid or rotated token');
     }
 
@@ -67,7 +71,9 @@ export class AuthTokenService {
     return {
       accessToken,
       refreshToken,
-      expiresIn: parseDurationToSeconds(this.configService.get<string>('JWT_EXPIRES_IN', '900')),
+      expiresIn: parseDurationToSeconds(
+        this.configService.get<string>('JWT_EXPIRES_IN', '900'),
+      ),
     };
   }
   /** Generate access token */
@@ -115,7 +121,10 @@ export class AuthTokenService {
   /**
    * Validate refresh token
    */
-  public async validateRefreshToken(userId: string, tokenId: string): Promise<boolean> {
+  public async validateRefreshToken(
+    userId: string,
+    tokenId: string,
+  ): Promise<boolean> {
     const tokenRecord = await this.prisma.authToken.findUnique({
       where: { id: tokenId },
     });
@@ -135,10 +144,7 @@ export class AuthTokenService {
   /**
    * Validate refresh token & rotate it
    */
-  public async validateAndRotateRefreshToken(
-    userId: string,
-    tokenId: string,
-  ) {
+  public async validateAndRotateRefreshToken(userId: string, tokenId: string) {
     const tokenRecord = await this.prisma.authToken.findUnique({
       where: { id: tokenId },
     });
@@ -200,7 +206,7 @@ export class AuthTokenService {
   }
 
   /**
-   * Revoke refresh tokens for user 
+   * Revoke refresh tokens for user
    */
 
   // Revoke a specific session

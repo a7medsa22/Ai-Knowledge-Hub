@@ -10,7 +10,6 @@ import { LinkedToType, SearchFilesDto } from './dto/files.dto';
 import { join } from 'path';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
 import * as mammoth from 'mammoth';
-const pdfParse = require('pdf-parse');
 
 @Injectable()
 export class FilesService {
@@ -269,7 +268,17 @@ export class FilesService {
   // Extract text from PDF
   private async extractTextFromPdf(filePath: string): Promise<string> {
     const dataBuffer = readFileSync(filePath);
-    const data = await pdfParse(dataBuffer);
+    const pdfParseModule = await import('pdf-parse');
+    const pdfParseFn =
+      (
+        pdfParseModule as unknown as {
+          default?: (input: Buffer) => Promise<{ text: string }>;
+        }
+      ).default ??
+      (pdfParseModule as unknown as (
+        input: Buffer,
+      ) => Promise<{ text: string }>);
+    const data = await pdfParseFn(dataBuffer);
     return data.text;
   }
 

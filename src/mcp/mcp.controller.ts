@@ -5,7 +5,7 @@ import {
   Body,
   HttpCode,
   HttpStatus,
-  Query
+  Query,
 } from '@nestjs/common';
 import { McpService } from './mcp.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -21,7 +21,7 @@ import { CreateNoteDto } from '../notes/dto/create-note.dto';
 @ApiAuth()
 @Controller('mcp')
 export class McpController {
-  constructor(private readonly mcpService: McpService) { }
+  constructor(private readonly mcpService: McpService) {}
 
   @Get('tools')
   @ApiOperation({

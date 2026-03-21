@@ -15,7 +15,7 @@ export class EmailVerificationService {
     private readonly otpService: OtpService,
     private readonly mailerService: EmailService,
     private readonly userService: UsersService,
-  ) { }
+  ) {}
 
   async sendOtp(email: string) {
     const user = await this.userService.findByEmail(email);
@@ -64,5 +64,4 @@ export class EmailVerificationService {
       'Account is not in a state that allows resending OTPs',
     );
   }
-
 }

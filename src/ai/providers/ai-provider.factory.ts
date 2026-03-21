@@ -40,7 +40,7 @@ export class AiProviderFactory {
         // TODO: Implement Anthropic provider
         throw new Error('Anthropic provider not yet implemented');
       default:
-        throw new Error(`Unsupported AI provider: ${selectedProvider}`);
+        throw new Error('Unsupported AI provider');
     }
     const isAvailable = await provider.isAvailable();
     if (!isAvailable) {

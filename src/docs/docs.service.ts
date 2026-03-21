@@ -16,7 +16,7 @@ export class DocsService {
     private readonly prisma: PrismaService,
     private readonly filesService: FilesService,
     @InjectQueue('embedding') private readonly embeddingQueue: Queue,
-  ) { }
+  ) {}
   async create(
     authorId: string,
     dto: CreateDocDto,

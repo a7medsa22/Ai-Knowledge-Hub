@@ -40,7 +40,10 @@ describe('AuthService - Register & VerifyEmail', () => {
         { provide: 'AuthTokenService', useValue: {} },
         { provide: 'JwtService', useValue: {} },
         { provide: 'ConfigService', useValue: { get: jest.fn() } },
-        { provide: 'AccountStatusService', useValue: { ensureCanLogin: jest.fn() } },
+        {
+          provide: 'AccountStatusService',
+          useValue: { ensureCanLogin: jest.fn() },
+        },
         { provide: 'PrismaService', useValue: {} },
       ],
     }).compile();
@@ -55,10 +58,15 @@ describe('AuthService - Register & VerifyEmail', () => {
     const mockUser = { id: 'user-id', email: 'test@test.com' };
     (credentialService.createUser as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await service.register({ email: 'test@test.com', password: '123' });
+    const result = await service.register({
+      email: 'test@test.com',
+      password: '123',
+    });
 
     expect(result.userId).toBe('user-id');
-    expect(result.message).toBe('User registered successfully, please verify your email');
+    expect(result.message).toBe(
+      'User registered successfully, please verify your email',
+    );
     expect(emailVerification.sendOtp).toHaveBeenCalledWith('test@test.com');
   });
 
@@ -68,7 +76,10 @@ describe('AuthService - Register & VerifyEmail', () => {
     (usersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
     (usersService.update as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await service.verifyEmail({ email: 'test@test.com', otp: '123456' });
+    const result = await service.verifyEmail({
+      email: 'test@test.com',
+      otp: '123456',
+    });
 
     expect(result.message).toBe('Email verified successfully, please login');
     expect(usersService.update).toHaveBeenCalled();
@@ -77,6 +88,8 @@ describe('AuthService - Register & VerifyEmail', () => {
   it('should throw BadRequestException for invalid OTP', async () => {
     (emailVerification.verify as jest.Mock).mockResolvedValue(false);
 
-    await expect(service.verifyEmail({ email: 'test@test.com', otp: 'wrong-otp' })).rejects.toThrow(BadRequestException);
+    await expect(
+      service.verifyEmail({ email: 'test@test.com', otp: 'wrong-otp' }),
+    ).rejects.toThrow(BadRequestException);
   });
 });

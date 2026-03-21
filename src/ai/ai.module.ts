@@ -39,4 +39,4 @@ import { Chunker } from './utils/chunker';
   ],
   exports: [AiService, AiProviderFactory, EmbeddingService],
 })
-export class AiModule { }
+export class AiModule {}
