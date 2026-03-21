@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { CreateDocDto } from './dto/create-doc.dto';
 import { UpdateDocDto } from './dto/update-doc.dto';
 import { Doc, File, Prisma } from '@prisma/client';
@@ -29,7 +33,7 @@ export class DocsService {
     if (file) {
       // Validate file type
       if (!this.filesService.canExtractText(file.mimetype)) {
-        throw new Error(
+        throw new BadRequestException(
           `Cannot extract text from ${file.mimetype}. Supported: PDF, Word, Plain Text`,
         );
       }
@@ -47,7 +51,7 @@ export class DocsService {
 
     // Validate: must have either content or file
     if (!content || content.trim().length === 0) {
-      throw new Error(
+      throw new BadRequestException(
         'Must provide either content text or a file to extract content from',
       );
     }

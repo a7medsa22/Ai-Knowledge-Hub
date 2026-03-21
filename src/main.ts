@@ -46,10 +46,7 @@ async function bootstrap() {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: [
-            "'self'",
-            'https://cdn.jsdelivr.net',
-          ],
+          scriptSrc: ["'self'", 'https://cdn.jsdelivr.net'],
           styleSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
           imgSrc: ["'self'", 'data:', 'https://cdn.jsdelivr.net'],
           connectSrc: ["'self'", ...cspConnectSrc],

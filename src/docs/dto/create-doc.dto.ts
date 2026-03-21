@@ -21,9 +21,10 @@ export class CreateDocDto {
     example: 'This article covers the basics of machine learning...',
     description: 'Main content of the document',
   })
+  @IsOptional()
   @IsString()
   @MinLength(1)
-  content: string;
+  content?: string;
 
   @ApiProperty({
     example: false,

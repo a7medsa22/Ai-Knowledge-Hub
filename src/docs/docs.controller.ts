@@ -153,6 +153,7 @@ export class DocsController {
   }
 
   @Get('status')
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @ApiOperation({
     summary: 'Get documents statistics',
     description: 'Get statistics about documents and tags',

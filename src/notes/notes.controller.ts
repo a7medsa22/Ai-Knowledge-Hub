@@ -23,6 +23,7 @@ import { GetUser, JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { NoteResponseDto } from './dto/response-note.dto';
 import { SearchNoteDto } from './dto/search-note.dto';
 import type { JwtUser } from 'src/common/interfaces/jwt-user.interface';
+import { Throttle } from '@nestjs/throttler';
 
 @ApiTags('Notes')
 @Controller('notes')
@@ -60,6 +61,7 @@ export class NotesController {
     description:
       'Get all notes created by the current user with search and filter options',
   })
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @ApiResponse({
     status: 200,
     description: 'Notes retrieved successfully',
@@ -97,6 +99,7 @@ export class NotesController {
   }
 
   @Get('status')
+  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
   @ApiOperation({
     summary: 'Get note status',
     description: 'Get the status of notes for the current user',
