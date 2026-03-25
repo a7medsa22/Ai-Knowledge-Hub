@@ -80,7 +80,9 @@ export class AuthTokenService {
   async generateAccessToken(payload: JwtPayload): Promise<string> {
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: this.configService.get<string>('JWT_EXPIRES_IN', '15m'),
+      expiresIn: parseDurationToSeconds(
+        this.configService.get<string>('JWT_EXPIRES_IN', '15m'),
+      ),
     });
   }
   // Generate refresh token and store its hash in the database
