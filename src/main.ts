@@ -157,6 +157,7 @@ async function bootstrap() {
         'API for AI-powered research and knowledge management platform',
       )
       .setVersion('1.0')
+      .addTag('Health')
       .addTag('Authentication')
       .addTag('Users')
       .addTag('AI Research')
@@ -196,7 +197,7 @@ async function bootstrap() {
   logger.log(`🌍 Environment: ${nodeEnv}`);
   logger.log(`📡 Port: ${port}`);
   logger.log(`📚 Local-Docs: http://localhost:${port}/${apiPrefix}/docs`);
-  logger.log(`📚 Public-Docs: ${configuredAppUrl}/${apiPrefix}/docs`);
+  logger.log(`📚 Public-Docs: ${configuredAppUrl}/${port}/${apiPrefix}/docs`);
   logger.log(`🔗 GraphQL: /graphql`);
 }
 
