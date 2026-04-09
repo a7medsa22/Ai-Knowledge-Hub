@@ -7,6 +7,7 @@ import {
 import { AiProviderFactory } from './providers/ai-provider.factory';
 import { DocsService } from 'src/docs/docs.service';
 import {
+  ExtractKeyPointsDto,
   QuestionAnswerDto,
   QuestionAnswerResponseDto,
   SemanticSearchDto,
@@ -212,14 +213,15 @@ export class AiService {
     questionAnswerDto: QuestionAnswerDto,
     userId?: string,
   ): Promise<QuestionAnswerResponseDto> {
-    const { question, context, docId } = questionAnswerDto;
+    const { question, context, text, docId } = questionAnswerDto;
+    const inputText = text || context;
 
     this.logger.log(
       `Q&A request - Question: "${question.substring(0, 50)}..."`,
     );
 
     // Get context content
-    const { content } = await this.getTextContent(context, docId, userId);
+    const { content } = await this.getTextContent(inputText, docId, userId);
 
     // Validate question
     if (question.length <= 5) {
@@ -306,22 +308,30 @@ export class AiService {
     return results;
   }
 
-  // Extract key points from text
-  async extractKeyPoints(text: string, count: number = 5): Promise<string[]> {
-    this.logger.log(`Extracting ${count} key points from text`);
+  // Extract key points from text or document
+  async extractKeyPoints(
+    dto: ExtractKeyPointsDto,
+    userId?: string,
+  ): Promise<string[]> {
+    const { text, docId, maxPoints = 5, count } = dto;
+    const finalCount = count || maxPoints;
+
+    this.logger.log(
+      `Extracting ${finalCount} key points - Source: ${docId ? 'doc' : 'text'}`,
+    );
+
+    const { content } = await this.getTextContent(text, docId, userId);
+
+    if (content.length < 50) {
+      throw new BadRequestException('Content too short to extract key points');
+    }
 
     const provider = await this.aiProviderFactory.getProvider();
 
     // Create a custom prompt for key point extraction
-    const customPrompt = `Extract the ${count} most important key points from this text. Return only the key points as a numbered list:\n\n${text}`;
+    const customPrompt = `Extract the ${finalCount} most important key points from this text. Return only the key points as a numbered list:\n\n${content}`;
 
     try {
-      // reusing summarize/answerQuestion or if provider has specific method?
-      // Assuming we use answerQuestion or summarize with prompt.
-      // Let's use summarize as it's general text generation usually.
-      // Or better, use answerQuestion with the prompt as question? No.
-      // The previous implementation used summarize with content.
-      // But wait, the previous implementation in step 181 used summarize.
       const response = await provider.summarize(
         customPrompt,
         SummaryLength.MEDIUM,
@@ -332,7 +342,7 @@ export class AiService {
         .split('\n')
         .filter((line) => line.match(/^\d+\.|^-|^•/))
         .map((line) => line.replace(/^\d+\.\s*|^-\s*|^•\s*/, '').trim())
-        .slice(0, count);
+        .slice(0, finalCount);
 
       return points;
     } catch (error) {

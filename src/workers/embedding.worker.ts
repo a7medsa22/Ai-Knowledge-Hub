@@ -55,6 +55,11 @@ export class EmbeddingWorker extends WorkerHost {
         const chunk = chunks[i];
         const vector = embeddings[i];
 
+        if (!vector || !Array.isArray(vector)) {
+          this.logger.error(`Skipping chunk ${i} - missing or invalid embedding vector`);
+          continue;
+        }
+
         await this.prisma.$executeRaw`
           INSERT INTO embeddings (id, "docId", content, vector, "chunkIndex", "createdAt")
           VALUES (gen_random_uuid(), ${docId}, ${chunk}, ${vector}::vector, ${i}, NOW())

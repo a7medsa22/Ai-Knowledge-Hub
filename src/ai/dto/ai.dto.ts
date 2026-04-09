@@ -72,8 +72,7 @@ export class QuestionAnswerDto {
 
   @ApiProperty({
     example: 'Machine learning is a subset of artificial intelligence...',
-    description:
-      'Context text for answering the question (if not providing docId)',
+    description: 'Context text for answering the question (if not providing docId)',
     required: false,
   })
   @IsString()
@@ -81,6 +80,15 @@ export class QuestionAnswerDto {
   @MaxLength(15000, {
     message: 'Context text is too long (max 15,000 characters)',
   })
+  text?: string;
+
+  @ApiProperty({
+    example: 'Machine learning is a subset of artificial intelligence...',
+    description: 'Alias for text property',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
   context?: string;
 }
 
@@ -196,11 +204,21 @@ export class QuestionAnswerResponseDto extends AiResponseDto {
 export class ExtractKeyPointsDto {
   @ApiProperty({
     example: 'This is a text to extract key points from',
-    description: 'Text to extract key points from',
+    description: 'Text to extract key points from (if not providing docId)',
+    required: false,
   })
   @IsString()
-  @IsNotEmpty()
-  text: string;
+  @IsOptional()
+  text?: string;
+
+  @ApiProperty({
+    example: 'clx1234567890',
+    description: 'Document ID to extract key points from (if not providing text)',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  docId?: string;
 
   @ApiProperty({
     example: 5,
@@ -210,7 +228,17 @@ export class ExtractKeyPointsDto {
   @IsInt()
   @Min(1)
   @IsOptional()
-  count?: number = 5;
+  maxPoints?: number = 5;
+
+  @ApiProperty({
+    example: 5,
+    description: 'Number of key points to extract (alias for maxPoints)',
+    required: false,
+  })
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  count?: number;
 }
 export class BulkSummarizeDto {
   @ApiProperty({

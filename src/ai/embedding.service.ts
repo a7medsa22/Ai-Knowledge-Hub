@@ -9,7 +9,7 @@ export class EmbeddingService {
 
   async generateEmbedding(text: string): Promise<number[]> {
     try {
-      const provider = await this.aiProviderFactory.getProvider();
+      const provider = await this.aiProviderFactory.getEmbeddingProvider();
       return await provider.generateEmbedding(text);
     } catch (error) {
       this.logger.error(`Failed to generate embedding: ${error.message}`);

@@ -1,4 +1,5 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsInt, Min, Max } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum LinkedToType {
@@ -90,4 +91,27 @@ export class SearchFilesDto {
   @IsString()
   @IsOptional()
   mimeType?: string;
+
+  @ApiProperty({
+    example: 10,
+    description: 'Number of results to return',
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  @Transform(({ value }) => parseInt(value))
+  limit?: number;
+
+  @ApiProperty({
+    example: 0,
+    description: 'Number of results to skip',
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Transform(({ value }) => parseInt(value))
+  offset?: number;
 }

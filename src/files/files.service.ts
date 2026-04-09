@@ -10,14 +10,18 @@ import { LinkedToType, SearchFilesDto } from './dto/files.dto';
 import { join } from 'path';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
 import * as mammoth from 'mammoth';
+import { BaseSearchService } from '../common/utils/base-search.service';
+import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 
 @Injectable()
-export class FilesService {
+export class FilesService extends BaseSearchService {
   private readonly logger = new Logger(FilesService.name);
   private readonly uploadDir = './uploads';
   private readonly baseUrl = process.env.APP_URL || 'http://localhost:3000';
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(protected readonly prisma: PrismaService) {
+    super(prisma);
+  }
 
   private readonly allowedMimeTypes = [
     'image/jpeg',
@@ -53,7 +57,22 @@ export class FilesService {
   ): Promise<File> {
     this.validateFile(file);
 
-    const url = `${this.baseUrl}/files/${file.filename}`;
+    // Upload to Cloudinary if it's an image or document
+    let url = `${this.baseUrl}/files/${file.filename}`;
+    let cloudinaryId: string | undefined;
+
+    try {
+      const filePath = this.getFilePath(file.filename);
+      const uploadResult = await this.uploadToCloudinary(filePath, file.mimetype);
+      url = uploadResult.secure_url;
+      cloudinaryId = uploadResult.public_id;
+      this.logger.log(`File uploaded to Cloudinary: ${url}`);
+    } catch (error) {
+      this.logger.error(`Cloudinary upload failed: ${error.message}`);
+      // Fallback to local URL if Cloudinary fails, or throw error?
+      // User specifically wants Cloudinary, so let's keep it required.
+      throw new BadRequestException(`Cloudinary upload failed: ${error.message}`);
+    }
 
     const fileData: Prisma.FileCreateInput = {
       filename: file.filename,
@@ -81,8 +100,40 @@ export class FilesService {
     return uploadedFile;
   }
 
+  async uploadToCloudinary(
+    filePath: string,
+    mimeType: string,
+  ): Promise<UploadApiResponse> {
+    return new Promise((resolve, reject) => {
+      const options: any = {
+        folder: 'ai-research',
+        resource_type: 'auto',
+      };
+
+      cloudinary.uploader.upload(filePath, options, (error, result) => {
+        if (error) return reject(error);
+        resolve(result!);
+      });
+    });
+  }
+
+  // Delete file from disk only
+  deleteFileFromDisk(filename: string): void {
+    const filePath = join(process.cwd(), this.uploadDir, filename);
+    try {
+      if (existsSync(filePath)) {
+        unlinkSync(filePath);
+        this.logger.log(`Temporary file deleted from disk: ${filename}`);
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to delete temporary file from disk: ${error.message}`,
+      );
+    }
+  }
+
   // get all files
-  async findAll(searchDto: SearchFilesDto): Promise<File[]> {
+  async findAll(searchDto: SearchFilesDto) {
     const { linkedToType, linkedToId, mimeType } = searchDto;
     const where: Prisma.FileWhereInput = {};
 
@@ -98,12 +149,11 @@ export class FilesService {
       where.mimeType = mimeType;
     }
 
-    const files = await this.prisma.file.findMany({
+    return this.executePaginatedQuery(
+      'file',
       where,
-      orderBy: {
-        createdAt: 'desc',
-      },
-      include: {
+      searchDto,
+      {
         doc: {
           select: {
             id: true,
@@ -111,8 +161,8 @@ export class FilesService {
           },
         },
       },
-    });
-    return files;
+      { createdAt: 'desc' },
+    );
   }
 
   // get file by id
@@ -138,6 +188,9 @@ export class FilesService {
 
   // Get file path for serving
   getFilePath(filename: string): string {
+    if (!filename) {
+      throw new BadRequestException('File filename is missing. Ensure Multer is configured for disk storage.');
+    }
     const filePath = join(process.cwd(), this.uploadDir, filename);
 
     if (!existsSync(filePath)) {

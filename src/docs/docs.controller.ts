@@ -30,6 +30,11 @@ import { UpdateDocDto } from './dto/update-doc.dto';
 import type { JwtUser } from '../common/interfaces/jwt-user.interface';
 import { ApiAuth } from 'src/common/decorators/api-auth.decorator';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
+import {
+  multerDiskStorage,
+  multerFileFilter,
+  multerLimits,
+} from 'src/files/multer-config';
 
 @ApiTags('Documents')
 @ApiAuth()
@@ -38,7 +43,13 @@ export class DocsController {
   constructor(private readonly docsService: DocsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: multerDiskStorage,
+      fileFilter: multerFileFilter,
+      limits: multerLimits,
+    }),
+  )
   @ApiConsumes('multipart/form-data', 'application/json')
   @ApiOperation({
     summary: 'Create a new document',
@@ -100,7 +111,7 @@ export class DocsController {
 
   @Get('my-docs')
   // allow a higher rate for document listing since front‑end may poll/search frequently
-  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
+  @Throttle({ short: { limit: 1000, ttl: 60000 } }) // Increased to 1000 per minute
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({
@@ -153,7 +164,7 @@ export class DocsController {
   }
 
   @Get('status')
-  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
+  @Throttle({ short: { limit: 1000, ttl: 60000 } }) // Increased to 1000 per minute
   @ApiOperation({
     summary: 'Get documents statistics',
     description: 'Get statistics about documents and tags',
@@ -168,7 +179,7 @@ export class DocsController {
 
   @Get()
   // public listing/search endpoint gets throttled too, increase limit to avoid quick 429s
-  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
+  @Throttle({ short: { limit: 1000, ttl: 60000 } }) // Increased to 1000 per minute
   @ApiOperation({
     summary: 'Get all public documents',
     description: 'Search and filter public documents',

@@ -24,7 +24,7 @@ export class OllamaProvider extends AiProvider {
     });
   }
   getName(): string {
-    return 'Ollama';
+    return 'ollama';
   }
 
   async summarize(
@@ -43,13 +43,36 @@ export class OllamaProvider extends AiProvider {
   }
   async generateEmbedding(text: string): Promise<number[]> {
     try {
+      // Trying the newer /api/embed endpoint first
       const response = await firstValueFrom(
         this.httpService.post(`${this.config.baseUrl}/api/embed`, {
           model: this.config.model,
-          prompt: text,
+          input: text, // newer API uses 'input'
         }),
       );
-      return response.data.embedding;
+
+      // Support for different response formats: 'embedding' or 'embeddings' (array of arrays)
+      if (response.data.embeddings && response.data.embeddings.length > 0) {
+        return response.data.embeddings[0];
+      }
+
+      if (response.data.embedding) {
+        return response.data.embedding;
+      }
+
+      // Fallback to older /api/embeddings endpoint if /api/embed didn't work as expected
+      const legacyResponse = await firstValueFrom(
+        this.httpService.post(`${this.config.baseUrl}/api/embeddings`, {
+          model: this.config.model,
+          prompt: text, // older API uses 'prompt'
+        }),
+      );
+
+      if (legacyResponse.data.embedding) {
+        return legacyResponse.data.embedding;
+      }
+
+      throw new Error('No embedding found in Ollama response');
     } catch (error) {
       this.logger.error('Ollama embedding generation failed:', error.message);
       throw new Error(`Ollama embedding generation failed: ${error.message}`);
@@ -78,6 +101,10 @@ export class OllamaProvider extends AiProvider {
       this.logger.error('Ollama availability check failed:', error.message);
       return false;
     }
+  }
+
+  supportsEmbeddings(): boolean {
+    return true;
   }
 
   private getSummaryPrompt(text: string, length: SummaryLength) {

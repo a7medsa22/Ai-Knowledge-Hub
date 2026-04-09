@@ -102,9 +102,11 @@ export class AiController {
   @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Extract key points from text' })
-  async extractKeyPoints(@Body() body: ExtractKeyPointsDto) {
-    const { text, count = 5 } = body;
-    const keyPoints = await this.aiService.extractKeyPoints(text, count);
+  async extractKeyPoints(
+    @Body() body: ExtractKeyPointsDto,
+    @CurrentUser('sub') userId: string,
+  ) {
+    const keyPoints = await this.aiService.extractKeyPoints(body, userId);
     return {
       keyPoints,
       count: keyPoints.length,

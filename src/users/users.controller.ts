@@ -17,6 +17,8 @@ import { UsersService } from './users.service';
 import { JwtAuthGuard, GetUser } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/user.dto';
 import type { JwtUser } from 'src/common/interfaces/jwt-user.interface';
+import { SearchUserDto } from './dto/search-user.dto';
+import { Query } from '@nestjs/common';
 
 @ApiTags('Users')
 @Controller('users')
@@ -69,7 +71,7 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all users (Admin only)' })
   @ApiResponse({ status: 200, description: 'Users retrieved successfully' })
-  async findAll() {
-    return this.usersService.findAll();
+  async findAll(@Query() search: SearchUserDto) {
+    return this.usersService.findAll(search);
   }
 }

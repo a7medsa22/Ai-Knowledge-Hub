@@ -2,44 +2,25 @@ import { forwardRef, Module } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FilesController } from './files.controller';
 import { MulterModule } from '@nestjs/platform-express/multer';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { DocsModule } from 'src/docs/docs.module';
+import { CloudinaryProvider } from './cloudinary.provider';
+import {
+  multerDiskStorage,
+  multerFileFilter,
+  multerLimits,
+} from './multer-config';
+
 @Module({
   imports: [
     forwardRef(() => DocsModule),
     MulterModule.register({
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, callback) => {
-          const uniqueSuffix = `${Date.now()}- ${Math.round(Math.random() * 1e9)}`;
-          const ext = extname(file.originalname);
-          const filename = `${file.fieldname}-${uniqueSuffix}${ext}`;
-          callback(null, filename);
-        },
-      }),
-      fileFilter: (req, file, callback) => {
-        const allowedMimeTypes = [
-          'application/pdf',
-          'application/msword',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          'application/vnd.ms-powerpoint',
-          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-          'application/vnd.ms-excel',
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        ];
-        if (!allowedMimeTypes.includes(file.mimetype)) {
-          return callback(new Error('Only documents are allowed!'), false);
-        }
-        callback(null, true);
-      },
-      limits: {
-        fileSize: 1024 * 1024 * 10, // 10MB limit
-      },
+      storage: multerDiskStorage,
+      fileFilter: multerFileFilter,
+      limits: multerLimits,
     }),
   ],
   controllers: [FilesController],
-  providers: [FilesService],
-  exports: [FilesService],
+  providers: [FilesService, CloudinaryProvider],
+  exports: [FilesService, CloudinaryProvider],
 })
 export class FilesModule {}

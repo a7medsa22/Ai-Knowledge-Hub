@@ -61,7 +61,7 @@ export class NotesController {
     description:
       'Get all notes created by the current user with search and filter options',
   })
-  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
+  @Throttle({ short: { limit: 1000, ttl: 60000 } }) // Increased to 1000 per minute
   @ApiResponse({
     status: 200,
     description: 'Notes retrieved successfully',
@@ -99,7 +99,7 @@ export class NotesController {
   }
 
   @Get('status')
-  @Throttle({ short: { limit: 200, ttl: 60000 } }) // 200 requests per minute
+  @Throttle({ short: { limit: 1000, ttl: 60000 } }) // Increased to 1000 per minute
   @ApiOperation({
     summary: 'Get note status',
     description: 'Get the status of notes for the current user',

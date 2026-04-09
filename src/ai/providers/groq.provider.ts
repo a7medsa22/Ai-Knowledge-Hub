@@ -5,21 +5,21 @@ import { AiProvider, AiProviderResponse } from './ai-provider.interface';
 import { SummaryLength } from '../dto/ai.dto';
 
 @Injectable()
-export class OpenAiProvider extends AiProvider {
-  private readonly logger = new Logger(OpenAiProvider.name);
+export class GroqProvider extends AiProvider {
+  private readonly logger = new Logger(GroqProvider.name);
 
   constructor(private readonly httpService: HttpService) {
     super({
       apiKey: process.env.AI_API_KEY,
-      baseUrl: process.env.AI_BASE_URL || 'https://api.openai.com/v1',
-      model: process.env.AI_MODEL || 'gpt-3.5-turbo',
+      baseUrl: process.env.AI_BASE_URL || 'https://api.groq.com/openai/v1',
+      model: process.env.AI_MODEL || 'llama3-8b-8192',
       temperature: 0.7,
       maxTokens: 1000,
     });
   }
 
   getName(): string {
-    return 'openai';
+    return 'groq';
   }
 
   private getSummarySystemMessage(length: SummaryLength): string {
@@ -38,7 +38,7 @@ export class OpenAiProvider extends AiProvider {
     return `You are a helpful assistant that answers questions based on provided context. Only use the information given in the context to answer questions. If the answer cannot be found in the context, clearly state that you cannot find the answer in the provided information.`;
   }
 
-  private async makeOpenAiRequest(
+  private async makeGroqRequest(
     systemMessage: string,
     userMessage: string,
     maxTokens?: number,
@@ -79,11 +79,11 @@ export class OpenAiProvider extends AiProvider {
       };
     } catch (error) {
       this.logger.error(
-        'OpenAI request failed:',
+        'Groq request failed:',
         error.response?.data || error.message,
       );
       throw new Error(
-        `OpenAI request failed: ${error.response?.data?.error?.message || error.message}`,
+        `Groq request failed: ${error.response?.data?.error?.message || error.message}`,
       );
     }
   }
@@ -95,7 +95,7 @@ export class OpenAiProvider extends AiProvider {
     const systemMessage = this.getSummarySystemMessage(length);
     const userMessage = `Please summarize this text:\n\n${text}`;
 
-    return this.makeOpenAiRequest(systemMessage, userMessage);
+    return this.makeGroqRequest(systemMessage, userMessage);
   }
 
   async answerQuestion(
@@ -105,42 +105,17 @@ export class OpenAiProvider extends AiProvider {
     const systemMessage = this.getQuestionAnswerSystemMessage();
     const userMessage = `Context:\n${context}\n\nQuestion: ${question}`;
 
-    return this.makeOpenAiRequest(systemMessage, userMessage);
+    return this.makeGroqRequest(systemMessage, userMessage);
   }
 
   async generateEmbedding(text: string): Promise<number[]> {
-    try {
-      const response = await firstValueFrom(
-        this.httpService.post(
-          `${this.config.baseUrl}/embeddings`,
-          {
-            model: 'text-embedding-3-small', // Use appropriate embedding model
-            input: text,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.config.apiKey}`,
-              'Content-Type': 'application/json',
-            },
-          },
-        ),
-      );
-
-      return response.data.data[0].embedding;
-    } catch (error) {
-      this.logger.error(
-        'OpenAI embedding request failed:',
-        error.response?.data || error.message,
-      );
-      throw new Error(
-        `OpenAI embedding request failed: ${error.response?.data?.error?.message || error.message}`,
-      );
-    }
+    // Groq currently doesn't have an embedding API, fallback or throw error
+    throw new Error('Groq provider does not support embeddings yet. Please use OpenAI or another provider for embeddings.');
   }
 
   async isAvailable(): Promise<boolean> {
     if (!this.config.apiKey) {
-      this.logger.warn('OpenAI API key not provided');
+      this.logger.warn('Groq API key not provided');
       return false;
     }
 
@@ -156,7 +131,7 @@ export class OpenAiProvider extends AiProvider {
       return true;
     } catch (error) {
       this.logger.error(
-        'OpenAI availability check failed:',
+        'Groq availability check failed:',
         error.response?.data || error.message,
       );
       return false;
@@ -164,6 +139,6 @@ export class OpenAiProvider extends AiProvider {
   }
 
   supportsEmbeddings(): boolean {
-    return true;
+    return false;
   }
 }

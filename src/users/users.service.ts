@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { UserMapper } from '../common/infrastructure/mappers/user.mapper';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/user.dto';
 import { UserStatus } from '../common/enums/user-status.enum';
+import { BaseSearchService } from '../common/utils/base-search.service';
+import { SearchUserDto } from './dto/search-user.dto';
 
 @Injectable()
-export class UsersService {
-  constructor(private prisma: PrismaService) {}
+export class UsersService extends BaseSearchService {
+  constructor(protected readonly prisma: PrismaService) {
+    super(prisma);
+  }
 
   async create(data: CreateUserDto): Promise<UserEntity> {
     const user = await this.prisma.user.create({
@@ -18,17 +22,26 @@ export class UsersService {
     return UserMapper.toDomain(user);
   }
 
-  async findAll() {
-    return this.prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+  async findAll(search?: SearchUserDto) {
+    const { query } = search || {};
+    const where: Prisma.UserWhereInput = {};
+
+    if (query) {
+      where.OR = [
+        { name: { contains: query, mode: 'insensitive' } },
+        { email: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+
+    const orderBy = this.buildOrderBy(search, 'createdAt');
+
+    return this.executePaginatedQuery(
+      'user',
+      where,
+      search,
+      undefined,
+      orderBy,
+    );
   }
   async findOne(id: string): Promise<UserEntity | null> {
     const user = await this.prisma.user.findUnique({ where: { id } });

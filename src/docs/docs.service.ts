@@ -25,9 +25,9 @@ export class DocsService {
     authorId: string,
     dto: CreateDocDto,
     file?: Express.Multer.File,
-  ): Promise<{ document: Doc; uploadedFile?: File }> {
+  ): Promise<{ document: Doc; file_url?: string }> {
     let content = dto.content;
-    let uploaded;
+    let uploadedFile: File | undefined;
 
     // If file is provided, extract text from it
     if (file) {
@@ -38,8 +38,8 @@ export class DocsService {
         );
       }
 
-      // Upload file first
-      uploaded = await this.filesService.uploadFile(file, authorId);
+      // Upload file first (this will upload to Cloudinary and create File record)
+      uploadedFile = await this.filesService.uploadFile(file, authorId);
 
       // Extract text from file
       const filePath = this.filesService.getFilePath(file.filename);
@@ -47,6 +47,9 @@ export class DocsService {
         filePath,
         file.mimetype,
       );
+
+      // Delete temporary file from local storage after extraction and Cloudinary upload
+      this.filesService.deleteFileFromDisk(file.filename);
     }
 
     // Validate: must have either content or file
@@ -55,22 +58,28 @@ export class DocsService {
         'Must provide either content text or a file to extract content from',
       );
     }
+
+    // Create document with file_url if available
     const document = await this.prisma.doc.create({
       data: {
         ...dto,
         authorId,
         content,
+        file_url: uploadedFile?.url || null,
       },
       include: this.getDocIncloude(),
     });
 
-    if (uploaded) {
-      await this.filesService.uploadFile(
-        file!,
-        authorId,
-        LinkedToType.DOC,
-        document.id,
-      );
+    // If file was uploaded, link it to the document
+    if (uploadedFile) {
+      await this.prisma.file.update({
+        where: { id: uploadedFile.id },
+        data: {
+          linkedToType: LinkedToType.DOC,
+          linkedToId: document.id,
+          docId: document.id,
+        },
+      });
     }
 
     // Trigger embedding generation
@@ -78,14 +87,7 @@ export class DocsService {
 
     return {
       document,
-      ...(uploaded && {
-        uploadedFile: {
-          id: uploaded.id,
-          filename: uploaded.filename,
-          originalName: uploaded.originalName,
-          url: uploaded.url,
-        },
-      }),
+      file_url: uploadedFile?.url,
     };
   }
 
