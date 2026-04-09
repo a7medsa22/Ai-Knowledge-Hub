@@ -3,7 +3,7 @@ import { Injectable, Logger, Inject, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AI_PROVIDERS_TOKEN } from '../ai.constants';
 
-export type AiProviderType = 'ollama' | 'openai' | 'anthropic' | 'groq';
+export type AiProviderType = 'ollama' | 'openai' | 'anthropic' | 'groq' | 'openrouter';
 
 @Injectable()
 export class AiProviderFactory implements OnModuleInit {
@@ -89,7 +89,7 @@ export class AiProviderFactory implements OnModuleInit {
   private async getFallbackProvider(
     failedProvider: string,
   ): Promise<AiProvider | null> {
-    const fallbackOrder = ['ollama', 'openai', 'groq'];
+    const fallbackOrder = ['ollama', 'openai', 'groq', 'openrouter'];
 
     for (const providerName of fallbackOrder) {
       if (providerName === failedProvider) continue;

@@ -125,10 +125,12 @@ export class AiService {
 
   async semanticSearch(
     dto: SemanticSearchRequestDto,
-    userId?: string, // If provided, filter by user access (TODO: Implement RLS or filter in query)
+    userId?: string, // If provided, filter by user access
   ): Promise<SemanticSearchResultDto[]> {
-    const { query, topK = RAG_CONFIG.topK } = dto;
-    this.logger.log(`Semantic search: "${query}" (topK: ${topK})`);
+    const { query, topK = RAG_CONFIG.topK, docId } = dto;
+    this.logger.log(
+      `Semantic search: "${query}" (topK: ${topK}${docId ? `, docId: ${docId}` : ''})`,
+    );
 
     try {
       // 1. Generate embedding for query
@@ -136,26 +138,38 @@ export class AiService {
         await this.embeddingService.generateEmbedding(query);
 
       // 2. Vector similarity search
-      // Note: We use raw query because Prisma doesn't support vector operations natively in type-safe API yet (except via extension in raw)
-      // We cast the embedding to string for the vector function
       const embeddingString = `[${queryEmbedding.join(',')}]`;
 
-      // TODO: Add user filtering if userId is present (need to join with Doc table)
-      // For now, let's assume public search or filter after (which is inefficient)
-      // OR better: RAW SQL JOIN
+      // Construct where clause with optional docId and userId
+      let results: any[];
 
-      const results = await this.prisma.$queryRaw<any[]>`
-        SELECT 
-          e.id, 
-          e."docId", 
-          e.content, 
-          1 - (e.vector <=> ${embeddingString}::vector) as similarity
-        FROM "embeddings" e
-        JOIN "docs" d ON e."docId" = d.id
-        WHERE 1 - (e.vector <=> ${embeddingString}::vector) > 0.5
-        ORDER BY similarity DESC
-        LIMIT ${topK};
-      `;
+      if (docId) {
+        results = await this.prisma.$queryRaw<any[]>`
+          SELECT 
+            e.id, 
+            e."docId", 
+            e.content, 
+            1 - (e.vector <=> ${embeddingString}::vector) as similarity
+          FROM "embeddings" e
+          JOIN "docs" d ON e."docId" = d.id
+          WHERE e."docId" = ${docId} AND 1 - (e.vector <=> ${embeddingString}::vector) > 0.5
+          ORDER BY similarity DESC
+          LIMIT ${topK};
+        `;
+      } else {
+        results = await this.prisma.$queryRaw<any[]>`
+          SELECT 
+            e.id, 
+            e."docId", 
+            e.content, 
+            1 - (e.vector <=> ${embeddingString}::vector) as similarity
+          FROM "embeddings" e
+          JOIN "docs" d ON e."docId" = d.id
+          WHERE 1 - (e.vector <=> ${embeddingString}::vector) > 0.5
+          ORDER BY similarity DESC
+          LIMIT ${topK};
+        `;
+      }
 
       return results.map((r) => ({
         docId: r.docId,
@@ -172,11 +186,11 @@ export class AiService {
     dto: AskQuestionRequestDto,
     userId?: string,
   ): Promise<AskQuestionResponseDto> {
-    const { question } = dto;
+    const { question, docId } = dto;
 
     // 1. Retrieve relevant context
     const searchResults = await this.semanticSearch(
-      { query: question, topK: 3 },
+      { query: question, topK: 3, docId },
       userId,
     );
 

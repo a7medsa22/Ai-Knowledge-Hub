@@ -19,4 +19,13 @@ export class CreateNoteDto {
   @IsString()
   @IsOptional()
   docId?: string;
+
+  @ApiProperty({
+    example: 'clx1234567890 (optional)',
+    description: 'Alias for docId (optional)',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  documentId?: string;
 }

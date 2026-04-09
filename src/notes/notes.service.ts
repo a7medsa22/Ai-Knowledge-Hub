@@ -14,16 +14,18 @@ export class NotesService {
   constructor(private readonly prisma: PrismaService) {}
 
   public async create(userId: string, dto: CreateNoteDto): Promise<Note> {
-    const { content, docId } = dto;
-    if (docId) {
-      await this.validateDocumentAccess(docId, userId);
+    const { content, docId, documentId } = dto;
+    const finalDocId = docId || documentId;
+
+    if (finalDocId) {
+      await this.validateDocumentAccess(finalDocId, userId);
     }
 
     return this.prisma.note.create({
       data: {
         content,
         authorId: userId,
-        docId: docId || null,
+        docId: finalDocId || null,
       },
       include: this.gerNoteInclude(),
     });

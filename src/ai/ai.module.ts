@@ -13,6 +13,7 @@ import { AiProvider } from './providers/ai-provider.interface';
 import { OllamaProvider } from './providers/ollama.provider';
 import { OpenAiProvider } from './providers/openai.provider';
 import { GroqProvider } from './providers/groq.provider';
+import { OpenRouterProvider } from './providers/openRouter.provider';
 import { EmbeddingService } from './embedding.service';
 import { Chunker } from './utils/chunker';
 import { AI_PROVIDERS_TOKEN } from './ai.constants';
@@ -37,12 +38,13 @@ import { AI_PROVIDERS_TOKEN } from './ai.constants';
     OllamaProvider,
     OpenAiProvider,
     GroqProvider,
+    OpenRouterProvider,
     EmbeddingService,
     Chunker,
     {
       provide: AI_PROVIDERS_TOKEN,
       useFactory: (...providers: AiProvider[]) => providers,
-      inject: [OllamaProvider, OpenAiProvider, GroqProvider],
+      inject: [OllamaProvider, OpenAiProvider, GroqProvider, OpenRouterProvider],
     },
   ],
   exports: [AiService, AiProviderFactory, EmbeddingService],

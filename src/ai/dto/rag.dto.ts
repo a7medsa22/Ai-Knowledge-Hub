@@ -15,6 +15,14 @@ export class SemanticSearchRequestDto {
   @IsNumber()
   @IsOptional()
   topK?: number;
+
+  @ApiPropertyOptional({
+    description: 'Filter by document ID',
+    example: 'clx1234567890',
+  })
+  @IsString()
+  @IsOptional()
+  docId?: string;
 }
 
 export class AskQuestionRequestDto {
@@ -25,6 +33,14 @@ export class AskQuestionRequestDto {
   @IsString()
   @IsNotEmpty()
   question: string;
+
+  @ApiPropertyOptional({
+    description: 'Document ID to use as context (if not providing text)',
+    example: 'clx1234567890',
+  })
+  @IsString()
+  @IsOptional()
+  docId?: string;
 }
 
 export class SemanticSearchResultDto {
