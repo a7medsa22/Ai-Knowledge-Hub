@@ -1,23 +1,27 @@
-# Use Node Alpine image
-FROM node:20-alpine
+# ---------- BUILD STAGE ----------
+FROM node:20-alpine AS builder
 
-# Create app directory
 WORKDIR /app
 
-# Install app dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
-COPY prisma ./prisma/
-RUN npx prisma generate
-# Copy app source
 COPY . .
-
-# Build the app
+RUN npx prisma generate
 RUN npm run build
 
-# Expose the port your app runs on
+# ---------- PRODUCTION STAGE ----------
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules ./node_modules
+
 EXPOSE 3000
 
-# Command to run the app
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main.js"]

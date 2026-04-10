@@ -43,7 +43,7 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 .env.local
-
+.gitignore
 # temp directory
 .temp
 .tmp
