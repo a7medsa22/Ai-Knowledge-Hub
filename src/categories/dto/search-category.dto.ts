@@ -1,0 +1,51 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { IsIn, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+
+export class SearchCategoryDto {
+  @ApiProperty({
+    example: 'College',
+    description: 'Search query for name and description',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  query?: string;
+
+  @ApiProperty({
+    example: 10,
+    description: 'Number of results to return',
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  @Transform(({ value }) => (value !== undefined ? parseInt(value, 10) : undefined))
+  limit?: number;
+
+  @ApiProperty({
+    example: 0,
+    description: 'Number of results to skip',
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Transform(({ value }) => (value !== undefined ? parseInt(value, 10) : undefined))
+  offset?: number;
+
+  @ApiProperty({
+    example: 'createdAt',
+    description: 'Sort by field',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  sortBy?: 'createdAt' | 'updatedAt' | 'name';
+
+  @ApiProperty({ example: 'desc', description: 'Sort order', required: false })
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
+  order?: 'asc' | 'desc';
+}
