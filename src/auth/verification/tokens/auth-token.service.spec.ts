@@ -5,6 +5,8 @@ import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { AuthTokenService } from './token.service';
+import { TokenType, UserRole } from '@prisma/client';
+import { UserStatus } from 'src/common/enums/user-status.enum';
 
 describe('AuthTokenService', () => {
   let service: AuthTokenService;
@@ -21,8 +23,12 @@ describe('AuthTokenService', () => {
             authToken: {
               create: jest.fn(),
               findFirst: jest.fn(),
+              findUnique: jest.fn(),
               update: jest.fn(),
               updateMany: jest.fn(),
+            },
+            user: {
+              findUnique: jest.fn(),
             },
           },
         },
@@ -30,6 +36,7 @@ describe('AuthTokenService', () => {
           provide: JwtService,
           useValue: {
             signAsync: jest.fn(),
+            sign: jest.fn(),
           },
         },
         {
@@ -51,9 +58,26 @@ describe('AuthTokenService', () => {
 
   it('should create refresh token', async () => {
     jest.spyOn(jwt, 'signAsync').mockResolvedValue('refresh.jwt');
+    jest.spyOn(jwt, 'sign').mockReturnValue('refresh.jwt');
+
+    jest.spyOn(prisma.authToken, 'findUnique').mockResolvedValue({
+      id: 'token-id',
+      authorId: 'user-id',
+      isRevoked: false,
+      expiresAt: new Date(Date.now() + 10000),
+    } as any);
+
+    jest.spyOn(prisma.authToken, 'update').mockResolvedValue({} as any);
+
+    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
+      id: 'user-id',
+      status: UserStatus.ACTIVE,
+      email: 'test@test.com',
+      role: UserRole.USER,
+    } as any);
 
     jest.spyOn(prisma.authToken, 'create').mockResolvedValue({
-      id: 'token-id',
+      id: 'new-token-id',
       expiresAt: new Date(),
     } as any);
 
@@ -71,11 +95,11 @@ describe('AuthTokenService', () => {
   });
 
   it('should validate and rotate refresh token', async () => {
-    const hashed = await bcrypt.hash('token', 10);
-
-    jest.spyOn(prisma.authToken, 'findFirst').mockResolvedValue({
+    jest.spyOn(prisma.authToken, 'findUnique').mockResolvedValue({
       id: 'token-id',
-      token: hashed,
+      authorId: 'user-id',
+      type: TokenType.REFRESH,
+      isRevoked: false,
       expiresAt: new Date(Date.now() + 10000),
     } as any);
 
@@ -83,7 +107,7 @@ describe('AuthTokenService', () => {
 
     const result = await service.validateAndRotateRefreshToken(
       'user-id',
-      'token',
+      'token-id',
     );
 
     expect(result.userId).toBe('user-id');
@@ -91,7 +115,7 @@ describe('AuthTokenService', () => {
   });
 
   it('should throw if refresh token invalid', async () => {
-    jest.spyOn(prisma.authToken, 'findFirst').mockResolvedValue(null);
+    jest.spyOn(prisma.authToken, 'findUnique').mockResolvedValue(null);
 
     await expect(
       service.validateAndRotateRefreshToken('user-id', 'bad-token'),

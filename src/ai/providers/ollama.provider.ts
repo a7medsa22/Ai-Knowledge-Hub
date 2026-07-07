@@ -98,7 +98,7 @@ export class OllamaProvider extends AiProvider {
 
       return modelExists;
     } catch (error) {
-      this.logger.error('Ollama availability check failed:', error.message);
+      this.logger.warn(`Ollama availability check failed: ${error.message}`);
       return false;
     }
   }

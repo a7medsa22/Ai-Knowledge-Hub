@@ -62,6 +62,7 @@ model User {
   notes     Note[]
   tasks     Task[]
   authTokens AuthToken[]
+  categories Category[]
 
   @@map("users")
 }
@@ -81,6 +82,7 @@ model Doc {
   files     File[]
   notes     Note[]
   embeddings Embedding[]
+  categories CategoryDoc[]
   @@index([authorId])
   @@map("docs")
 }
@@ -163,4 +165,33 @@ enum Priority {
   MEDIUM
   HIGH
   URGENT
+}
+
+model Category {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  color       String?       // e.g. "#4F46E5"
+  icon        String?       // e.g. "book", "flask"
+  isPublic    Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  docs        CategoryDoc[]
+
+  @@index([authorId])
+  @@map("categories")
+}
+
+model CategoryDoc {
+  categoryId  String
+  docId       String
+  addedAt     DateTime @default(now())
+
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  doc         Doc      @relation(fields: [docId], references: [id], onDelete: Cascade)
+
+  @@id([categoryId, docId])
+  @@map("category_docs")
 }

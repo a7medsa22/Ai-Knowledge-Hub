@@ -26,6 +26,7 @@ export class UpdateDocDto {
   })
   @IsString()
   @MinLength(1)
+  @IsOptional()
   content?: string;
 
   @ApiProperty({
@@ -46,7 +47,7 @@ export class UpdateDocDto {
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
+  @Transform(({ value }) => (value === undefined ? undefined : (Array.isArray(value) ? value : [value])))
   tags?: string[];
 
   @ApiProperty({

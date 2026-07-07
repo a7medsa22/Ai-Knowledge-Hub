@@ -136,6 +136,7 @@ export class McpController {
     const failureCount = results.filter((result) => !result.success).length;
     return {
       results,
+      totalCount: results.length,
       totalExecutionTime: executionTime,
       successCount,
       failureCount,

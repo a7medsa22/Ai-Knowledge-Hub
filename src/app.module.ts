@@ -17,6 +17,7 @@ import { FilesModule } from './files/files.module';
 import { RedisModule } from './infrastructure/cache/redis.module';
 import { BullModule } from '@nestjs/bullmq';
 import { EmbeddingQueueModule } from './queues/embedding.queue.module';
+import { CategoriesModule } from './categories/categories.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -58,10 +59,12 @@ import { EmbeddingQueueModule } from './queues/embedding.queue.module';
     McpModule,
     FilesModule,
     RedisModule,
+    CategoriesModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const redisUrl = configService.get('REDIS_URL');
+        const isTest = configService.get('NODE_ENV') === 'test';
         if (redisUrl) {
           const url = new URL(redisUrl);
           return {
@@ -74,13 +77,31 @@ import { EmbeddingQueueModule } from './queues/embedding.queue.module';
                 url.protocol === 'rediss:'
                   ? { rejectUnauthorized: false }
                   : undefined,
+              ...(isTest
+                ? {
+                    maxRetriesPerRequest: null,
+                    enableReadyCheck: false,
+                    reconnectOnError: () => false,
+                    retryStrategy: () => null,
+                  }
+                : {}),
             },
           };
         }
+        const redisPassword = configService.get('REDIS_PASSWORD');
         return {
           connection: {
             host: configService.get('REDIS_HOST', 'localhost'),
             port: configService.get('REDIS_PORT', 6379),
+            ...(redisPassword ? { password: redisPassword } : {}),
+            ...(isTest
+              ? {
+                  maxRetriesPerRequest: null,
+                  enableReadyCheck: false,
+                  reconnectOnError: () => false,
+                  retryStrategy: () => null,
+                }
+              : {}),
           },
         };
       },

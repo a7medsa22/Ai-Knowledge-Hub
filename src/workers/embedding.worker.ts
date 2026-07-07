@@ -45,8 +45,18 @@ export class EmbeddingWorker extends WorkerHost {
       const embeddings = await this.embeddingService.generateEmbeddings(chunks);
 
       // 3. Store embeddings in database
-      // Delete existing embeddings first to avoid duplicates on re-processing
+      // Check if document still exists (it might have been deleted during the API call)
+      const docExists = await this.prisma.doc.findUnique({
+        where: { id: docId },
+        select: { id: true },
+      });
 
+      if (!docExists) {
+        this.logger.warn(`Document ${docId} was deleted during embedding generation. Aborting storage.`);
+        return { success: false, reason: 'Document deleted' };
+      }
+
+      // Delete existing embeddings first to avoid duplicates on re-processing
       // delete manually because of cascade delete issue or to be safe
       await this.prisma
         .$executeRaw`DELETE FROM embeddings WHERE "docId" = ${docId}`;

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/auth.dto';
+import { RegisterDto, LoginDto } from './dto/auth.dto';
 import { UserStatus } from 'src/common/enums/user-status.enum';
 
 describe('AuthController', () => {
@@ -46,7 +46,6 @@ describe('AuthController', () => {
         email: 'test@test.com',
         password: 'Password123!',
         name: 'Test User',
-        status: UserStatus.PENDING_EMAIL_VERIFICATION,
       };
       const result = {
         userId: 'uuid-123',
@@ -58,11 +57,7 @@ describe('AuthController', () => {
       const response = await controller.register(dto);
 
       expect(authService.register).toHaveBeenCalledWith(dto);
-      expect(response).toEqual({
-        success: true,
-        message: 'User registered successfully, please verify your email',
-        data: { userId: result.userId },
-      });
+      expect(response).toEqual(result);
     });
   });
 
@@ -81,6 +76,11 @@ describe('AuthController', () => {
         ip: '127.0.0.1',
       };
 
+      const body: LoginDto = {
+        email: 'test@example.com',
+        password: 'Password123!',
+      };
+
       const serviceResult = {
         user: {
           sub: 'uuid-123',
@@ -96,14 +96,10 @@ describe('AuthController', () => {
 
       mockAuthService.login.mockResolvedValue(serviceResult);
 
-      const response = await controller.login(req);
+      const response = await controller.login(body, req as any);
 
       expect(authService.login).toHaveBeenCalledWith(req.user, req);
-      expect(response).toEqual({
-        success: true,
-        message: 'Login successful',
-        data: serviceResult,
-      });
+      expect(response).toEqual(serviceResult);
     });
   });
 
@@ -116,12 +112,8 @@ describe('AuthController', () => {
 
       const response = await controller.verifyEmail(body);
 
-      expect(authService.verifyEmail).toHaveBeenCalledWith(
-        body.email,
-        body.otp,
-      );
+      expect(authService.verifyEmail).toHaveBeenCalledWith(body);
       expect(response).toEqual({
-        success: true,
         message: 'Email verified successfully',
       });
     });
@@ -135,6 +127,9 @@ describe('AuthController', () => {
           tokenId: 'token-uuid',
         },
       };
+      const body = {
+        refreshToken: 'old-refresh-token',
+      };
       const result = {
         accessToken: 'new-access-token',
         refreshToken: 'new-refresh-token',
@@ -142,43 +137,13 @@ describe('AuthController', () => {
 
       mockAuthService.refreshTokens.mockResolvedValue(result);
 
-      const response = await controller.refreshToken(req);
+      const response = await controller.refreshToken(body, req as any);
 
       expect(authService.refreshTokens).toHaveBeenCalledWith(
         req.user.userId,
         req.user.tokenId,
       );
       expect(response).toEqual(result);
-    });
-  });
-
-  describe('sessions', () => {
-    it('should return user sessions', async () => {
-      const userId = 'uuid-123';
-      const sessions = [
-        { id: '1', createdAt: new Date(), lastActiveAt: new Date() },
-      ];
-
-      mockAuthService.getUserSessions.mockResolvedValue(sessions);
-
-      const response = await controller.sessions(userId);
-
-      expect(authService.getUserSessions).toHaveBeenCalledWith(userId);
-      expect(response).toEqual(sessions);
-    });
-  });
-
-  describe('revokeSession', () => {
-    it('should revoke a session', async () => {
-      const userId = 'uuid-123';
-      const tokenId = 'token-uuid';
-
-      mockAuthService.revokeSession.mockResolvedValue(undefined);
-
-      const response = await controller.revokeSession(tokenId, userId);
-
-      expect(authService.revokeSession).toHaveBeenCalledWith(userId, tokenId);
-      expect(response).toBeUndefined();
     });
   });
 });

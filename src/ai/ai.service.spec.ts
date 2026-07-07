@@ -230,7 +230,7 @@ describe('AiService', () => {
 
   describe('extractKeyPoints', () => {
     it('should extract key points successfully', async () => {
-      const text = 'Point 1. Point 2. Point 3.';
+      const text = 'Point 1: This is a very long sentence to satisfy the minimum length check of fifty characters. Point 2: Another long sentence that is also extremely descriptive. Point 3: Final sentence to ensure we have enough content.';
       const count = 3;
 
       mockProvider.summarize.mockResolvedValue({
@@ -238,7 +238,7 @@ describe('AiService', () => {
         model: 'gpt-4',
       });
 
-      const result = await service.extractKeyPoints(text, count);
+      const result = await service.extractKeyPoints({ text, count });
 
       expect(mockProvider.summarize).toHaveBeenCalledWith(
         expect.stringContaining('Extract the 3 most important key points'),
@@ -250,7 +250,7 @@ describe('AiService', () => {
 
     it('should handle extraction errors', async () => {
       mockProvider.summarize.mockRejectedValue(new Error('Extraction failed'));
-      await expect(service.extractKeyPoints('text')).rejects.toThrow(
+      await expect(service.extractKeyPoints({ text: 'Point 1: This is a very long sentence to satisfy the minimum length check of fifty characters.' })).rejects.toThrow(
         BadRequestException,
       );
     });

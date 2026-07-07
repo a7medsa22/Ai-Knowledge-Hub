@@ -8,14 +8,18 @@ import { ConfigService } from '@nestjs/config';
   providers: [
     {
       provide: REDIS_CLIENT,
-      useFactory: async (config:ConfigService) => {
-        const client = createClient({
-          socket:{
-            host: config.get<string>('REDIS_HOST'),
-            port: config.get<number>('REDIS_PORT'),
-          },
-          password: config.get<string>('REDIS_PASSWORD')
-        });
+      useFactory: async (config: ConfigService) => {
+        const redisUrl = config.get<string>('REDIS_URL');
+        const redisPassword = config.get<string>('REDIS_PASSWORD');
+        const client = redisUrl
+          ? createClient({ url: redisUrl })
+          : createClient({
+              socket: {
+                host: config.get<string>('REDIS_HOST', 'localhost'),
+                port: config.get<number>('REDIS_PORT', 6379),
+              },
+              ...(redisPassword ? { password: redisPassword } : {}),
+            });
         client.on('error', (err) => console.error('Redis Client Error', err));
 
         await client.connect();

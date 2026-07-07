@@ -29,7 +29,7 @@ export class SearchDocDto {
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
+  @Transform(({ value }) => (value === undefined ? undefined : (Array.isArray(value) ? value : [value])))
   tags?: string[];
 
   @ApiProperty({
@@ -41,7 +41,7 @@ export class SearchDocDto {
   @IsInt()
   @Min(1)
   @Max(100)
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value !== undefined ? parseInt(value, 10) : undefined))
   limit?: number;
 
   @ApiProperty({
@@ -52,7 +52,7 @@ export class SearchDocDto {
   @IsOptional()
   @IsInt()
   @Min(0)
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value !== undefined ? parseInt(value, 10) : undefined))
   offset?: number;
 
   @ApiProperty({

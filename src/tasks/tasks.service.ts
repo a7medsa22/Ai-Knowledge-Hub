@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateStatusDto, UpdateTaskDto } from './dto/update-task.dto';
 import {
@@ -53,7 +53,7 @@ export class TasksService extends BaseSearchService {
       include: this.getTaskInclude(),
     });
     if (!task) {
-      throw new Error('Task not found');
+      throw new NotFoundException('Task not found');
     }
     return task;
   }

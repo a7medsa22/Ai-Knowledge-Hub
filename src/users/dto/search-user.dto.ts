@@ -28,7 +28,7 @@ export class SearchUserDto {
   @IsInt()
   @Min(1)
   @Max(100)
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value !== undefined ? parseInt(value, 10) : undefined))
   limit?: number;
 
   @ApiProperty({
@@ -39,7 +39,7 @@ export class SearchUserDto {
   @IsOptional()
   @IsInt()
   @Min(0)
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value !== undefined ? parseInt(value, 10) : undefined))
   offset?: number;
 
   @ApiProperty({

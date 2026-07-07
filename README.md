@@ -89,6 +89,14 @@ AI Knowledge Hub(RAG) is a comprehensive platform designed for researchers, stud
 - Due date tracking with overdue detection
 - Task statistics and completion rates
 
+### 📁 Categories System
+
+- Create custom categories to organize documents
+- Color-code and assign custom icons to categories
+- Search, list, and filter public or private categories
+- Seamlessly link/unlink documents to/from categories
+- View all documents associated with a specific category
+
 ### 🔌 MCP (Model Context Protocol)
 
 - Standardized tool interface for AI agents
@@ -432,6 +440,20 @@ POST /ai/qa
 - `PATCH /tasks/:id/status` - Update task status
 - `DELETE /tasks/:id` - Delete task
 
+### 7. Categories Module
+
+**Endpoints:**
+
+- `POST /categories` - Create new category
+- `GET /categories` - Get all public categories
+- `GET /categories/my` - Get current user categories
+- `GET /categories/:id` - Get specific category details
+- `PATCH /categories/:id` - Update category (owner only)
+- `DELETE /categories/:id` - Delete category (owner only)
+- `POST /categories/:id/docs/:docId` - Add document to category
+- `DELETE /categories/:id/docs/:docId` - Remove document from category
+- `GET /categories/:id/docs` - Get all documents in a category
+
 ### 7. MCP Module
 
 **Endpoints:**
@@ -617,16 +639,22 @@ npm run test:watch
 
 ### Test Structure
 
+The codebase includes comprehensive unit tests and end-to-end (E2E) integration tests across all modules (Authentication, Users, Documents, Categories, Notes, Tasks, Files, and MCP):
+
 ```
 src/
-├── mcp/
-│   ├── mcp.service.spec.ts      # Unit tests
-│   └── mcp.controller.spec.ts   # Unit tests
+├── **/*.spec.ts                # Unit tests for all controllers and services
 test/
-└── mcp.e2e-spec.ts               # Integration tests
+├── setup/                      # Test database seeder and application factories
+├── app.e2e-spec.ts             # App routing and health check tests
+├── auth.e2e-spec.ts            # Authentication and session management tests
+├── categories.e2e-spec.ts      # Categories CRUD and document-linking E2E tests
+├── docs.e2e-spec.ts            # Documents upload, parsing, and query E2E tests
+├── notes.e2e-spec.ts           # Notes CRUD and document-attached notes tests
+├── tasks.e2e-spec.ts           # Task CRUD, stats, and filter tests
+├── mcp.e2e-spec.ts             # Model Context Protocol tool execution tests
+└── production-readiness.e2e-spec.ts  # Verification of security headers, DB, and AI connectivity
 ```
-
-# the rest of the tests in next version
 
 ---
 

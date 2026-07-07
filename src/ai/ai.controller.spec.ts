@@ -118,7 +118,7 @@ describe('AiController', () => {
       mockAiService.extractKeyPoints.mockResolvedValue(keyPoints);
       mockAiService.getAiStatus.mockResolvedValue({ currentProvider: 'gpt' });
 
-      const result = await controller.extractKeyPoints(dto);
+      const result = await controller.extractKeyPoints(dto, 'user-id');
 
       expect(result).toEqual({
         keyPoints,
@@ -126,8 +126,8 @@ describe('AiController', () => {
         provider: 'gpt',
       });
       expect(service.extractKeyPoints).toHaveBeenCalledWith(
-        dto.text,
-        dto.count,
+        dto,
+        'user-id',
       );
     });
   });

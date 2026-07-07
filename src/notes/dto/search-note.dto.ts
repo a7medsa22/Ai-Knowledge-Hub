@@ -41,7 +41,7 @@ export class SearchNoteDto {
   @IsInt()
   @Min(1)
   @Max(100)
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value !== undefined ? parseInt(value, 10) : undefined))
   limit?: number;
 
   // Optional number of results to skip for pagination
@@ -53,7 +53,7 @@ export class SearchNoteDto {
   @IsOptional()
   @IsInt()
   @Min(0)
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value !== undefined ? parseInt(value, 10) : undefined))
   offset?: number;
 
   // Optional sorting field and order
