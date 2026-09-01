@@ -18,7 +18,16 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --runInBand --forceExit"
+    "test:e2e": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --runInBand --forceExit",
+    "benchmark:seed": "npx ts-node test/k6/seed/seed-perf-data.ts",
+    "benchmark:baseline": "C:/PROGRA~1/k6/k6.exe run test/k6/scenarios/01-baseline-endpoints.js",
+    "benchmark:auth": "C:/PROGRA~1/k6/k6.exe run test/k6/scenarios/02-auth-capacity.js",
+    "benchmark:docs": "C:/PROGRA~1/k6/k6.exe run test/k6/scenarios/03-docs-db-workload.js",
+    "benchmark:vector": "C:/PROGRA~1/k6/k6.exe run test/k6/scenarios/04-pgvector-rag.js",
+    "benchmark:bullmq": "C:/PROGRA~1/k6/k6.exe run test/k6/scenarios/05-bullmq-pipeline.js",
+    "benchmark:mcp": "C:/PROGRA~1/k6/k6.exe run test/k6/scenarios/06-mcp-tools.js",
+    "benchmark:ai": "C:/PROGRA~1/k6/k6.exe run test/k6/scenarios/08-ai-operations.js",
+    "benchmark:full": "C:/PROGRA~1/k6/k6.exe run test/k6/scenarios/07-realistic-user-journey.js"
   },
   "dependencies": {
     "@as-integrations/express5": "^1.1.2",

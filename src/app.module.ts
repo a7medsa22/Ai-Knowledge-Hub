@@ -39,12 +39,12 @@ import { CategoriesModule } from './categories/categories.module';
         {
           name: 'auth',
           ttl: 60 * 1000, // 1 minute
-          limit: 5, // 5 requests per minute for auth endpoints
+          limit: config.get('THROTTLE_LIMIT_AUTH', 5), // 5 requests per minute for auth endpoints
         },
         {
           name: 'upload',
           ttl: 60 * 60 * 1000, // 1 hour
-          limit: 10, // 10 file uploads per hour
+          limit: config.get('THROTTLE_LIMIT_UPLOAD', 10), // 10 file uploads per hour
         },
       ],
     }),
