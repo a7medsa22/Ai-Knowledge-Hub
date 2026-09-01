@@ -685,13 +685,14 @@ The system was benchmarked using **k6** under progressive concurrency profiles (
 
 ## 🚀 Deployment
 
-### Production URL
+### Production Status & Deployment Notice
 
-The application is deployed and live at:
+> [!NOTE]
+> **Free Tier Deployment Status**: The free tier hosting plan on Fly.io has expired, so the live demonstration URL is currently inactive/unavailable. You can run the entire application locally using Docker Compose or deploy it to your own cloud instance following the instructions below.
 
-- **API Base URL**: [https://ai-research-weathered-waterfall-4110.fly.dev](https://ai-research-weathered-waterfall-4110.fly.dev)
-- **Swagger Documentation**: [https://ai-research-weathered-waterfall-4110.fly.dev/api/docs](https://ai-research-weathered-waterfall-4110.fly.dev/api/docs)
-- **GraphQL Endpoint**: [https://ai-research-weathered-waterfall-4110.fly.dev/graphql](https://ai-research-weathered-waterfall-4110.fly.dev/graphql)
+- **API Base URL (Historical)**: `https://ai-research-weathered-waterfall-4110.fly.dev` (Inactive - Plan Expired)
+- **Swagger Documentation**: Local endpoint available at `http://localhost:3000/api/docs`
+- **GraphQL Endpoint**: Local endpoint available at `http://localhost:3000/graphql`
 
 ### Fly.io Deployment
 
