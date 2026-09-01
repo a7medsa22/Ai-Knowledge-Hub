@@ -1,0 +1,6 @@
+Redis PING: PONG
+BullMQ Embedding Keys Count: 3344
+Sample Keys: bull:embedding:3049, bull:embedding:2614, bull:embedding:1101, bull:embedding:1772, bull:embedding:3204, bull:embedding:2560, bull:embedding:271, bull:embedding:1961, bull:embedding:1619, bull:embedding:2533
+BullMQ Waiting Jobs: 0
+BullMQ Job Counter (bull:embedding:id): 3338
+Redis Memory Used: 3.90M

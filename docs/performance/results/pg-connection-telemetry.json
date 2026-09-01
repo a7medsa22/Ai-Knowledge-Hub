@@ -1,0 +1,2992 @@
+[
+  {
+    "timestamp": "2026-09-01T22:30:20.439Z",
+    "nodeRssMb": 311,
+    "nodeHeapUsedMb": 232,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:23.454Z",
+    "nodeRssMb": 318,
+    "nodeHeapUsedMb": 233,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:26.477Z",
+    "nodeRssMb": 318,
+    "nodeHeapUsedMb": 233,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:29.497Z",
+    "nodeRssMb": 318,
+    "nodeHeapUsedMb": 233,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:32.507Z",
+    "nodeRssMb": 318,
+    "nodeHeapUsedMb": 233,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:35.516Z",
+    "nodeRssMb": 318,
+    "nodeHeapUsedMb": 233,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:38.538Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:41.554Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:44.570Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:47.588Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:50.600Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:53.618Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:56.635Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:30:59.646Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:02.662Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:05.669Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:08.681Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:11.702Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:14.709Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:17.725Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:20.741Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:23.752Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:26.774Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:29.791Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:32.802Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:35.814Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:38.833Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:41.839Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:44.854Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:47.866Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:50.875Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:53.881Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:56.894Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:31:59.902Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:02.913Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:05.920Z",
+    "nodeRssMb": 287,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:08.935Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:11.943Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:14.959Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:17.977Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:20.992Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:24.010Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:27.017Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:30.024Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:33.041Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:36.053Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:39.060Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:42.076Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:45.081Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:48.087Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:51.097Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:54.109Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:32:57.127Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:00.147Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:03.154Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:06.165Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:09.180Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:12.185Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:15.194Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:18.208Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:21.225Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:24.243Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:27.261Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:30.280Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:33.297Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:36.316Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:39.334Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:42.353Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:45.361Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:48.366Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:51.381Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:54.393Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:33:57.405Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:00.410Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:03.419Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:06.427Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:09.435Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:12.453Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:15.461Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:18.478Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:21.494Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:24.500Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:27.508Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:30.526Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:33.531Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:36.538Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:39.551Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:42.566Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:45.584Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:48.596Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:51.604Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:54.622Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:34:57.635Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:00.644Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 9,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:03.655Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:06.663Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:09.684Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:12.703Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:15.722Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:18.731Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:21.777Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:24.788Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:27.799Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:30.808Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:33.813Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:36.838Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:39.846Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:42.860Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:45.869Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:48.876Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:51.886Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:54.891Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:35:57.909Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:00.918Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:03.923Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:06.935Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:09.954Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:12.972Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:15.989Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:18.996Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:22.003Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:25.021Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:28.034Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:31.049Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:34.054Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:37.065Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:40.078Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:43.096Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:46.109Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:49.121Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:52.125Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:55.135Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:36:58.157Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 4,
+    "postgresIdleConnections": 6,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:01.170Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:04.177Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:07.185Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:10.205Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:13.217Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:16.235Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:19.238Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:22.262Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:25.279Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:28.293Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:31.301Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:34.311Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:37.320Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:40.330Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:43.335Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:46.349Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:49.355Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:52.363Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:55.379Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:37:58.384Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:01.404Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 7,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:04.418Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:07.428Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:10.437Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:13.451Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:16.458Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:19.465Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:22.480Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:25.488Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:28.497Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 7,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:31.510Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:34.517Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:37.528Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:40.539Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:43.548Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:46.559Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:49.570Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:52.585Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:55.596Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:38:58.613Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 226,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:01.618Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:04.632Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:07.640Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:10.650Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:13.657Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:16.664Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:19.669Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:22.680Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:25.686Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:28.700Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:31.712Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:34.731Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:37.757Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:40.775Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:43.790Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:46.806Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:49.819Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:52.836Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:55.847Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:39:58.853Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:01.867Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:04.872Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:07.889Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:10.904Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:13.912Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:16.927Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:19.939Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:22.987Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:26.003Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:29.012Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:32.019Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:35.025Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:38.041Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:41.050Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:44.055Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:47.063Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:50.076Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:53.097Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:56.105Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:40:59.113Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:02.127Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:05.130Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:08.149Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:11.163Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:14.167Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:17.175Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 3,
+    "postgresIdleConnections": 7,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:20.200Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 5,
+    "postgresIdleConnections": 1,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:23.218Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:26.227Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:29.244Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:32.257Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:35.264Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:38.279Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:41.284Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:44.294Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:47.312Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 3,
+    "postgresIdleConnections": 4,
+    "postgresTotalConnections": 9,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:50.327Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:53.334Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:56.344Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:41:59.350Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:02.376Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:05.390Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:08.394Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:11.406Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:14.421Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:17.427Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:20.436Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:23.450Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:26.460Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:29.473Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:32.490Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:35.499Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:38.514Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:41.533Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:44.552Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:47.570Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:50.591Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 8,
+    "postgresIdleConnections": 1,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:53.597Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:56.624Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 4,
+    "postgresIdleConnections": 2,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:42:59.642Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:02.651Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:05.662Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:08.673Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:11.687Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:14.697Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:17.708Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:20.721Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:23.737Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:26.756Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:29.771Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:32.783Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:35.794Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:38.804Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:41.815Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:44.831Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:47.840Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:50.854Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:53.863Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:56.877Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:43:59.894Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:02.914Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:05.922Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:08.926Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:11.940Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:14.955Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:17.973Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 2,
+    "postgresIdleConnections": 8,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:20.991Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:24.000Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:27.012Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:30.027Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:33.035Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:36.049Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:39.068Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:42.077Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:45.092Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:48.107Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:51.115Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:54.126Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:44:57.137Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:45:00.142Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:45:03.151Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:45:06.168Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 228,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:45:09.189Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 228,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:45:12.196Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 228,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 5,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:45:15.209Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 228,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  },
+  {
+    "timestamp": "2026-09-01T22:45:18.218Z",
+    "nodeRssMb": 288,
+    "nodeHeapUsedMb": 227,
+    "postgresActiveConnections": 1,
+    "postgresIdleConnections": 9,
+    "postgresTotalConnections": 10,
+    "redisMemoryUsedMb": 4,
+    "bullMqWaitingJobs": 0
+  }
+]

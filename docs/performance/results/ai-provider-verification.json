@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-09-01T21:12:42.978Z",
+  "classification": "VERIFIED REAL EXTERNAL PROVIDER",
+  "aiStatus": {
+    "success": true,
+    "statusCode": 200,
+    "message": "Operation successful",
+    "data": {
+      "available": true,
+      "providers": [
+        "openrouter"
+      ],
+      "currentProvider": "openrouter",
+      "model": "mistralai/ministral-14b-2512"
+    },
+    "timestamp": "2026-09-01T21:12:41.380Z"
+  },
+  "verificationDetails": {
+    "httpStatus": 200,
+    "clientMeasuredLatencyMs": 1586,
+    "providerReported": "openrouter",
+    "modelReported": "mistralai/ministral-14b-2512",
+    "processingTimeMs": 1497,
+    "inputTokens": 86,
+    "outputTokens": 104,
+    "summaryLength": 511,
+    "summarySnippet": "This text explains how **Artificial Intelligence (AI) and PostgreSQL vector search** create efficien..."
+  }
+}

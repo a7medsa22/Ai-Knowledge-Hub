@@ -1,0 +1,65 @@
+PostgreSQL Version:
+[
+  {
+    "version": "PostgreSQL 15.16 (Debian 15.16-1.pgdg12+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit"
+  }
+]
+
+pgvector Extension:
+[
+  {
+    "extname": "vector",
+    "extversion": "0.8.1"
+  }
+]
+
+Embedding Row Count:
+[
+  {
+    "count": "6969"
+  }
+]
+
+Vector Column Definition:
+[
+  {
+    "column_name": "vector",
+    "udt_name": "vector"
+  }
+]
+
+Initial Indexes on embeddings:
+[
+  {
+    "indexname": "embeddings_pkey",
+    "indexdef": "CREATE UNIQUE INDEX embeddings_pkey ON public.embeddings USING btree (id)"
+  },
+  {
+    "indexname": "embeddings_docId_idx",
+    "indexdef": "CREATE INDEX \"embeddings_docId_idx\" ON public.embeddings USING btree (\"docId\")"
+  },
+  {
+    "indexname": "idx_embeddings_hnsw",
+    "indexdef": "CREATE INDEX idx_embeddings_hnsw ON public.embeddings USING hnsw (vector vector_cosine_ops) WITH (m='16', ef_construction='64')"
+  }
+]
+
+PostgreSQL Connection States:
+[
+  {
+    "state": "active",
+    "count": "1"
+  },
+  {
+    "state": "idle",
+    "count": "9"
+  }
+]
+
+max_connections:
+[
+  {
+    "max_connections": "100"
+  }
+]
+
