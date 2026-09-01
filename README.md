@@ -24,6 +24,7 @@
 - [MCP Integration](#-mcp-integration)
 - [Environment Variables](#-environment-variables)
 - [Testing](#-testing)
+- [Performance Engineering](#-performance-engineering)
 - [Deployment](#-deployment)
 - [Contributing](#-contributing)
 - [License](#-license)
@@ -655,6 +656,30 @@ test/
 ├── mcp.e2e-spec.ts             # Model Context Protocol tool execution tests
 └── production-readiness.e2e-spec.ts  # Verification of security headers, DB, and AI connectivity
 ```
+
+---
+
+## 🏎️ Performance Engineering
+
+The system was benchmarked using **k6** under progressive concurrency profiles (up to 200 Virtual Users). PostgreSQL with `pgvector`, Redis with BullMQ, application REST endpoints, and OpenRouter external AI integration were evaluated under load.
+
+### Key Evidence & Diagnostic Reports
+
+- 📄 **[System Architecture Documentation](docs/architecture.md)** — Comprehensive clean architecture breakdown, system boundaries, and design trade-offs.
+- ⚡ **[Performance Benchmark Summary](docs/performance/benchmark-summary.md)** — Executive summary of key capacity findings, bottlenecks, and sustainable throughput.
+- 📊 **[Full Technical Benchmark Report](docs/performance/benchmark-report.md)** — Exhaustive technical report with `EXPLAIN (ANALYZE, BUFFERS)` evidence, telemetry snapshots, and subsystem latency distributions.
+- 📂 **[Reproducible Benchmark Artifacts](docs/performance/results/)** — Raw JSON/text results including DB EXPLAIN plans and provider verification proofs.
+
+### Verification Summary Matrix
+
+| Subsystem | Code Implementation | Runtime Verified | Benchmark Verified | Key Empirical Finding |
+|-----------|:------------------:|:----------------:|:------------------:|-----------------------|
+| **PostgreSQL 15** | ✅ | ✅ | ✅ | Max connections=100; pool telemetry captured |
+| **pgvector 0.8.1** | ✅ | ✅ | ✅ | p(95) search latency = 743.95ms @ 30 VUs |
+| **HNSW Index** | ✅ | ✅ | ✅ | Vector query execution time reduced from **376.05ms to 41.41ms (-89.0%)** |
+| **Redis 7 & BullMQ** | ✅ | ✅ | ✅ | 893 jobs enqueued @ **8.46 jobs/sec** with 0% error rate |
+| **OpenRouter AI** | ✅ | ✅ | ✅ | Real outbound HTTP execution (`mistralai/ministral-14b-2512`); p(95) = 1,822ms |
+| **MCP Integration** | ✅ | ✅ | ✅ | Tool execution & batch processing verified via REST API |
 
 ---
 
